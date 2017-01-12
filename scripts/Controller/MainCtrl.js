@@ -11,17 +11,26 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
     $scope.info = angular.fromJson(ls.getItem("info"));
     //是否可以阅卷 试题的名称等等
     var testInfo = angular.fromJson(ls.getItem("testInfo"));
-    var testid = testInfo.testid;
     var redraw = false;
     redraw = testInfo.redraw;
-    //倒计时的时间
-    var submitSlide = null;
-    var slide = null;
+    var testid = testInfo.testid;
     var drawsetting = "";
-    drawsetting = ls.getItem("drawsetting" + testInfo.testid);
-    //如果有剩余时间的话
-    var timeslided = ls.getItem("timeslide" + testid);
-    if(timeslided != null) {
+    drawsetting = testInfo.drawsetting;
+    //倒计时的时间
+     var submitSlide = null;
+     var slide = null;
+     var timeSlide = null;
+    var timeSlides = [];
+     timeSlides = angular.fromJson(ls.getItem("timeSlides"));
+    if(timeSlides != null) {
+        for (var i = 0; i < timeSlides.length; i++) {
+            if (timeSlides[i].key == ls.getItem("username") + "timeSlide" + testid) {
+                timeSlide = timeSlides[i].value;
+                break;
+            }
+        }
+    }
+    if(timeSlide != null) {
      calTimeSlided();
     }
     $scope.title = testInfo.title;
@@ -41,10 +50,10 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
         redraw:redraw,
         drawsetting:drawsetting
     };
-    console.log(param);
     var promise = httpService.post( "api/testinfo",param);
     $scope.hasQus = false;
     promise.then(function (data) {
+        console.log(data);
         $scope.hasQus = true;
         qusIndex = 0;
         itemsIndex = 0;
@@ -143,8 +152,6 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
             answer:"",
             answerfile:"",
         }
-
-
         var param = {
             authtoken:ls.getItem("authtoken"),
             data:base64.encode(angular.toJson(data)),
@@ -164,7 +171,6 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
     //阅卷
     $scope.goOver = function () {
        //当前试卷是否可以阅卷
-
         if(testInfo.enableClientJudge == false) {
             swal("提醒","未开启阅卷功能","warning");
         }else {
@@ -233,11 +239,21 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
             console.log(info);
             if(info.succ == true) {
                 //进行清空 跳转
-                ls.setItem("testInfo",null);
-                ls.setItem("timelimted" + testid,null);
-                ls.setItem("timelimted" + testid,null);
-                $interval.cancel(slide);
-                $interval.cancel(submitSlide);
+                ls.removeItem("testInfo");
+                ls.removeItem("courseid");
+                ls.removeItem("coursename");
+                 if(timeSlides != null) {
+                     for (var i = 0; i < timeSlides.length; i++) {
+                         if (timeSlides[i].key == ls.getItem("username") + "timeSlide" + testid) {
+                             timeSlides.splice(i, 1);
+                             break;
+                         }
+                     }
+
+                     ls.setItem("timeSlides", angular.toJson(timeSlides));
+                     $interval.cancel(slide);
+                     $interval.cancel(submitSlide);
+                 }
                 swal({
                         title: "恭喜您",
                         text: "提交成功",
@@ -275,7 +291,6 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
                      qus[j].style = selStyle;
                  else
                      qus[j].style = unSelStyle;
-
              }
 
              items[i].questions = qus;
@@ -283,14 +298,12 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
          QusService.qusItems = items;
      }
     //进行总时间的计算
-
     function calTimeSlided() {
-        var slideH =  parseInt(timeslided / 3600);
-        var slideM = parseInt((timeslided - slideH * 3600) / 60);
-        var slideS = timeslided - slideH * 3600  - slideM * 60;
+        var slideH =  parseInt(timeSlide / 3600);
+        var slideM = parseInt((timeSlide - slideH * 3600) / 60);
+        var slideS = timeSlide - slideH * 3600  - slideM * 60;
         //随后进行倒计时
-
-         slide = $interval(function () {
+        slide = $interval(function () {
          //如果还有秒数的话
             if(slideS > 0) {
                 slideS--;
@@ -313,23 +326,28 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
                 }
             }
             $scope.timeLimited = slideH + ":" + slideM + ":" + slideS;
-          ls.setItem("timeslide" + testid,slideH * 3600 + slideM * 60 + slideS);
+             //进行更新值
+            for(var i = 0 ; i < timeSlides.length;i++) {
+                if(timeSlides[i].key == ls.getItem("username") + "timeSlide" + testid) {
+                    timeSlides[i].value = slideH * 3600 + slideM * 60 + slideS;
+                break;
+                }
+            }
+            ls.setItem("timeSlides",angular.toJson(timeSlides));
         },1000);
-        //像服务器每5分钟发起一次请求 当前用掉的时间
+        //向服务器每5分钟发起一次请求 当前用掉的时间
          submitSlide = $interval(function () {
             var param = {
                 testid:testid,
                 authtoken:ls.getItem("authtoken"),
-                slided: (ls.getItem("timelimted" + testid)) * 60 -  ls.getItem("timeslide" + testid),
+                slided: (ls.getItem(ls.getItem("username")+ "timelimted" + testid)) * 60 -  ls.getItem(ls.getItem("username") + "timeslide" + testid),
             };
-            console.log(ls.getItem("timelimted" + testid)) * 60 -  ls.getItem("timeslide" + testid);
-            console.log(param);
             var promise = httpService.infoPost("api/signslidetime",param);
             promise.then(function (data) {
                 console.log(data);
             },function (err) {
         console.log("提交时间失败",err,"error");
             });
-        },300000);
-    }
+        },180000);
+     }
 })

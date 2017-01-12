@@ -7,6 +7,7 @@
     <title></title>
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css" media="all">
     <!-- compiled css output -->
     <script src="../libs/angular-1.5.3/angular.js"></script>
@@ -31,18 +32,25 @@
 </head>
 <body ng-app="HomeWorkListModel" ng-controller = "HomeWorkListCtrl">
 
-
-    <div style="margin-left: 40%;margin-top: 20px">
-        <div ng-click="goToHomeWork()" style="float: left;" ng-style="homeWorkStyle">我的作业</div>
-
-
-        <div ng-click="goToExperiment()" style="float:left;margin-left: 30px;margin-right: 30px" ng-style="experimentStyle">我的实验</div>
+ <nav class="navbar navbar-default"  role="navigation">
+    <font size="5px"><i class="fa fa-arrow-left" ng-click="back()"></i></font>
+     <div style="text-align: center;margin-top: -30px"><font size="5px">{{coursename}}</font> </div>
+ </nav>
 
 
-        <div  ng-click="goToExerceise()"  style="float:left;" ng-style="exerciseStyle">模拟练习</div>
-    </div>
+    <div style="margin-top: 20px;text-align: center;margin-left: 30%;margin-right: 30%">
+        <div ng-click="goToHomeWork()" style="float: left;text-align: center" ng-style="homeWorkStyle"><font size="5px"> 我的作业</font></div>
+
+
+        <div ng-click="goToExperiment()" style="float:left;text-align: center;margin-left: 30px;margin-right: 30px" ng-style="experimentStyle"><font size="5px">我的实验</font></div>
+
+
+        <div  ng-click="goToExerceise()"  style="float:left;text-align: center" ng-style="exerciseStyle"><font size="5px">模拟练习</font></div>
+
+     </div>
   <div style="height: 40px;"></div>
-            <div style="margin-left: 10%;text-align: center" ui-view></div>
+
+            <div style="text-align: center" ui-view></div>
 
 </body>
 </html>

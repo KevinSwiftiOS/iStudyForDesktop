@@ -8,7 +8,7 @@
     <p>截止时间:{{item.dateend}}</p>
             </div>
         <div class="col-xs-4">
-    <h3 ng-if = "item.isEnd">分数{{item.score}}</h3>
+    <h3 ng-if = "item.isEnd == true">分数{{item.myscore}}</h3>
             </div>
         <div class="col-xs-4" style="margin-top: 30px">
     <button class="btn btn-info" ng-click="answer($index)">{{item.btnTitle}}</button>

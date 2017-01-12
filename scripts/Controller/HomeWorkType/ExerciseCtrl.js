@@ -49,7 +49,8 @@ HomeWorkListModel.controller("ExerciseCtrl",function ($scope,httpService,subDate
                 enableClientJudge: $scope.items[$index].enableClientJudge,
                 keyVisible: $scope.items[$index].keyVisible,
                 viewOneWithAnswerKey: $scope.items[$index].viewOneWithAnswerKey,
-                redraw:false
+                redraw:false,
+                drawsetting:""
             }
             ls.setItem("testInfo", angular.toJson(testInfo));
             window.location.href = "Main.html";
@@ -62,7 +63,8 @@ HomeWorkListModel.controller("ExerciseCtrl",function ($scope,httpService,subDate
             enableClientJudge: $scope.items[$index].enableClientJudge,
             keyVisible: $scope.items[$index].keyVisible,
             viewOneWithAnswerKey: $scope.items[$index].viewOneWithAnswerKey,
-            redraw:true
+            redraw:true,
+            drawsetting:""
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
         window.location.href = "Main.html";

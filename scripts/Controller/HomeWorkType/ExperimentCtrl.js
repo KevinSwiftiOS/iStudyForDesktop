@@ -11,6 +11,7 @@ HomeWorkListModel.controller("ExperimentCtrl",function (hostip,$scope,httpServic
     cfpLoadingBar.start();
     var promise = httpService.post("api/exprementquery",param);
     promise.then(function (data) {
+        console.log(data);
         cfpLoadingBar.complete();
         //分割日期并进行查看
         items = data;
@@ -41,20 +42,23 @@ HomeWorkListModel.controller("ExperimentCtrl",function (hostip,$scope,httpServic
     })
     //跳转到答题界面 要传4个参数 testid 是否可以阅卷 阅卷后是否可以查看标准答案 查卷时是否答案可见 考虑放到indexdb中 这样可以存储多个 随后从里面取值即可
     $scope.answer = function ($index) {
-
-
-
+        //看是查看还是打他
+        if($scope.items[$index].btnTitle == "答题") {
             var testInfo = {
                 testid: $scope.items[$index].id,
                 title: $scope.items[$index].title,
                 enableClientJudge: $scope.items[$index].enableClientJudge,
                 keyVisible: $scope.items[$index].keyVisible,
                 viewOneWithAnswerKey: $scope.items[$index].viewOneWithAnswerKey,
-                redraw:false
+                redraw: false,
+                drawsetting: ""
             }
             ls.setItem("testInfo", angular.toJson(testInfo));
             window.location.href = "Main.html";
-
+        }else{
+            //调用jsapi 打开浏览器
+            window.open(hostip + "Output/ViewOne/" + $scope.items[$index].usertestid);
+        }
     }
 
 

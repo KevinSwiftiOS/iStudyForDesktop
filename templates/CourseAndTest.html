@@ -29,6 +29,10 @@
 <div style="border-style: dashed;border-width: 1px"></div>
 <div style="text-align: center">
 <p  ng-if = 'tests.length > 0 ? false:true' style="font-size: 20px">暂无考试信息</p>
+    <font color="red">
+
+     <span ng-if = "remainS > 0 || remainM > 0">离考试开始还有{{remainM}}分{{remainS}}秒</span>
+    </font>
     </div>
 <div ng-repeat="test in tests">
     <div class="row">
@@ -38,11 +42,16 @@
             <p style="margin-left: 5px;">截止时间:{{test.dateend}}</p>
         </div>
         <div class="col-xs-5" style="text-align: center;margin-top: 20px">
-           <h3>成绩{{test.score}}</h3>
+           <h3 ng-if = "test.issubmited">成绩{{test.myscore}}</h3>
         </div>
         <div class="col-xs-2">
-            <button class="btn btn-info" style="margin-top: 30px" ng-if = "test.canEdit" ng-click="goToTest($index)">开始答题</button>
-            <p ng-if = "!test.canEdit">已交卷</p>
+            <button class="btn btn-info" style="margin-top: 30px" ng-if = "!test.isEnd && test.isStart && !test.issubmited && !test.isforbid" ng-click="goToTest($index)">开始答题</button>
+           <p ng-if = "test.isforbid && test.status == '进行中'">已禁考</p>
+           <p ng-if = "!test.isStart">还未开始
+
+
+           <p ng-if = "test.issubmited">已交卷</p>
+            <p ng-if = "!test.isSubmit && test.isEnd">已截止</p>
         </div>
 
     </div>

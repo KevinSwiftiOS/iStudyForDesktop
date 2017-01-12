@@ -46,21 +46,26 @@ HomeWorkListModel.controller("HomeWorkCtrl",function ($scope,httpService,subDate
         //     window:newWin,
         //     parameter:"ccc
         // })
+        if ($scope.items[$index].btnTitle == "答题") {
+            var testInfo = {
+                testid: $scope.items[$index].id,
+                title: $scope.items[$index].title,
+                enableClientJudge: $scope.items[$index].enableClientJudge,
+                keyVisible: $scope.items[$index].keyVisible,
+                viewOneWithAnswerKey: $scope.items[$index].viewOneWithAnswerKey,
+                redraw: false,
+                drawsetting: ""
+            }
 
-    var testInfo = {
-        testid: $scope.items[$index].id,
-        title: $scope.items[$index].title,
-        enableClientJudge: $scope.items[$index].enableClientJudge,
-        keyVisible: $scope.items[$index].keyVisible,
-        viewOneWithAnswerKey: $scope.items[$index].viewOneWithAnswerKey,
-        redraw:false
+            ls.setItem("testInfo", angular.toJson(testInfo));
+            window.location.href = "Main.html";
+
+        }else{
+            //调用jsapi 打开浏览器
+            window.open(hostip + "Output/ViewOne/" + $scope.items[$index].usertestid);
+        }
+
     }
-
-ls.setItem("testInfo",angular.toJson(testInfo));
-        window.location.href = "Main.html";
-
-    }
-
 
 
     function getParam(paramName) {

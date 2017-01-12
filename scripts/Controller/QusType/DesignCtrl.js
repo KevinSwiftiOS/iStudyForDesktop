@@ -24,7 +24,12 @@ MainModel.controller("DesignCtrl",function ($scope,$stateParams,httpService,QusS
 
 
     }
-
+    //开始答题 调用jsapi
+$scope.startAnswer = function () {
+     //第几题
+    console.log(QusService.qusItems[itemsIndex]);
+    console.log(QusService.qusItems[itemsIndex].questions[qusIndex]);
+}
     var ls = window.localStorage;
     var authtoken = ls.getItem("authtoken");
     //保存的按钮

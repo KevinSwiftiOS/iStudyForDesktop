@@ -36,11 +36,9 @@ SelfSelModel.controller("selfSelCtrl",function ($scope,httpService,hostip,cfpLoa
             }
             drawsetting.push((dic));
         }
-        console.log(drawsetting);
         //设置字符串
-
-       ls.setItem("drawsetting" + testInfo.testid,angular.toJson(drawsetting));
         testInfo.redraw = true;
+        testInfo.drawsetting = angular.toJson(drawsetting);
         ls.setItem("testInfo", angular.toJson((testInfo)));
         window.location.href = "Main.html";
 

@@ -35,4 +35,10 @@ var unSelStyle = {
      $scope.experimentStyle = selStyle;
      $scope.exerciseStyle = unSelStyle;
  }
+ //返回按钮
+    $scope.back = function () {
+        window.location.href = "CourseAndTest.html";
+    }
+    var ls = window.localStorage;
+    $scope.coursename = ls.getItem("coursename");
 });

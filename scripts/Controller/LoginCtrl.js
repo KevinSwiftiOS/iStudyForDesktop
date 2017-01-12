@@ -29,6 +29,7 @@ loginModel.controller("LoginCtrl",function ($scope,httpService,hostip) {
 
             }
             ls.setItem("info",angular.toJson(info));
+            ls.setItem("username",user.username);
            //页面跳转
             window.location.href = "CourseAndTest.html";
         },function (err) {
