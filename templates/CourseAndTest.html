@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta name="format-detection" content="telephone=no">
+    <title></title>
+    <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css" media="all">
+    <!-- compiled css output -->
+    <script src="../libs/angular-1.5.3/angular.js"></script>
+    <script src="../libs/angular-1.5.3/angular-animate.min.js"></script>
+    <script src = "../libs/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="../libs/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../libs/js/jquery.min.js"></script>
+    <script src="../libs/js/bootstrap.min.js"></script>
+
+    <script src = "../libs/angular-loading-bar/src/loading-bar.js"></script>
+    <script src = "../scripts/Controller/CourseAndTestListCtrl.js"></script>
+    <script src = "../scripts/Service/CourseAndTestListService.js"></script>
+</head>
+<body ng-app="CourseAndTestListModel" ng-controller = "CourseAndTestListCtrl">
+&nbsp;<h2 style="margin-left: 10px">我的考试</h2>
+<div style="text-align: center">
+</div>
+<div style="border-style: dashed;border-width: 1px"></div>
+<div style="text-align: center">
+<p  ng-if = 'tests.length > 0 ? false:true' style="font-size: 20px">暂无考试信息</p>
+    </div>
+<div ng-repeat="test in tests">
+    <div class="row">
+        <div class="col-xs-5">
+            <h4 style="margin-left: 5px">{{test.title}}</h4>
+           <p style="margin-left: 5px">开始时间:{{test.datestart}}</p>
+            <p style="margin-left: 5px;">截止时间:{{test.dateend}}</p>
+        </div>
+        <div class="col-xs-5" style="text-align: center;margin-top: 20px">
+           <h3>成绩{{test.score}}</h3>
+        </div>
+        <div class="col-xs-2">
+            <button class="btn btn-info" style="margin-top: 30px" ng-if = "test.canEdit" ng-click="goToTest($index)">开始答题</button>
+            <p ng-if = "!test.canEdit">已交卷</p>
+        </div>
+
+    </div>
+
+
+</div>
+<h2 style="margin-left: 10px">我的课程</h2>
+<div style="border-style: dashed;border-width: 1px"></div>
+<div style="text-align: center">
+<p  ng-if = 'courses.length > 0 ? false:true' style="font-size: 20px">暂无课程信息</p>
+    </div>
+<div class="container-fluid" >
+
+    <div ng-repeat="course in courses">
+<div class="row">
+    <div class="col-xs-2" style="margin-top: 20px">
+        <img src = "course.pic" ng-if="couse.pic != null">
+        <div style="text-align: center;height: 100px;line-height: 100px;word-wrap: break-word" ng-style="course.style" ng-if="couse.pic == null" >
+           <font color="white">{{course.pictit}}</font>
+        </div>
+    </div>
+    <div class="col-xs-8">
+        <h2>{{course.title}}</h2>
+       <div ng-bind-html=" course.memo"></div>
+        <p></p>
+        <i class="fa fa-envelope"></i>{{course.teacher}}
+    </div>
+<div class="col-xs-2" style="margin-top: 50px">
+    <button  class="btn btn-info" ng-click="goToStudy($index)">立即学习</button>
+</div>
+
+
+</div>
+        </div>
+    </div>
+</body>
+</html>

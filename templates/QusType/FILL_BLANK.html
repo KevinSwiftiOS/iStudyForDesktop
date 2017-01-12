@@ -1,0 +1,7 @@
+<div ng-bind-html="content"></div>
+<div ng-repeat="option in options track by $index">
+ <div ng-bind-html="option.blank"></div>
+  <input type="text" ng-model="option.value" ng-keydown="keyDown()">
+  <p></p>
+</div>
+<p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>

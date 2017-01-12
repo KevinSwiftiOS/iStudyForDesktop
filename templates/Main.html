@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta name="format-detection" content="telephone=no">
+    <title></title>
+    <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../libs/angular-modal-service/modal.css" rel="stylesheet" type="text/css">
+    <link href="../libs/angular-modal-service/demo-modal.css" rel="stylesheet" type="text/css">
+<link href="../css/file.css" type="text/css" rel="stylesheet">
+
+
+
+
+
+    <script src="../libs/js/jquery.min.js"></script>
+    <!-- compiled css output -->
+    <script src="../libs/angular-1.5.3/angular.js"></script>
+    <script src="../libs/angular-1.5.3/angular-animate.min.js"></script>
+   <script src = "../libs/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="../libs/sweetalert/dist/sweetalert.min.js"></script>
+
+    <script src="../libs/js/bootstrap.min.js"></script>
+    <!--base64加密-->
+    <script src = "../libs/angular-utf8-base64/angular-utf8-base64/angular-utf8-base64.js"></script>
+    <!--阅卷时候的模态框-->
+
+    <script src="../libs/angular-modal-service/modal.js"></script>
+
+
+
+    <script src = "../scripts/Service/MainRoutes.js"></script>
+    <script src = "../scripts/Service/MainService.js"></script>
+   <script src = "../scripts/Controller/MainCtrl.js"></script>
+    <script src = "../scripts/Controller/QusType/SingleChoiceCtrl.js"></script>
+    <script src = "../scripts/Controller/QusType/CompletionCtrl.js"></script>
+    <script src = "../scripts/Controller/QusType/MulitChoiceCtrl.js"></script>
+    <script src = "../scripts/Controller/QusType/ComplexCtrl.js"></script>
+    <script src = "../scripts/Controller/QusType/DesignCtrl.js"></script>
+    <script src = "../scripts/Controller/QusType/ProgramDesCtrl.js"></script>
+    <script src = "../scripts/Controller/MyModalCtrl.js"></script>
+
+</head>
+
+<body ng-app="MainModel" ng-controller = "MainCtrl">
+<div class="container-fluid">
+
+    <div class="row" style="text-align: center;background-color: #0F46A1">
+      <h2><font color="white">{{title}}</font></h2>
+    </div>
+<p></p>
+    <div class="row">
+        <div class="col-xs-2">
+       <table class="table-responsive">
+       <tr ng-repeat="item in items">
+          <td>
+           <div style="cursor: pointer"  ng-click="showQusList($index)">
+               <i class="{{item.icon}}"></i>
+
+               <font size="3px">{{item.title}}</font></div>
+
+      <table>
+       <tr ng-repeat="qus in item.questions" ng-if = "item.isShow">
+        <td>
+            <div style="cursor: pointer" ng-style="qus.style" ng-click="showQus($index,item.itemIndex)">
+                &nbsp;&nbsp;<i class="{{qus.icon}}"> </i>
+            {{qus.qusDesRow}}
+            </div>
+       </td>
+           </tr>
+
+      </table>
+          </td>
+       </tr>
+       </table>
+   </div>
+        <div class="col-xs-8">
+            <p></p>
+            <div>
+                <button class="btn btn-info" ng-click="goOver()">阅卷</button>
+                <button class="btn btn-warning" ng-click="reset()">重做</button>
+                 <button  class="btn btn-info" ng-click="forwardQus()">上一题</button>
+                 <button  class="btn btn-info" ng-click="nextQus()">下一题</button>
+            </div>
+            <div class="row">
+            <p ng-if="!hasQus"><i class="fa fa-spinner fa-spin"></i>正在加载题目 请稍后</p>
+                <div class="col-xs-9">
+                    总时间{{totalTime}}
+                    分时间{{time}}
+                    <div ui-view></div>
+                </div>
+                <div class="col-xs-3" style="text-align: center">
+               <p style="border-style: solid;border-width: 1px;width: 50px" >分数:{{score}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-2" style="text-align: center;">
+            <p></p>
+            <div><button class="btn btn-info" ng-click="submitHomeWork()">提交作业</button></div>
+            <p></p>
+            <img src = "{{info.avtarurl}}"  style="width:100%;height:60%">
+            <p></p>
+            <p>姓名:{{info.name}}</p>
+            <font color="red">{{timeLimited}}</font>
+            </div>
+
+</div>
+
+    </div>
+</body>
+</html>

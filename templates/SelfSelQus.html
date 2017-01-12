@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta name="format-detection" content="telephone=no">
+    <title></title>
+    <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
+    <link href="../css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css" media="all">
+    <!-- compiled css output -->
+    <script src="../libs/angular-1.5.3/angular.js"></script>
+    <script src="../libs/angular-1.5.3/angular-animate.min.js"></script>
+    <script src = "../libs/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../libs/angular-ui-router/release/angular-ui-router.min.js"></script>
+    <script src="../libs/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="../libs/js/jquery.min.js"></script>
+    <script src="../libs/js/bootstrap.min.js"></script>
+
+    <script src = "../libs/angular-loading-bar/src/loading-bar.js"></script>
+    <!--阅卷时候的模态框-->
+    <script src = "../scripts/Service/SelfSelQusService.js"></script>
+    <script src = "../scripts/Controller/SelfSelQusCtrl.js"></script>
+
+</head>
+<body ng-app = "SelfSelModel" ng-controller="selfSelCtrl">
+<div ng-repeat="item in items">
+   <p> {{item.topicname}}</p>
+
+    <select ng-model = "item.selBundle">
+        <option  ng-repeat="x in item.range">第{{x}}套</option>
+    </select>
+
+</div>
+<button class="btn btn-info" ng-click="goToExe()">进行练习</button>
+</body>

@@ -1,0 +1,8 @@
+<div ng-bind-html="content"></div>
+<div ng-repeat="option in options">
+
+        <input type="checkbox" ng-model="option.isSel" style="float: left;" ng-change="changed($index)" ng-click="answer($index)" style="cursor: pointer">
+        <label ng-click="answer($index)" style="cursor: pointer"><div ng-bind-html="option.optionContent"></div></label>
+
+</div>
+<p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>

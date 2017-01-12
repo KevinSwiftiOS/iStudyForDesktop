@@ -1,0 +1,39 @@
+<div ng-bind-html="content"></div>
+<!--循环-->
+<div ng-repeat="qus in subquestions">
+
+    <!--单选题-->
+<div ng-if="qus.type == 'SINGLE_CHIOCE'">
+    <div ng-bind-html="qus.content"></div>
+    <div ng-repeat="option in qus.options">
+        <div ng-click="answerSingle($index,qus.row)" style="cursor: pointer">
+            <input type="radio" ng-checked="option.isSel" style="float: left;">
+            <div ng-bind-html="option.optionContent"></div>
+        </div>
+    </div>
+
+</div>
+
+
+    <!--填空题-->
+    <div ng-if = "qus.type == 'FILL_BLANK'">
+        <div ng-bind-html="qus.content"></div>
+<div ng-repeat="option in qus.options track by $index">
+    <div ng-bind-html="option.blank"></div>
+    <input type="text" ng-model="option.value">
+    <p></p>
+</div>
+    </div>
+
+<!--多选题-->
+    <div ng-if = "qus.type == 'MULIT_CHIOCE'">
+        <div ng-bind-html="qus.content"></div>
+    <div ng-repeat="option in qus.options">
+        <div ng-click="answerMulit($index,qus.row)" style="cursor: pointer">
+            <input type="checkbox" ng-model="option.isSel" style="float: left;" ng-change="answerMulit($index,qus.row)">
+            <div ng-bind-html="option.optionContent"></div>
+        </div>
+    </div>
+        </div>
+        </div>
+<p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>

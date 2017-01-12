@@ -1,0 +1,9 @@
+<div ng-bind-html="content"></div>
+ <div ng-repeat="option in options">
+     <input type="radio" ng-checked="option.isSel" ng-click="answer($index)" style="cursor: pointer;float: left;margin-right: 2px">
+    <label>
+     <div ng-bind-html="option.optionContent" ng-click="answer($index)" style="cursor: pointer;float: left"></div>
+    </label>
+
+ </div>
+<p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>

@@ -1,0 +1,20 @@
+<div ng-bind-html="content"></div>
+<!--有没有附件-->
+<p ng-if = 'files.length > 0 ? true:false'>答题材料</p>
+
+<div ng-repeat="file in files">
+    <a href="{{file.url}}">{{file.name}}&nbsp;</a>
+    {{file.size}}
+    </div>
+
+<div ng-if = "designanswermode == 1">
+    <div ng-repeat="answerfile in answerfiles">
+        <a ng-href="{{answerfile.url}}">{{answerfile.name}} &nbsp;{{answerfile.size}}</a>
+    </div>
+
+
+    </div>
+<div ng-if = "designanswermode == 0">
+</div>
+<p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>
+

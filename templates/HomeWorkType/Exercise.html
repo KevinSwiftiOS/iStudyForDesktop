@@ -1,0 +1,30 @@
+
+<div class="container-fluid">
+    <p  ng-if = 'items.length > 0 ? false:true' style="font-size: 20px">暂无练习信息</p>
+    <div ng-repeat="item in items" style="border-bottom-style: solid">
+        <div class="row">
+            <div class="col-xs-4">
+                <p>{{item.title}}</p>
+                <p>开始时间:{{item.datestart}}</p>
+                <p>截止时间:{{item.dateend}}</p>
+            </div>
+
+            <div class="col-xs-8" ng-if = 'item.isEnd == false'>
+
+            <div class="col-xs-2" style="margin-top: 30px" >
+                <button class="btn btn-info" ng-click="continueLast($index)">继续上次</button>
+                </div>
+            <div class="col-xs-2" style="margin-top: 30px" >
+                <button class="btn btn-info" ng-click="randomSel($index)">随机选题</button>
+                </div>
+            <div class="col-xs-2" style="margin-top: 30px">
+                <button  class="btn btn-info" ng-click="selfSel($index)">自主选题</button>
+                </div>
+
+        </div>
+            <div class="col-xs-8" ng-if = 'item.isEnd == true' style="text-align: center;margin-top: 50px">
+                已截止
+                </div>
+            </div>
+    </div>
+</div>
