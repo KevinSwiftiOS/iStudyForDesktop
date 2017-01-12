@@ -1,0 +1,15 @@
+.demo-modal {
+    border: 1px solid black;
+    background: white;
+    padding: 15px;
+    width: 50%;
+    height: 50%;
+    opacity:.90;
+    overflow: scroll;
+}
+
+.demo-modal-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
