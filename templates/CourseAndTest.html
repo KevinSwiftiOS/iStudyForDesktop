@@ -5,87 +5,128 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta name="format-detection" content="telephone=no">
     <title></title>
+    <link href="../css/CourseAndTest.css" rel="stylesheet" type="text/css">
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css">
+    <link href="../css/file.css" type="text/css" rel="stylesheet">
+
+
+
+
+
+    <script src="../libs/js/jquery.min.js"></script>
     <!-- compiled css output -->
     <script src="../libs/angular-1.5.3/angular.js"></script>
     <script src="../libs/angular-1.5.3/angular-animate.min.js"></script>
     <script src = "../libs/angular-sanitize/angular-sanitize.js"></script>
     <script src="../libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../libs/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="../libs/js/jquery.min.js"></script>
-    <script src="../libs/js/bootstrap.min.js"></script>
 
+    <script src="../libs/js/bootstrap.min.js"></script>
+    <!--base64加密-->
     <script src = "../libs/angular-loading-bar/src/loading-bar.js"></script>
+
     <script src = "../scripts/Controller/CourseAndTestListCtrl.js"></script>
     <script src = "../scripts/Service/CourseAndTestListService.js"></script>
 </head>
 <body ng-app="CourseAndTestListModel" ng-controller = "CourseAndTestListCtrl">
-&nbsp;<h2 style="margin-left: 10px">我的考试</h2>
-<div style="text-align: center">
+<!--导航条-->
+
+<div class="head">
+    <div class="head-inner container">
+        <div class="logo">
+            <i class="fa fa-graduation-cap">
+            </i>
+            &nbsp;iStudy通用实践平台
+        </div>
+        <div id = "user_actions">
+         <span id="user_info">您好,{{name}}!</span>
+
+                <font color="white" ng-click="exit()"><i class="fa fa-power-off"></i></font>
+        </div>
+        </div>
 </div>
-<div style="border-style: dashed;border-width: 1px"></div>
-<div style="text-align: center">
+
+
+
+
+&nbsp;<h2 class="title">我的考试</h2>
+
+
+<div class="dashed"></div>
+
+<div class="btnCenter">
 <p  ng-if = 'tests.length > 0 ? false:true' style="font-size: 20px">暂无考试信息</p>
-    <font color="red">
+    <font color="red" size="5px">
 
      <span ng-if = "remainS > 0 || remainM > 0">离考试开始还有{{remainM}}分{{remainS}}秒</span>
     </font>
     </div>
-<div ng-repeat="test in tests">
+
+<div ng-repeat="test in tests" class="testItem">
     <div class="row">
-        <div class="col-xs-5">
-            <h4 style="margin-left: 5px">{{test.title}}</h4>
-           <p style="margin-left: 5px">开始时间:{{test.datestart}}</p>
-            <p style="margin-left: 5px;">截止时间:{{test.dateend}}</p>
+        <div class="col-xs-12">
+            <h3 class="testTitle">{{test.title}}</h3>
         </div>
-        <div class="col-xs-5" style="text-align: center;margin-top: 20px">
-           <h3 ng-if = "test.issubmited">成绩{{test.myscore}}</h3>
+    </div>
+    <div class="row">
+        <div class="col-xs-9">
+        <span class="testTime">开始时间:{{test.datestart}}
+            <span class="testTime">截止时间:{{test.dateend}}</span>
+        </span>
         </div>
-        <div class="col-xs-2">
-            <button class="btn btn-info" style="margin-top: 30px" ng-if = "!test.isEnd && test.isStart && !test.issubmited && !test.isforbid" ng-click="goToTest($index)">开始答题</button>
-           <p ng-if = "test.isforbid && test.status == '进行中'">已禁考</p>
-           <p ng-if = "!test.isStart">还未开始
+        <div class="col-xs-3 btnCenter">
+            <button class="btn btn-info" ng-if = "!test.isEnd && test.isStart && !test.issubmited && !test.isforbid" ng-click="goToTest($index)">开始答题</button>
+            <p ng-if = "test.isforbid && test.status == '进行中'">已禁考</p>
+            <p ng-if = "!test.isStart">还未开始
 
-
-           <p ng-if = "test.issubmited">已交卷</p>
+            <p ng-if = "test.issubmited" >已交卷</p>
             <p ng-if = "!test.isSubmit && test.isEnd">已截止</p>
         </div>
+
+    </div>
+    <div class="row">
+        <div class="col-xs-10">
+            <span class="testTime">考试时长:{{test.timelimit}}分钟</span>
+            <span ng-if = "test.issubmited || test.isEnd ">成绩:{{test.myscore}}</span>
+        </div>
+
+    </div>
 
     </div>
 
 
 </div>
-<h2 style="margin-left: 10px">我的课程</h2>
-<div style="border-style: dashed;border-width: 1px"></div>
-<div style="text-align: center">
+<h2 class="title">我的课程</h2>
+
+<div class="dashed"></div>
+<div class="btnCenter">
 <p  ng-if = 'courses.length > 0 ? false:true' style="font-size: 20px">暂无课程信息</p>
     </div>
-<div class="container-fluid" >
 
-    <div ng-repeat="course in courses">
+
+<div class="courseItem" ng-repeat="course in courses" >
 <div class="row">
-    <div class="col-xs-2" style="margin-top: 20px">
+    <div class="col-xs-2 coursePicDiv">
         <img src = "course.pic" ng-if="couse.pic != null">
-        <div style="text-align: center;height: 100px;line-height: 100px;word-wrap: break-word" ng-style="course.style" ng-if="couse.pic == null" >
-           <font color="white">{{course.pictit}}</font>
+        <div class="courseRGB" ng-style="course.style" ng-if="couse.pic == null" >
+            <div class="coursePit"><font color="white">{{course.pictit}}</font></div>
         </div>
     </div>
-    <div class="col-xs-8">
+    <div class="col-xs-7">
         <h2>{{course.title}}</h2>
        <div ng-bind-html=" course.memo"></div>
         <p></p>
         <i class="fa fa-envelope"></i>{{course.teacher}}
     </div>
-<div class="col-xs-2" style="margin-top: 50px">
+<div class="col-xs-3 goToStudy">
     <button  class="btn btn-info" ng-click="goToStudy($index)">立即学习</button>
 </div>
 
 
 </div>
         </div>
-    </div>
 </body>
 </html>

@@ -35,7 +35,11 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
     }
     $scope.title = testInfo.title;
     //时间剩下总共有多少 倒计时
-
+    //如果是考试的话 要显示准考证号
+    if(testInfo.isTest) {
+        $scope.username = "准考证号:" + ls.getItem("username");
+        $scope.isTest = testInfo.isTest;
+    }
     var unSelStyle = {
         "background-color":"while",
     }
@@ -229,6 +233,10 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
     }
    //提交作业
     $scope.submitHomeWork = function () {
+
+        submitHomeWork();
+    }
+     function submitHomeWork() {
         var param = {
             testid:testid,
             authtoken:ls.getItem("authtoken")
@@ -236,7 +244,6 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
        var promise = httpService.infoPost("api/submittest",param);
         promise.then(function (data) {
             var info = data.info;
-            console.log(info);
             if(info.succ == true) {
                 //进行清空 跳转
                 ls.removeItem("testInfo");
@@ -254,18 +261,13 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
                      $interval.cancel(slide);
                      $interval.cancel(submitSlide);
                  }
-                swal({
-                        title: "恭喜您",
-                        text: "提交成功",
-                        type: "success",
-                        height: 10000,
-                        width: 100,
-                    },
-                    function () {
-                      window.location.href = "CourseAndTest.html";
+                window.location.href = "CourseAndTest.html";
                         return true;
-                    });
+            }else{
+                swal("提交失败","","error");
             }
+        },function (err) {
+            swal("提交失败",err,"error");
         })
     }
 
@@ -301,9 +303,14 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
     function calTimeSlided() {
         var slideH =  parseInt(timeSlide / 3600);
         var slideM = parseInt((timeSlide - slideH * 3600) / 60);
+        console.log(slideH);
+        console.log(slideM);
         var slideS = timeSlide - slideH * 3600  - slideM * 60;
         //随后进行倒计时
         slide = $interval(function () {
+            if(slideM <= 5) {
+                $scope.remainLess = true;
+            }
          //如果还有秒数的话
             if(slideS > 0) {
                 slideS--;
@@ -322,6 +329,18 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
                         slideH = 00;
                         slideM = 00;
                         slideS = 00;
+                        $scope.remainLess = false;
+                      //根据服务器请求的参数来判断是否自动交卷
+                        swal({
+                                title: "提醒",
+                                text: "考试时间已经到了",
+                                type: "warning",
+                                height: 10000,
+                                width: 100,
+                            },
+                            function () {
+                                submitHomeWork();
+                            });
                     }
                 }
             }
@@ -335,16 +354,23 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
             }
             ls.setItem("timeSlides",angular.toJson(timeSlides));
         },1000);
-        //向服务器每5分钟发起一次请求 当前用掉的时间
+        //向服务器每3分钟发起一次请求 当前用掉的时间
          submitSlide = $interval(function () {
+             //从localStorage取值
+             var timeSlide;
+             for(var i = 0 ; i < timeSlides.length;i++) {
+                 if(timeSlides[i].key == ls.getItem("username") + "timeSlide" + testid) {
+                     timeSlide =  timeSlides[i].value;
+                     break;
+                 }
+             }
             var param = {
                 testid:testid,
                 authtoken:ls.getItem("authtoken"),
-                slided: (ls.getItem(ls.getItem("username")+ "timelimted" + testid)) * 60 -  ls.getItem(ls.getItem("username") + "timeslide" + testid),
+                slided: testInfo.timelimit * 60 - timeSlide,
             };
             var promise = httpService.infoPost("api/signslidetime",param);
             promise.then(function (data) {
-                console.log(data);
             },function (err) {
         console.log("提交时间失败",err,"error");
             });

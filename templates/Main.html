@@ -100,12 +100,18 @@
         </div>
         <div class="col-xs-2" style="text-align: center;">
             <p></p>
-            <div><button class="btn btn-info" ng-click="submitHomeWork()">提交作业</button></div>
+            <div><button class="btn btn-info" ng-click="submitHomeWork()">
+                <span ng-if = 'isTest'>交卷</span>
+                <span ng-if = '!isTest'>提交作业</span></button></div>
             <p></p>
             <img src = "{{info.avtarurl}}"  style="width:100%;height:60%">
             <p></p>
             <p>姓名:{{info.name}}</p>
-            <font color="red">{{timeLimited}}</font>
+            <p>{{username}}</p>
+            <p ng-if = "isTest">剩余时间</p>
+            <font color="red" size="5px">{{timeLimited}}</font>
+            <p></p>
+            <font color="red" size="4px" ng-if = "remainLess">距离考试结束时间不多了,请注意!</font>
             </div>
 
 </div>

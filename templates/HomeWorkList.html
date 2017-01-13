@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta name="format-detection" content="telephone=no">
     <title></title>
+    <link href="../css/HomeWorkList.css" rel="stylesheet" type="text/css">
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -31,26 +32,37 @@
     <script src = "../scripts/Controller/HomeWorkType/ExperimentCtrl.js"></script>
 </head>
 <body ng-app="HomeWorkListModel" ng-controller = "HomeWorkListCtrl">
-
- <nav class="navbar navbar-default"  role="navigation">
-    <font size="5px"><i class="fa fa-arrow-left" ng-click="back()"></i></font>
-     <div style="text-align: center;margin-top: -30px"><font size="5px">{{coursename}}</font> </div>
- </nav>
-
-
-    <div style="margin-top: 20px;text-align: center;margin-left: 30%;margin-right: 30%">
-        <div ng-click="goToHomeWork()" style="float: left;text-align: center" ng-style="homeWorkStyle"><font size="5px"> 我的作业</font></div>
+<div class="head">
+     <div class="head-inner container">
+         <div class="logo">
+             <font size="5px"><i class="fa fa-arrow-left backStyle" ng-click="back()"></i></font>
 
 
-        <div ng-click="goToExperiment()" style="float:left;text-align: center;margin-left: 30px;margin-right: 30px" ng-style="experimentStyle"><font size="5px">我的实验</font></div>
+         </div>
+         <div class="courseName">
+         {{coursename}}
+         </div>
+         <div id = "user_actions">
+             <span id="user_info">您好,{{name}}!</span>
 
-
-        <div  ng-click="goToExerceise()"  style="float:left;text-align: center" ng-style="exerciseStyle"><font size="5px">模拟练习</font></div>
-
+             <font color="white" ng-click="exit()"><i class="fa fa-power-off"></i></font>
+         </div>
      </div>
-  <div style="height: 40px;"></div>
+ </div>
 
-            <div style="text-align: center" ui-view></div>
+<p></p>
+
+
+    <div class="tabCommon" ng-click="goToHomeWork()" ng-style="homeWorkStyle"><font size="5px">我的作业</font></div>
+    <div class="tabCommon" ng-click="goToExperiment()" ng-style="experimentStyle"><font size="5px;">我的实验</font></div>
+    <div class="tabCommon" ng-click="goToExerceise()" ng-style="exerciseStyle"><font size="5px">模拟练习</font></div>
+
+
+
+
+<div class="dashed"></div>
+<div  ui-view></div>
+
 
 </body>
 </html>

@@ -1,18 +1,20 @@
 <div class="container-fluid">
-    <p  ng-if = 'items.length > 0 ? false:true' style="font-size: 20px">暂无实验信息</p>
-<div ng-repeat="item in items" style="border-bottom-style: solid">
-    <div class="row">
-        <div class="col-xs-4">
-    <p>{{item.title}}</p>
-    <p>开始时间:{{item.datestart}}</p>
-    <p>截止时间:{{item.dateend}}</p>
+    <div style="text-align: center">
+        <p  ng-if = 'items.length > 0 ? false:true' style="font-size: 20px">暂无实验信息</p>
+    </div>
+    <div ng-repeat="item in items" class="homeworkItem">
+        <div class="row">
+            <div class="col-xs-5">
+                <h4 class="homeworkMarginLeft">{{item.title}}</h4>
+                <p class="homeworkMarginLeft">开始时间:{{item.datestart}}</p>
+                <p class="homeworkMarginLeft">截止时间:{{item.dateend}}</p>
             </div>
-        <div class="col-xs-4">
-    <h3 ng-if = "item.isEnd == true">分数{{item.myscore}}</h3>
+            <div class="col-xs-3 homeworkMarginTop">
+                <h4 ng-if = "item.isEnd">分数{{item.myscore}}</h4>
             </div>
-        <div class="col-xs-4" style="margin-top: 30px">
-    <button class="btn btn-info" ng-click="answer($index)">{{item.btnTitle}}</button>
+            <div class="col-xs-4 homeworkMarginTop" style="text-align: center">
+                <button class="btn btn-info" ng-click="answer($index)">{{item.btnTitle}}</button>
             </div>
         </div>
-</div>
     </div>
+</div>

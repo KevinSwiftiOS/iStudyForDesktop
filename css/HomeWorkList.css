@@ -1,0 +1,79 @@
+.head-inner {
+    height: 60px;
+    margin: 0 auto;
+}
+.container {
+    margin-right: auto;
+    margin-left: auto;
+}
+.head{
+    width: 100%;
+    height: 61px;
+    background-color: #3867e8;
+
+    border-bottom:1px solid #ededed
+}
+.logo {
+    height: 60px;
+    line-height: 60px;
+    float: left;
+    font-size: 25px;
+    color: #fff;
+}
+.courseName {
+
+    height: 60px;
+    line-height: 60px;
+    text-align: center;
+    font-size: 25px;
+    color: #fff;
+}
+#user_actions {
+    float: right;
+    height: 60px;
+    line-height: 60px;
+    margin-top: -60px;
+    color: #fff;
+    cursor: pointer;
+
+}
+#user_info {
+    margin-right: 10px;
+    cursor: pointer;
+}
+body {
+    background-color: #e6e6e6;
+    font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Segoe UI","Microsoft Yahei",Tahoma,Arial,STHeiti,sans-serif;
+    font-size: 14px;
+    line-height: 1.428571429;
+}
+.backStyle{
+    margin-left: 10px;
+    margin-top: 10px
+}
+.tabCommon{
+    width: 33.3%;
+    float: left;
+    text-align: center;
+    border: solid;
+    border-width: 1px;
+    cursor: pointer;
+}
+.dashed{
+    border-style: dashed;
+    border-width: 1px;
+    margin-top: 50px;
+}
+.homeworkItem{
+
+    margin-left: 5%;
+    margin-right: 5%;
+    background: whitesmoke;
+    border-bottom: 1px dashed #E7E4E4;
+}
+.homeworkMarginLeft{
+   margin-left: 5px
+}
+.homeworkMarginTop{
+    margin-top: 30px;
+}

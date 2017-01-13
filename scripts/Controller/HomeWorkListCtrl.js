@@ -5,13 +5,13 @@
 HomeWorkListModel.controller("HomeWorkListCtrl",function ($scope,$state) {
     $state.go("HomeWork");
     var selStyle = {
-        "float":"left",
-        "border-bottom-width": "1px",
-        "border-bottom": "double"
+        "background-color": "white",
+        "color":"black"
 
 }
 var unSelStyle = {
-    "float":"left"
+    "background-color": "#3867e8",
+    "color":"white"
 }
     $scope.homeWorkStyle = selStyle;
     $scope.experimentStyle = unSelStyle;
@@ -40,5 +40,11 @@ var unSelStyle = {
         window.location.href = "CourseAndTest.html";
     }
     var ls = window.localStorage;
+    var info = angular.fromJson(ls.getItem("info"));
+    $scope.name = info.name;
     $scope.coursename = ls.getItem("coursename");
+    $scope.exit = function () {
+        ls.clear();
+        window.location.href = "Login.html";
+    }
 });
