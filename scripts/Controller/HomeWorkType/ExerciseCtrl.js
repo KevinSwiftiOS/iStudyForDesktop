@@ -3,9 +3,10 @@
  */
 HomeWorkListModel.controller("ExerciseCtrl",function ($scope,httpService,subDate,$state,cfpLoadingBar,hostip) {
     var ls = window.localStorage;
+    var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
         authtoken:ls.getItem("authtoken"),
-        courseid:ls.getItem("courseid")
+        courseid:courseInfo.courseid
     }
 
     var items = [];
@@ -32,7 +33,6 @@ HomeWorkListModel.controller("ExerciseCtrl",function ($scope,httpService,subDate
                 items[i].isEnd = true;
 
             }
-            console.log(items[i].isEnd);
         }
         $scope.items = items;
     },function (err) {

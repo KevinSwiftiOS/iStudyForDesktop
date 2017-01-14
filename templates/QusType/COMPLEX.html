@@ -1,39 +1,60 @@
-<div ng-bind-html="content"></div>
+<div ng-bind-html="content" class="question-face"></div>
+<!--有没有附件-->
+<p ng-if = 'files.length > 0 ? true:false' style="font-weight: bold"><font size="3px">【答题材料】</font> </p>
+
+<div ng-repeat="file in files" class="fileStyle" >
+    <i class="fa fa-file-o" style="margin-left: 5px"></i>
+    <a href="{{file.url}}"><font size="3px">{{file.name}}</font></a>
+    <font size="3px">{{file.size}}</font>
+
+</div>
 <!--循环-->
 <div ng-repeat="qus in subquestions">
 
     <!--单选题-->
 <div ng-if="qus.type == 'SINGLE_CHIOCE'">
-    <div ng-bind-html="qus.content"></div>
+    <div ng-bind-html="qus.content" class="question-face"></div>
     <div ng-repeat="option in qus.options">
-        <div ng-click="answerSingle($index,qus.row)" style="cursor: pointer">
-            <input type="radio" ng-checked="option.isSel" style="float: left;">
+        <input type="radio" ng-checked="option.isSel"  ng-click="answerSingle($index,qus.row)" style="cursor: pointer;float: left;margin-right: 2px">
+        <label class="answer-option" ng-checked="option.isSel" ng-click="answerSingle($index,qus.row)">
             <div ng-bind-html="option.optionContent"></div>
-        </div>
+        </label>
     </div>
-
+    <p></p>
 </div>
 
 
     <!--填空题-->
     <div ng-if = "qus.type == 'FILL_BLANK'">
-        <div ng-bind-html="qus.content"></div>
+        <div ng-bind-html="qus.content" class="question-face"></div>
 <div ng-repeat="option in qus.options track by $index">
     <div ng-bind-html="option.blank"></div>
-    <input type="text" ng-model="option.value">
+    <input type="text" ng-model="option.value" class="form-control">
     <p></p>
 </div>
+
+
+
+
+
     </div>
 
 <!--多选题-->
     <div ng-if = "qus.type == 'MULIT_CHIOCE'">
-        <div ng-bind-html="qus.content"></div>
+        <div ng-bind-html="qus.content" class="question-face"></div>
+
+
+
+
     <div ng-repeat="option in qus.options">
-        <div ng-click="answerMulit($index,qus.row)" style="cursor: pointer">
-            <input type="checkbox" ng-model="option.isSel" style="float: left;" ng-change="answerMulit($index,qus.row)">
-            <div ng-bind-html="option.optionContent"></div>
-        </div>
+        <input type="checkbox" ng-model="option.isSel" style="float: left" ng-change="answerMulit($index,qus.row)" ng-click="answerMulit($index,qus.row)">
+        <label  class="muiltAnswer-option" ng-click="answerMulit($index,qus.row)" style="margin-left: 2px">
+            <div ng-bind-html="option.optionContent" ></div></label>
+
     </div>
-        </div>
+
+
+</div>
+
         </div>
 <p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>

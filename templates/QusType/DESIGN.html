@@ -1,21 +1,19 @@
-<div ng-bind-html="content"></div>
+<div ng-bind-html="content" class="question-face"></div>
 <!--有没有附件-->
-<p ng-if = 'files.length > 0 ? true:false'>答题材料</p>
+<p ng-if = 'files.length > 0 ? true:false' style="font-weight: bold"><font size="3px">【答题材料】</font> </p>
 
-<div ng-repeat="file in files">
-    <a href="{{file.url}}">{{file.name}}&nbsp;</a>
-    {{file.size}}
-    </div>
-
-<div ng-if = "designanswermode == 1">
-    <div ng-repeat="answerfile in answerfiles">
-        <a ng-href="{{answerfile.url}}">{{answerfile.name}} &nbsp;{{answerfile.size}}</a>
-    </div>
-
+<div ng-repeat="file in files" style="background-color: #e6e6e6;height: 80px;line-height: 80px" >
+    <i class="fa fa-file-o" style="margin-left: 5px"></i>
+   <a href="{{file.url}}"><font size="3px">{{file.name}}</font></a>
+    <font size="3px">{{file.size}}</font>
 
     </div>
-<div ng-if = "designanswermode == 0">
-</div>
-<button  class="btn btn-info" ng-click="startAnswer()">开始答题</button>
+
+  <div ng-repeat="answerfile in answerfiles" style="background-color: #e6e6e6;height: 80px;line-height: 80px">
+        <i class="fa fa-file-o" style="margin-left: 5px"></i>
+     <a ng-href="{{answerfile.url}}"><font size="3px">{{answerfile.name}} &nbsp;{{answerfile.size}}</font></a>
+    </div>
+
+<button  class="btn btn-info" ng-click="startAnswer()" style="margin-top: 10px">开始答题</button>
 <p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>
 

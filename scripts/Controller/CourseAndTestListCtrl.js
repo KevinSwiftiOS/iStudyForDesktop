@@ -5,18 +5,21 @@ var CourseAndTestListModel = angular.module("CourseAndTestListModel",['angular-l
 CourseAndTestListModel.constant("hostip","http://dodo.hznu.edu.cn/");
 CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLoadingBar,httpService,subDate,$interval) {
     var ls = window.localStorage;
-    //每一秒都要进行监控
+    //总共的监控
     var totalStartInterval;
     cfpLoadingBar.start();
     var authtoken = ls.getItem("authtoken");
-    var info = angular.fromJson(ls.getItem("info"));
-    $scope.name = info.name;
+    var userInfo = angular.fromJson(ls.getItem("userInfo"));
+    $scope.name = userInfo.name;
+
+
     var param = {
         authtoken:authtoken
     }
     //先请求考试的数据 后请求练习的数据
     var testPromise = httpService.post("api/testquery",param);
     testPromise.then(function (data) {
+        cfpLoadingBar.complete();
         var tests = [];
         tests = data;
         //进行遍历 随后和当前时间进行比较看是否已经过期
@@ -46,7 +49,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
             if (tests[i].isEnd == true) {
                 //本次还未截止
                 //看本次时间
-                //剩余时间还有多少数组
+                //剩余时间还有多少
                 var timeSlides = angular.fromJson(ls.getItem("timeSlides"));
                 if (timeSlides == null) {
                     //根据服务器返回的剩余时间和总共时间的多少进行判断
@@ -56,7 +59,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
                     //看看截止时间
                     var timeSlide = null;
                     for (var i = 0; i < timeSlides.length; i++) {
-                        if (timeSlides[i].key == ls.getItem("username") + "timeSlide" + tests[i].id) {
+                        if (timeSlides[i].key == userInfo.username + "timeSlide" + tests[i].id) {
                             timeSlide = timeSlides[i].value;
                             break;
                         }
@@ -91,7 +94,6 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
     function showCoutDown() {
         var tests = $scope.tests;
         var i = 0;
-
         for( i = 0; i < tests.length;i++) {
             //如果需要倒计时的
             var now = new Date();
@@ -102,7 +104,6 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
             var currentMin = now.getMinutes();
             if (currentYear == tests[i].startY && currentMonth == tests[i].startM && currentDay == tests[i].startD) {
                 if (tests[i].startH == currentHour && tests[i].startMin - currentMin <= 5 && tests[i].startMin - currentMin > 0) {
-
                     $interval.cancel(totalStartInterval);
                     swal("提醒",tests[i].title + "快开始了","warning");
                     break;
@@ -122,7 +123,6 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
             var countDownInterval = $interval(function () {
                 if (remainS > 0) {
                     remainS--;
-
                 } else {
                     if (remainM > 0) {
                         remainM--;
@@ -138,9 +138,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
                 $scope.remainM = remainM;
                 $scope.remainS = remainS;
             }, 1000);
-
         }
-
 
     }
     function updateTest() {
@@ -203,7 +201,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
         if(timeSlides == null) {
             timeSlides = [];
             timeSlideDic = {
-                key: ls.getItem("username") + "timeSlide" + $scope.tests[$index].id,
+                key: userInfo.username + "timeSlide" + $scope.tests[$index].id,
                 value: $scope.tests[$index].timelimit * 60 - $scope.tests[$index].timeslided
             }
             timeSlides.push(timeSlideDic);
@@ -212,14 +210,14 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
             //看看看有没有值
             var timeSlide = null;
           for(var i = 0; i < timeSlides.length;i++) {
-              if (timeSlides[i].key == ls.getItem("username") + "timeSlide" + $scope.tests[$index].id) {
+              if (timeSlides[i].key == userInfo.username + "timeSlide" + $scope.tests[$index].id) {
                   timeSlide = timeSlides[i].value;
                   break;
               }
           }
             if(timeSlide == null) {
                 timeSlideDic = {
-                    key: ls.getItem("username") + "timeSlide" + $scope.tests[$index].id,
+                    key: userInfo.username + "timeSlide" + $scope.tests[$index].id,
                     value: $scope.tests[$index].timelimit * 60 - $scope.tests[$index].timeslided
                 }
                 timeSlides.push(timeSlideDic);
@@ -232,8 +230,11 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
 
     }
     $scope.goToStudy = function ($index) {
-        ls.setItem("courseid", $scope.courses[$index].id);
-        ls.setItem("coursename",$scope.courses[$index].title);
+        var courseInfo = {
+            courseid:$scope.courses[$index].id,
+            coursename:$scope.courses[$index].title
+        }
+       ls.setItem("courseInfo",angular.toJson(courseInfo));
         window.location.href = "HomeWorkList.html";
     }
     //退出系统

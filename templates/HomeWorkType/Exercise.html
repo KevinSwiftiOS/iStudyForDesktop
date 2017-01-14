@@ -10,17 +10,17 @@
                 <p class="homeworkMarginLeft">开始时间:{{item.datestart}}</p>
                 <p class="homeworkMarginLeft">截止时间:{{item.dateend}}</p>
             </div>
-            <div class="col-xs-2 col-lg-4 homeworkMarginTop" ng-if = 'item.isEnd == false'></div>
+            <div class="col-xs-2  col-lg-4 homeworkMarginTop" ng-if = 'item.isEnd == false'></div>
             <div class="col-xs-6  col-lg-4 homeworkMarginTop" ng-if = 'item.isEnd == false'>
 
 
-                <button class="btn btn-info" ng-click="continueLast($index)" style="float: left;margin-left: 10%">继续上次</button>
+                <button class="btn btn-info" ng-click="continueLast($index)">继续上次</button>
 
 
-                <button class="btn btn-info" ng-click="randomSel($index)" style="margin-left: 5px;margin-right: 5px;float:left;">随机选题</button>
+                <button class="btn btn-info" ng-click="randomSel($index)">随机选题</button>
 
 
-                <button  class="btn btn-info" ng-click="selfSel($index)" style="float: left">自主选题</button>
+                <button  class="btn btn-info" ng-click="selfSel($index)">自主选题</button>
 
 
         </div>

@@ -2,9 +2,10 @@ HomeWorkListModel.controller("HomeWorkCtrl",function ($scope,httpService,subDate
 
 
     var ls = window.localStorage ;
+    var courserInfo = angular.fromJson( ls.getItem("courseInfo"));
     var param = {
         authtoken:ls.getItem("authtoken"),
-        courseid:ls.getItem("courseid")
+        courseid:courserInfo.courseid
     }
 
     var items = [];

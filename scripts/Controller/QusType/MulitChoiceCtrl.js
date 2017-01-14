@@ -22,6 +22,7 @@ MainModel.controller("MulitChoiceCtrl",function ($scope,$stateParams,httpService
         var qus = QusService.qusItems[itemsIndex].questions[qusIndex];
         var answer = qus.answer;
         var content = qus.content;
+        $scope.files = qus.files;
         $scope.content = content;
         //如果有匹配的就加上
 

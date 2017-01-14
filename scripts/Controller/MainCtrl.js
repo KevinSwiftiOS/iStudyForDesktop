@@ -6,9 +6,10 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
     //请求数据
     var ls = window.localStorage;
     //头像的参数
-    $scope.avrarurlStyle =  style="width: 80px; height: 200px"
+    $scope.avrarurlStyle = style = "width: 80px; height: 200px"
     //初始化
-    $scope.info = angular.fromJson(ls.getItem("info"));
+    var userInfo = angular.fromJson(ls.getItem("userInfo"));
+    $scope.info = userInfo;
     //是否可以阅卷 试题的名称等等
     var testInfo = angular.fromJson(ls.getItem("testInfo"));
     var redraw = false;
@@ -17,161 +18,174 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
     var drawsetting = "";
     drawsetting = testInfo.drawsetting;
     //倒计时的时间
-     var submitSlide = null;
-     var slide = null;
-     var timeSlide = null;
+    var submitSlideInterval = null;
+    var slideInterval = null;
+    var timeSlide = null;
     var timeSlides = [];
-     timeSlides = angular.fromJson(ls.getItem("timeSlides"));
-    if(timeSlides != null) {
+    timeSlides = angular.fromJson(ls.getItem("timeSlides"));
+    if (timeSlides != null) {
         for (var i = 0; i < timeSlides.length; i++) {
-            if (timeSlides[i].key == ls.getItem("username") + "timeSlide" + testid) {
+            if (timeSlides[i].key == userInfo.username + "timeSlide" + testid) {
                 timeSlide = timeSlides[i].value;
                 break;
             }
         }
     }
-    if(timeSlide != null) {
-     calTimeSlided();
+    if (timeSlide != null) {
+        calTimeSlided();
     }
     $scope.title = testInfo.title;
     //时间剩下总共有多少 倒计时
     //如果是考试的话 要显示准考证号
-    if(testInfo.isTest) {
-        $scope.username = "准考证号:" + ls.getItem("username");
+    if (testInfo.isTest) {
+        $scope.username = "准考证号:" + userInfo.username;
         $scope.isTest = testInfo.isTest;
     }
     var unSelStyle = {
-        "background-color":"while",
+        "background-color": "while",
     }
-    var selStyle ={
-        "background-color":"#C5DBFD",
+    var selStyle = {
+        "background-color": "#C5DBFD",
     }
     //已经选中的题型
-    var itemsIndex = 0,qusIndex = 0;
+    var itemsIndex = 0, qusIndex = 0;
     var param = {
-        authtoken:ls.getItem("authtoken"),
-        testid:testid,
-        redraw:redraw,
-        drawsetting:drawsetting
+        authtoken: ls.getItem("authtoken"),
+        testid: testid,
+        redraw: redraw,
+        drawsetting: drawsetting
     };
-    var promise = httpService.post( "api/testinfo",param);
+    var promise = httpService.post("api/testinfo", param);
     $scope.hasQus = false;
     promise.then(function (data) {
-        console.log(data);
         $scope.hasQus = true;
         qusIndex = 0;
         itemsIndex = 0;
-        var totalTime = 2000;
-        $interval(function () {
-            $scope.totalTime = totalTime--;
-
-        },1000);
         data[0].itemIndex = 0;
-        for(var i = 1; i < data.length;i++) {
+        for (var i = 1; i < data.length; i++) {
             data[i].icon = "fa fa-chevron-circle-right";
             data[i].isShow = false;
             data[i].itemIndex = i;
         }
         QusService.qusItems = data;
-        initIcon(itemsIndex,qusIndex);
+        initIcon(itemsIndex, qusIndex);
         $scope.items = QusService.qusItems;
         goToDiffState();
 
-    },function (err) {
+    }, function (err) {
         $scope.hasQus = true;
         $scope.items = [];
         QusService.qusItems = [];
 
-        swal("请求失败",err,"error");
+        swal("请求失败", err, "error");
     })
     //监听值得变化
-    $scope.$watch('items',function (newV,oldV) {
-        if(newV != oldV) {
+    $scope.$watch('items', function (newV, oldV) {
+        if (newV != oldV) {
             $scope.items = newV;
 
         }
-    },true);
+    }, true);
     //展现题目
-   $scope.showQusList = function ($index) {
-       var items = QusService.qusItems;
-       if(items[$index].isShow == false){
-           items[$index].isShow = true;
+    $scope.showQusList = function ($index) {
+        var items = QusService.qusItems;
+        if (items[$index].isShow == false) {
+            items[$index].isShow = true;
 
-           items[$index].icon = "fa fa-chevron-circle-down";
-       }else{
-           items[$index].icon = "fa fa-chevron-circle-right";
-           items[$index].isShow = false;
-       }
-       QusService.qusItems = items;
-       $scope.items = QusService.qusItems;
-   }
-   $scope.showQus = function (_qusIndex,_itemsIndex) {
-       qusIndex = _qusIndex;
-       itemsIndex = _itemsIndex;
-       initIcon(itemsIndex,qusIndex);
-       //根据不同的题型到不同的view去
-       goToDiffState();
-   }
-   //上一题与下一题
+            items[$index].icon = "fa fa-chevron-circle-down";
+        } else {
+            items[$index].icon = "fa fa-chevron-circle-right";
+            items[$index].isShow = false;
+        }
+        QusService.qusItems = items;
+        $scope.items = QusService.qusItems;
+    }
+    $scope.showQus = function (_qusIndex, _itemsIndex) {
+        qusIndex = _qusIndex;
+        itemsIndex = _itemsIndex;
+        initIcon(itemsIndex, qusIndex);
+        //根据不同的题型到不同的view去
+        goToDiffState();
+    }
+    //上一题与下一题
     $scope.forwardQus = function () {
-        if(qusIndex > 0) {
+        if (qusIndex > 0) {
             qusIndex--;
-            initIcon(itemsIndex,qusIndex);
-        }else{
-            if(itemsIndex > 0) {
-                var items =  QusService.qusItems;
+            initIcon(itemsIndex, qusIndex);
+        } else {
+            if (itemsIndex > 0) {
+                var items = QusService.qusItems;
                 itemsIndex--;
                 var qus = items[itemsIndex].questions;
                 qusIndex = qus.length - 1;
-              initIcon(itemsIndex,qusIndex);
-            }else
-                swal("提醒","已到达第一题","warning");
+                initIcon(itemsIndex, qusIndex);
+            } else
+                swal("提醒", "已到达第一题", "warning");
         }
         goToDiffState();
     }
     $scope.nextQus = function () {
-        if(qusIndex < QusService.qusItems[itemsIndex].questions.length - 1){
-             qusIndex++;
-            initIcon(itemsIndex,qusIndex);
-         }else{
+        if (qusIndex < QusService.qusItems[itemsIndex].questions.length - 1) {
+            qusIndex++;
+            initIcon(itemsIndex, qusIndex);
+        } else {
             var items = QusService.qusItems;
-             if(itemsIndex < items.length - 1){
-                 itemsIndex++;
-                 qusIndex = 0;
-                 items[itemsIndex].isShow = true;
-                 items[itemsIndex].icon = "fa fa-chevron-circle-down";
-                 initIcon(itemsIndex,qusIndex);
+            if (itemsIndex < items.length - 1) {
+                itemsIndex++;
+                qusIndex = 0;
+                items[itemsIndex].isShow = true;
+                items[itemsIndex].icon = "fa fa-chevron-circle-down";
+                initIcon(itemsIndex, qusIndex);
 
-             }else
-                 swal("提醒","已到达最后一题","warning");
+            } else
+                swal("提醒", "已到达最后一题", "warning");
 
-         }
+        }
         goToDiffState();
     }
-   //重置答案
+    //重置答案
     $scope.reset = function () {
-        var data = {
-            testid:testid,
-            questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
-            answer:"",
-            answerfile:"",
-        }
-        var param = {
-            authtoken:ls.getItem("authtoken"),
-            data:base64.encode(angular.toJson(data)),
-        }
-        var promise = httpService.post("api/submitquestion",param);
-        promise.then(function (res) {
-            swal("恭喜您","重置成功","success");
-         var reset = IsReset.reset;
-            reset.isReset = !reset.isReset;
-            QusService.qusItems[itemsIndex].questions[qusIndex].answer = "";
+        swal({
+                title: "提醒",
+                text: "您确认重置该题吗?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    //进行缓存的清理和跳转
+                    var data = {
+                        testid:testid,
+                        questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
+                        answer:"",
+                        answerfile:"",
+                    }
+                    var param = {
+                        authtoken:ls.getItem("authtoken"),
+                        data:base64.encode(angular.toJson(data)),
+                    }
+                    var promise = httpService.post("api/submitquestion",param);
+                    promise.then(function (res) {
+                        var reset = IsReset.reset;
+                        reset.isReset = !reset.isReset;
+                        QusService.qusItems[itemsIndex].questions[qusIndex].answer = "";
 
-            QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle-thin";
-        },function (err) {
-            swal("重置失败",err,"error");
-        })
+                        QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle-thin";
+                    },function (err) {
+                        swal("重置失败",err,"error");
+                    })
+                }
+
+            });
+
     }
+
+
     //阅卷
     $scope.goOver = function () {
        //当前试卷是否可以阅卷
@@ -233,8 +247,24 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
     }
    //提交作业
     $scope.submitHomeWork = function () {
+        swal({
+                title: "提醒",
+                text: "您确认提交吗?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    //进行缓存的清理和跳转
+                    submitHomeWork();
+                }
+            });
 
-        submitHomeWork();
     }
      function submitHomeWork() {
         var param = {
@@ -247,19 +277,19 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
             if(info.succ == true) {
                 //进行清空 跳转
                 ls.removeItem("testInfo");
-                ls.removeItem("courseid");
-                ls.removeItem("coursename");
+                ls.removeItem("courseInfo");
+                ls.removeItem("qusLocation");
                  if(timeSlides != null) {
                      for (var i = 0; i < timeSlides.length; i++) {
-                         if (timeSlides[i].key == ls.getItem("username") + "timeSlide" + testid) {
+                         if (timeSlides[i].key == userInfo.username + "timeSlide" + testid) {
                              timeSlides.splice(i, 1);
                              break;
                          }
                      }
 
                      ls.setItem("timeSlides", angular.toJson(timeSlides));
-                     $interval.cancel(slide);
-                     $interval.cancel(submitSlide);
+                     $interval.cancel(slideInterval);
+                     $interval.cancel(submitSlideInterval);
                  }
                 window.location.href = "CourseAndTest.html";
                         return true;
@@ -307,7 +337,7 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
         console.log(slideM);
         var slideS = timeSlide - slideH * 3600  - slideM * 60;
         //随后进行倒计时
-        slide = $interval(function () {
+        slideInterval = $interval(function () {
             if(slideM <= 5) {
                 $scope.remainLess = true;
             }
@@ -339,6 +369,7 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
                                 width: 100,
                             },
                             function () {
+                                //根据apil来确定是否要交卷
                                 submitHomeWork();
                             });
                     }
@@ -347,7 +378,7 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
             $scope.timeLimited = slideH + ":" + slideM + ":" + slideS;
              //进行更新值
             for(var i = 0 ; i < timeSlides.length;i++) {
-                if(timeSlides[i].key == ls.getItem("username") + "timeSlide" + testid) {
+                if(timeSlides[i].key == userInfo.username + "timeSlide" + testid) {
                     timeSlides[i].value = slideH * 3600 + slideM * 60 + slideS;
                 break;
                 }
@@ -359,7 +390,7 @@ MainModel.controller("MainCtrl",function ($scope,$state,httpService,QusService,b
              //从localStorage取值
              var timeSlide;
              for(var i = 0 ; i < timeSlides.length;i++) {
-                 if(timeSlides[i].key == ls.getItem("username") + "timeSlide" + testid) {
+                 if(timeSlides[i].key == userInfo.username + "timeSlide" + testid) {
                      timeSlide =  timeSlides[i].value;
                      break;
                  }

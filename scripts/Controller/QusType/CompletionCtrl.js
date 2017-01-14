@@ -11,6 +11,7 @@ MainModel.controller("CompletionCtrl",function ($scope,$stateParams,QusService,h
         var qus = QusService.qusItems[itemsIndex].questions[qusIndex];
         var answer = qus.answer;
         var content = qus.content;
+        $scope.files = qus.files;
         $scope.content = content;
         //标准答案
         var strandanswer = qus.strandanswer;

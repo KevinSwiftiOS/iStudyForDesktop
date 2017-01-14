@@ -11,13 +11,11 @@ MainModel.controller("DesignCtrl",function ($scope,$stateParams,httpService,QusS
         $scope.content = qus.content;
         $scope.files = qus.files;
         //看是文件上传类型题目还是富文本题目
-       $scope.files = qus.files;
-        $scope.designanswermode = qus.designanswermode;
+        $scope.files = qus.files;
         $scope.answerfiles = qus.answerfiles;
-        console.log($scope.files);
-    //答案
-        var answer = qus.answer;
 
+        //答案
+        var answer = qus.answer;
         $scope.Ans = {
             answer:answer
         }

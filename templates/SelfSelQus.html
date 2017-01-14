@@ -5,6 +5,8 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta name="format-detection" content="telephone=no">
     <title></title>
+    <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="../css/SelfSelQus.css" rel=" stylesheet" type="text/css">
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css" media="all">
@@ -24,7 +26,35 @@
 
 </head>
 <body ng-app = "SelfSelModel" ng-controller="selfSelCtrl">
-<div ng-repeat="item in items">
+<div class="head">
+    <div class="head-inner container">
+        <div class="logo">
+            <font size="5px"><i class="fa fa-arrow-left backStyle" ng-click="back()"></i></font>
+
+
+        </div>
+        <div class="courseName">
+            {{testTitle}}
+        </div>
+        <div id = "user_actions">
+            <span id="user_info">您好,{{name}}!</span>
+
+            <font color="white" ng-click="exit()"><i class="fa fa-power-off"></i></font>
+        </div>
+    </div>
+</div>
+
+<div class="dashed"></div>
+<p></p>
+
+
+
+
+
+
+
+
+<div ng-repeat="item in items" class="topicStyle">
    <p> {{item.topicname}}</p>
 
     <select ng-model = "item.selBundle">
@@ -32,5 +62,5 @@
     </select>
 
 </div>
-<button class="btn btn-info" ng-click="goToExe()">进行练习</button>
+<button class="btn btn-info topicStyle" ng-click="goToExe()">进行练习</button>
 </body>

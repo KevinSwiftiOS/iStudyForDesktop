@@ -5,6 +5,7 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta name="format-detection" content="telephone=no">
     <title></title>
+    <link href="../css/Main.css" type="text/css" rel="stylesheet">
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -48,25 +49,24 @@
 
 <body ng-app="MainModel" ng-controller = "MainCtrl">
 <div class="container-fluid">
-
-    <div class="row" style="text-align: center;background-color: #0F46A1">
-      <h2><font color="white">{{title}}</font></h2>
+    <div class="row head">
+      <h2>{{title}}</font></h2>
     </div>
 <p></p>
+
     <div class="row">
-        <div class="col-xs-2">
-       <table class="table-responsive">
+        <div class="col-xs-2 col-md-2 col-lg-2" style="background-color: white;">
+       <table class="table table-responsive table-bordered">
        <tr ng-repeat="item in items">
           <td>
-           <div style="cursor: pointer"  ng-click="showQusList($index)">
+           <div class="qusPointer"  ng-click="showQusList($index)">
                <i class="{{item.icon}}"></i>
-
                <font size="3px">{{item.title}}</font></div>
 
       <table>
        <tr ng-repeat="qus in item.questions" ng-if = "item.isShow">
         <td>
-            <div style="cursor: pointer" ng-style="qus.style" ng-click="showQus($index,item.itemIndex)">
+            <div class="qusPointer" ng-style="qus.style" ng-click="showQus($index,item.itemIndex)">
                 &nbsp;&nbsp;<i class="{{qus.icon}}"> </i>
             {{qus.qusDesRow}}
             </div>
@@ -78,33 +78,32 @@
        </tr>
        </table>
    </div>
-        <div class="col-xs-8">
+        <div class="col-xs-8 col-md-8 col-lg-8" style="background-color: white;">
             <p></p>
-            <div>
-                <button class="btn btn-info" ng-click="goOver()">阅卷</button>
-                <button class="btn btn-warning" ng-click="reset()">重做</button>
-                 <button  class="btn btn-info" ng-click="forwardQus()">上一题</button>
-                 <button  class="btn btn-info" ng-click="nextQus()">下一题</button>
+            <div class="tabBtns">
+                <button class="btn btn-info" ng-click="goOver()" style="margin-bottom: 2px">阅卷</button>
+                <button class="btn btn-warning" ng-click="reset()" style="margin-bottom: 2px">重做</button>
+                 <button  class="btn btn-info" ng-click="forwardQus()" style="margin-bottom: 2px">上一题</button>
+                 <button  class="btn btn-info" ng-click="nextQus()" style="margin-bottom: 2px">下一题</button>
             </div>
-            <div class="row">
+            <div class="row" style="margin-top: 10px">
             <p ng-if="!hasQus"><i class="fa fa-spinner fa-spin"></i>正在加载题目 请稍后</p>
-                <div class="col-xs-9">
-                    <!--总时间{{totalTime}}-->
-                    <!--分时间{{time}}-->
+                <div class="col-xs-9 col-md-8">
                     <div ui-view></div>
                 </div>
-                <div class="col-xs-3" style="text-align: center">
-               <p style="border-style: solid;border-width: 1px;width: 50px" >分数:{{score}}</p>
+                <div class="col-xs-3 col-md-4" style="text-align: center">
+               <p class="scoreStyle"><font size="3px"> 分数:{{score}}</font></p>
                 </div>
             </div>
         </div>
-        <div class="col-xs-2" style="text-align: center;">
+
+        <div class="col-xs-2 col-md-2 col-lg-2 infoStyle" >
             <p></p>
             <div><button class="btn btn-info" ng-click="submitHomeWork()">
                 <span ng-if = 'isTest'>交卷</span>
                 <span ng-if = '!isTest'>提交作业</span></button></div>
             <p></p>
-            <img src = "{{info.avtarurl}}"  style="width:100%;height:60%">
+            <img src = "{{info.avtarurl}}" class="avaturlStyle">
             <p></p>
             <p>姓名:{{info.name}}</p>
             <p>{{username}}</p>
@@ -112,7 +111,7 @@
             <font color="red" size="5px">{{timeLimited}}</font>
             <p></p>
             <font color="red" size="4px" ng-if = "remainLess">距离考试结束时间不多了,请注意!</font>
-            </div>
+        </div>
 
 </div>
 

@@ -6,7 +6,11 @@
 SelfSelModel.controller("selfSelCtrl",function ($scope,httpService,hostip,cfpLoadingBar) {
   cfpLoadingBar.start();
     var ls = window.localStorage;
+    var userInfo = angular.fromJson(ls.getItem("userInfo"));
     var testInfo =  angular.fromJson(ls.getItem("testInfo"));
+    $scope.testTitle = testInfo.title;
+
+    $scope.name = userInfo.name;
     var param = {
         testid: testInfo.testid,
         authtoken:ls.getItem("authtoken")
@@ -43,4 +47,13 @@ SelfSelModel.controller("selfSelCtrl",function ($scope,httpService,hostip,cfpLoa
         window.location.href = "Main.html";
 
     }
+        //退出界面
+    $scope.exit = function () {
+        ls.clear();
+        window.location.href = "Login.html";
+    }
+    $scope.back = function () {
+        window.location.href = "HomeWorkList.html";
+    }
+
 })

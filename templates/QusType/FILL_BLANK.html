@@ -1,7 +1,18 @@
-<div ng-bind-html="content"></div>
+
+<div ng-bind-html="content" class="question-face"></div>
+<!--有没有附件-->
+<p ng-if = 'files.length > 0 ? true:false' style="font-weight: bold"><font size="3px">【答题材料】</font> </p>
+
+<div ng-repeat="file in files" style="background-color: #e6e6e6;height: 80px;line-height: 80px" >
+ <i class="fa fa-file-o" style="margin-left: 5px"></i>
+ <a href="{{file.url}}"><font size="3px">{{file.name}}</font></a>
+ <font size="3px">{{file.size}}</font>
+
+</div>
 <div ng-repeat="option in options track by $index">
  <div ng-bind-html="option.blank"></div>
-  <input type="text" ng-model="option.value" ng-keydown="keyDown()">
+  <input type="text" ng-model="option.value" ng-keydown="keyDown()" class="form-control">
   <p></p>
 </div>
+
 <p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>

@@ -14,6 +14,7 @@ MainModel.controller("ProgramDesCtrl",function ($scope,QusService,httpService,$s
        var pattern = new RegExp("^\[E\]([\s\S]*?)\[/E\]\r?");
        var qus = QusService.qusItems[itemsIndex].questions[qusIndex];
        var answer = qus.answer;
+       $scope.files = qus.files;
        var content = qus.content;
        //默认的答案
        var defaultanswer = qus.defaultanswer;

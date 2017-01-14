@@ -18,6 +18,7 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
         var qus = QusService.qusItems[itemsIndex].questions[qusIndex];
         //大题目的描述
         $scope.content = qus.content;
+        $scope.files = qus.files;
         //标准答案进行分割
         var strandanswer = qus.strandanswer;
         var subQus = qus.subquestions;

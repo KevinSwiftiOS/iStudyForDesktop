@@ -53,6 +53,7 @@ MainModel.controller("SingleChoiceCtrl",function ($scope,$stateParams,QusService
         var oneQus = QusService.qusItems[itemsIndex].questions[qusIndex];
         var content = oneQus.content;
         $scope.content = content;
+        $scope.files = oneQus.files;
         //单选题拿到后看有几个选项
         //进行比较看有几个
         var options = [];

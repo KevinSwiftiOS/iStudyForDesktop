@@ -22,7 +22,7 @@ MainModel.controller('MyModalCtrl', function ($scope, $timeout, myModal,base64,h
             $scope.isGoOver = false;
           var info = data.info;
             $scope.currentQus = info.questioninfo;
-         console.log(data);
+
             if(testinfo.keyVisible == false) {
             var points = info.points;
                 for(var i = 0; i < points.length;i++)
@@ -31,13 +31,12 @@ MainModel.controller('MyModalCtrl', function ($scope, $timeout, myModal,base64,h
             }
             var points = info.points;
             for(var i = 0; i < points.length;i++) {
-                console.log(points[i].comment);
-                console.log(points[i].comment === "正确");
+
                 if(points[i].comment === "正确")
                     points[i].color = "green";
                 else
                     points[i].color = "red";
-                console.log(points[i].color);
+
             }
             info.points = points;
             $scope.points = info.points;

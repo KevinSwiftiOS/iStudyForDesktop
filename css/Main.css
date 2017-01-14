@@ -1,0 +1,88 @@
+.head{
+    background-color: #3867e8;
+    text-align: center;
+    color: white;
+}
+.qusPointer{
+    cursor: pointer
+}
+.question-block {
+    border-bottom: 1px solid #ccc;
+    padding: 8px;
+    position: relative;
+    z-index: 0;
+}
+
+.question-block > a {
+    position: absolute;
+    top: -55px;
+}
+
+.question-face {
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.question-answer {
+    padding: 12px;
+}
+img{
+    max-width: 100%;
+}
+.answer-option {
+    display: block;
+    padding: 0px 5px;
+    margin-left: -2px;
+   cursor: pointer;
+    border: 2px solid transparent;
+}
+
+.answer-option:hover {
+    border: 2px solid #e7e7e7;
+}
+
+.preview .answer-option:hover {
+    border: 2px solid transparent;
+}
+.muiltAnswer-option{
+    display: block;
+
+    margin-left: -4px;
+    border: 2px solid transparent;
+    cursor: pointer;
+}
+.muiltAnswer-option:hover {
+    border: 2px solid #e7e7e7;
+}
+.answer-option input {
+    margin-right: 5px;
+
+}
+.tabBtns{
+   border-bottom-style: solid;
+border-bottom-width: 1px
+}
+.scoreStyle{
+    border-style: solid;
+    border-width: 1px;
+    max-width: 100px;
+    float: right;
+    padding: 5px;
+    margin-right: 50px;
+}
+.infoStyle{
+   text-align: center;
+    background-color: #e6e6e6;
+    height: 1000px;
+    margin-top: -10px
+}
+.avaturlStyle{
+  width:100%;
+    height:20%;
+    background-color: white
+}
+.fileStyle{
+    background-color: #e6e6e6;
+    height: 80px;
+    line-height: 80px
+}

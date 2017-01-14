@@ -40,9 +40,10 @@ var unSelStyle = {
         window.location.href = "CourseAndTest.html";
     }
     var ls = window.localStorage;
-    var info = angular.fromJson(ls.getItem("info"));
-    $scope.name = info.name;
-    $scope.coursename = ls.getItem("coursename");
+    var userInfo = angular.fromJson(ls.getItem("userInfo"));
+    $scope.name = userInfo.name;
+    var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
+    $scope.coursename = courseInfo.coursename;
     $scope.exit = function () {
         ls.clear();
         window.location.href = "Login.html";

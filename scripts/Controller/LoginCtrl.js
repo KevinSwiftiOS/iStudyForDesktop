@@ -28,8 +28,8 @@ loginModel.controller("LoginCtrl",function ($scope,httpService,hostip) {
                 info.avtarurl = "../images/head.png";
 
             }
-            ls.setItem("info",angular.toJson(info));
-            ls.setItem("username",user.username);
+            info.username = user.username;
+            ls.setItem("userInfo",angular.toJson(info));
            //页面跳转
             window.location.href = "CourseAndTest.html";
         },function (err) {
