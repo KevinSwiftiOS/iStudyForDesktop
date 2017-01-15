@@ -2,16 +2,19 @@
     height: 60px;
     margin: 0 auto;
 }
+
 .container {
     margin-right: auto;
     margin-left: auto;
 }
-.head{
+
+.head {
     height: 61px;
     background-color: #3867e8;
-    position:relative;;
-    border-bottom:1px solid #ededed
+    position: relative;;
+    border-bottom: 1px solid #ededed
 }
+
 .logo {
     height: 60px;
     line-height: 60px;
@@ -19,6 +22,7 @@
     font-size: 30px;
     color: #fff;
 }
+
 #user_actions {
     float: right;
     height: 60px;
@@ -27,71 +31,85 @@
     margin-right: 10px;
     cursor: pointer;
 }
+
 #user_info {
     margin-right: 10px;
 
 }
+
 body {
     background-color: #e6e6e6;
-    font-family: "Helvetica Neue",Helvetica,"Hiragino Sans GB","Segoe UI","Microsoft Yahei",Tahoma,Arial,STHeiti,sans-serif;
+    font-family: "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Segoe UI", "Microsoft Yahei", Tahoma, Arial, STHeiti, sans-serif;
     font-size: 14px;
     line-height: 1.428571429;
 }
+
 .content-block {
     background-color: #fff;
     padding: 10px;
 }
+
 .offset-t30 {
     margin-top: 30px;
 }
-.testItem{
 
-
-  margin-left: 5%;
-    margin-right: 5%;
-    background: whitesmoke;
-    border-bottom: 1px dashed #E7E4E4;
-}
-.courseItem{
+.testItem {
 
     margin-left: 5%;
     margin-right: 5%;
     background: whitesmoke;
     border-bottom: 1px dashed #E7E4E4;
 }
-.title{
+
+.courseItem {
+
+    margin-left: 5%;
+    margin-right: 5%;
+    background: whitesmoke;
+    border-bottom: 1px dashed #E7E4E4;
+}
+
+.title {
     margin-left: 10px;
     margin-top: 20px
 }
-.dashed{
+
+.dashed {
     border-style: dashed;
     border-width: 1px
 }
-.testTitle{
-margin-left: 5px
+
+.testTitle {
+    margin-left: 5px
 }
-.testTime{
+
+.testTime {
     margin-left: 5px;
 }
-.btnCenter{
+
+.btnCenter {
     text-align: center;
 }
-.coursePicDiv{
-   margin-top: 10px;
+
+.coursePicDiv {
+    margin-top: 10px;
     margin-left: 10px;
 }
-.courseRGB{
+
+.courseRGB {
     text-align: center;
     height: 100px;
-    display:block;
+    display: block;
     word-break: break-all;
     word-wrap: break-word;
     overflow: hidden
 }
-.coursePit{
-  margin-top: 40px;
+
+.coursePit {
+    margin-top: 40px;
 }
-.goToStudy{
+
+.goToStudy {
     margin-top: 50px;
     margin-right: -10px;
     text-align: center;

@@ -1,21 +1,21 @@
 /**
  * Created by hcnucai on 2016/12/20.
  */
-var SelfSelModel = angular.module("SelfSelModel",['ngAnimate','ngSanitize','angular-loading-bar']);
+var SelfSelModel = angular.module("SelfSelModel", ['ngAnimate', 'ngSanitize', 'angular-loading-bar']);
 //设置成全局变量
-SelfSelModel.constant("hostip","http://dodo.hznu.edu.cn/");
+SelfSelModel.constant("hostip", "http://dodo.hznu.edu.cn/");
 //定义公有的http服务
 SelfSelModel.factory("httpService",
-    function($http, $q,hostip) {
+    function ($http, $q, hostip) {
         return {
-            post: function (suburl,params) {
+            post: function (suburl, params) {
                 var defer = $q.defer();
                 $http({
                     method: 'POST',
                     params: params,
                     url: hostip + suburl,
                 }).success(function (data) {
-                    if(data.retcode == 0) {
+                    if (data.retcode == 0) {
                         defer.resolve(data.items);
                     }
                     else
@@ -25,14 +25,14 @@ SelfSelModel.factory("httpService",
                 });
                 return defer.promise;
             },
-            infoPost: function (suburl,params) {
+            infoPost: function (suburl, params) {
                 var defer = $q.defer();
                 $http({
                     method: 'POST',
                     params: params,
                     url: hostip + suburl,
                 }).success(function (data) {
-                    if(data.retcode == 0) {
+                    if (data.retcode == 0) {
                         defer.resolve(data);
                     }
                     else

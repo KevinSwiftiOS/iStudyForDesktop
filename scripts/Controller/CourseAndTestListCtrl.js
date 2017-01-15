@@ -1,9 +1,9 @@
 /**
  * Created by hcnucai on 2016/12/20.
  */
-var CourseAndTestListModel = angular.module("CourseAndTestListModel",['angular-loading-bar','ngAnimate','ngSanitize']);
-CourseAndTestListModel.constant("hostip","http://dodo.hznu.edu.cn/");
-CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLoadingBar,httpService,subDate,$interval) {
+var CourseAndTestListModel = angular.module("CourseAndTestListModel", ['angular-loading-bar', 'ngAnimate', 'ngSanitize']);
+CourseAndTestListModel.constant("hostip", "http://dodo.hznu.edu.cn/");
+CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfpLoadingBar, httpService, subDate, $interval) {
     var ls = window.localStorage;
     //总共的监控
     var totalStartInterval;
@@ -11,13 +11,11 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
     var authtoken = ls.getItem("authtoken");
     var userInfo = angular.fromJson(ls.getItem("userInfo"));
     $scope.name = userInfo.name;
-
-
     var param = {
-        authtoken:authtoken
+        authtoken: authtoken
     }
     //先请求考试的数据 后请求练习的数据
-    var testPromise = httpService.post("api/testquery",param);
+    var testPromise = httpService.post("api/testquery", param);
     testPromise.then(function (data) {
         cfpLoadingBar.complete();
         var tests = [];
@@ -40,11 +38,11 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
             tests[i].startValue = startDate.valueOf();
             //是否需要倒计时的功能
             var now = new Date();
-            //还要看是否已经交卷
+            //看考试是否已经开始
             if (now.valueOf() > startDate.valueOf()) {
                 tests[i].isStart = true;
             } else {
-               tests[i].isStart = false;
+                tests[i].isStart = false;
             }
             if (tests[i].isEnd == true) {
                 //本次还未截止
@@ -80,21 +78,21 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
         //监视时间的变化
         $scope.tests = tests;
         //监控时间
-         totalStartInterval = $interval(function () {
+        totalStartInterval = $interval(function () {
             showCoutDown();
-        },1000);
+        }, 1000);
 
-    },function (err) {
+    }, function (err) {
         var tests = [];
-        swal("请求失败",err,"error");
+        swal("请求失败", err, "error");
         cfpLoadingBar.complete();
         $scope.tests = tests;
     })
-   
+
     function showCoutDown() {
         var tests = $scope.tests;
         var i = 0;
-        for( i = 0; i < tests.length;i++) {
+        for (i = 0; i < tests.length; i++) {
             //如果需要倒计时的
             var now = new Date();
             var currentYear = now.getFullYear();
@@ -105,20 +103,20 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
             if (currentYear == tests[i].startY && currentMonth == tests[i].startM && currentDay == tests[i].startD) {
                 if (tests[i].startH == currentHour && tests[i].startMin - currentMin <= 5 && tests[i].startMin - currentMin > 0) {
                     $interval.cancel(totalStartInterval);
-                    swal("提醒",tests[i].title + "快开始了","warning");
+                    swal("提醒", tests[i].title + "快开始了", "warning");
                     break;
                 }
-                }
-                if (tests[i].startH - currentHour == 1 && 60 - currentMin <= 5) {
-                    $interval.cancel(totalStartInterval);
-                    swal("提醒",tests[i].title + "快开始了","warning");
-                    break;
-                }
-                }
-    //倒计时
-        if(i < tests.length) {
+            }
+            if (tests[i].startH - currentHour == 1 && 60 - currentMin <= 5) {
+                $interval.cancel(totalStartInterval);
+                swal("提醒", tests[i].title + "快开始了", "warning");
+                break;
+            }
+        }
+        //倒计时
+        if (i < tests.length) {
             var now = new Date();
-            var remainM =   tests[i].startMin - now.getMinutes() - 1;
+            var remainM = tests[i].startMin - now.getMinutes() - 1;
             var remainS = 60 - now.getSeconds();
             var countDownInterval = $interval(function () {
                 if (remainS > 0) {
@@ -141,105 +139,102 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl",function ($scope,cfpLo
         }
 
     }
+
     function updateTest() {
         //再一次遍历 看看有没有到达时间的
-             var tests = $scope.tests;
-
-           for (var i = 0; i < tests.length; i++) {
-               var now = new Date();
-                if (now.valueOf() >= tests[i].startValue) {
-                    tests[i].isStart = true;
-                    break;
-                }
+        var tests = $scope.tests;
+        for (var i = 0; i < tests.length; i++) {
+            var now = new Date();
+            if (now.valueOf() >= tests[i].startValue) {
+                tests[i].isStart = true;
             }
-            $scope.tests = tests;
         }
+        $scope.tests = tests;
+    }
 
-
-
-        //随后再请求课程的数据
-        var cousrePromise = httpService.post("api/coursequery",param);
-        cousrePromise.then(function (data) {
-
-            cfpLoadingBar.complete();
-            var courses = data;
-
-            for (var i = 0; i < courses.length; i++) {
-                var rgb = courses[i].picbg;
+    //随后再请求课程的数据
+    var cousrePromise = httpService.post("api/coursequery", param);
+    cousrePromise.then(function (data) {
+        cfpLoadingBar.complete();
+        var courses = data;
+        for (var i = 0; i < courses.length; i++) {
+            var rgb = courses[i].picbg;
+            if (rgb != null) {
                 courses[i].style = {
                     "background-color": "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")",
                     "word-wrap": "break-word"
                 }
             }
-            $scope.courses = courses;
-                //和当前的时间进行比较
-            },function (err) {
-            var courses = [];
-            swal("请求失败",err,"error");
-            cfpLoadingBar.complete();
-            $scope.courses = courses;
-        })
+        }
+        $scope.courses = courses;
+        //和当前的时间进行比较
+    }, function (err) {
+        var courses = [];
+        swal("请求失败", err, "error");
+        cfpLoadingBar.complete();
+        $scope.courses = courses;
+    })
 
     //开始答题
     $scope.goToTest = function ($index) {
         //赋值
         var testInfo = {
-            testid:$scope.tests[$index].id,
-            title:$scope.tests[$index].title,
-            enableClientJudge:true,
-            keyVisible:false,
-            viewOneWithAnswerKey:false,
-            redraw:false,
-             drawsetting:"",
-            timelimit:$scope.tests[$index].timelimit,
+            testid: $scope.tests[$index].id,
+            title: $scope.tests[$index].title,
+            enableClientJudge: true,
+            keyVisible: false,
+            viewOneWithAnswerKey: false,
+            redraw: false,
+            drawsetting: "",
+            timelimit: $scope.tests[$index].timelimit,
             //是否是考试
-            isTest:true
+            isTest: true
         }
-        //剩余时间还有多少数组
+        //剩余时间的检测
         var timeSlides = angular.fromJson(ls.getItem("timeSlides"));
         var timeSlideDic = {};
-        if(timeSlides == null) {
+        if (timeSlides == null) {
             timeSlides = [];
             timeSlideDic = {
                 key: userInfo.username + "timeSlide" + $scope.tests[$index].id,
                 value: $scope.tests[$index].timelimit * 60 - $scope.tests[$index].timeslided
             }
             timeSlides.push(timeSlideDic);
-            ls.setItem("timeSlides",angular.toJson(timeSlides));
-        }else{
-            //看看看有没有值
+            ls.setItem("timeSlides", angular.toJson(timeSlides));
+        } else {
+            //看看有没有值
             var timeSlide = null;
-          for(var i = 0; i < timeSlides.length;i++) {
-              if (timeSlides[i].key == userInfo.username + "timeSlide" + $scope.tests[$index].id) {
-                  timeSlide = timeSlides[i].value;
-                  break;
-              }
-          }
-            if(timeSlide == null) {
+            for (var i = 0; i < timeSlides.length; i++) {
+                if (timeSlides[i].key == userInfo.username + "timeSlide" + $scope.tests[$index].id) {
+                    timeSlide = timeSlides[i].value;
+                    break;
+                }
+            }
+            //如果本地没有本村该次考试的剩余时间 就应该保存下来 本次时间
+            if (timeSlide == null) {
                 timeSlideDic = {
                     key: userInfo.username + "timeSlide" + $scope.tests[$index].id,
                     value: $scope.tests[$index].timelimit * 60 - $scope.tests[$index].timeslided
                 }
                 timeSlides.push(timeSlideDic);
             }
-            ls.setItem("timeSlides",angular.toJson(timeSlides));
+            ls.setItem("timeSlides", angular.toJson(timeSlides));
         }
-        ls.setItem("testInfo",angular.toJson(testInfo));
+        ls.setItem("testInfo", angular.toJson(testInfo));
         //页面跳转
-     window.location.href = "Main.html";
-
+        window.location.href = "Main.html";
     }
     $scope.goToStudy = function ($index) {
         var courseInfo = {
-            courseid:$scope.courses[$index].id,
-            coursename:$scope.courses[$index].title
+            courseid: $scope.courses[$index].id,
+            coursename: $scope.courses[$index].title
         }
-       ls.setItem("courseInfo",angular.toJson(courseInfo));
+        ls.setItem("courseInfo", angular.toJson(courseInfo));
         window.location.href = "HomeWorkList.html";
     }
     //退出系统
     $scope.exit = function () {
-       ls.clear();
+        ls.clear();
         window.location.href = "Login.html";
     }
 })

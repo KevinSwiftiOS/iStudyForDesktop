@@ -5,11 +5,11 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta name="format-detection" content="telephone=no">
     <title></title>
+    <!-- compiled css output -->
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/account_login.css" rel="stylesheet"/>
 
-    <!-- compiled css output -->
     <script src="../libs/angular-1.5.3/angular.js"></script>
     <script src="../libs/angular-1.5.3/angular-animate.min.js"></script>
 
@@ -17,23 +17,22 @@
     <script src="../libs/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../libs/js/jquery.min.js"></script>
     <script src="../libs/js/bootstrap.min.js"></script>
-    <script src = "../scripts/Controller/LoginCtrl.js"></script>
-    <script src = "../scripts/Service/LoginService.js"></script>
-  <script src = "../libs/node_modules/angular-ueditor/dist/angular-ueditor.js"></script>
-    <!-- 个人css-->
-    <link href="../css/account_login.css" rel="stylesheet"/>
-   </head>
-  <body ng-app="LoginModel" ng-controller="LoginCtrl">
+    <script src="../scripts/Controller/LoginCtrl.js"></script>
+    <script src="../scripts/Service/LoginService.js"></script>
+</head>
+<body ng-app="LoginModel" ng-controller="LoginCtrl">
 <div class="container-fluid">
     <form class="form-signin">
         <h2 class="form-signin-heading">欢迎登录</h2>
         <label for="username" class="sr-only">账号</label>
-        <input type="text" id="username" class="form-control" placeholder="请输入账号" ng-model = "user.username" required autofocus />
+        <input type="text" id="username" class="form-control" placeholder="请输入账号" ng-model="user.username" required
+               autofocus/>
         <label for="password" class="sr-only">密码</label>
-        <input type="password" id="password" class="form-control" placeholder="请输入密码" ng-model="user.password" required />
+        <input type="password" id="password" class="form-control" placeholder="请输入密码" ng-model="user.password"
+               required/>
         <p></p>
         <button class="btn btn-lg btn-warning btn-block" ng-click="submit()">登录</button>
     </form>
-  </div>
-  </body>
+</div>
+</body>
 </html>

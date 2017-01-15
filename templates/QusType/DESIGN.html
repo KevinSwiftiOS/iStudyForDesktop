@@ -1,19 +1,19 @@
 <div ng-bind-html="content" class="question-face"></div>
 <!--有没有附件-->
-<p ng-if = 'files.length > 0 ? true:false' style="font-weight: bold"><font size="3px">【答题材料】</font> </p>
-
-<div ng-repeat="file in files" style="background-color: #e6e6e6;height: 80px;line-height: 80px" >
+<p ng-if='files.length > 0 ? true:false' style="font-weight: bold"><font size="3px">【答题材料】</font></p>
+<div ng-repeat="file in files" class="fileStyle">
     <i class="fa fa-file-o" style="margin-left: 5px"></i>
-   <a href="{{file.url}}"><font size="3px">{{file.name}}</font></a>
-    <font size="3px">{{file.size}}</font>
+    <a href="{{file.url}}"><font size="2px">{{file.name}}</font></a>
+    <font size="2px">{{file.size}}</font>
 
-    </div>
+</div>
+<p ng-if='answerfiles.length > 0 ? true:false' style="font-weight: bold"><font size="3px">【答题文件】</font></p>
+<div ng-repeat="answerfile in answerfiles"  class="fileStyle">
+    <i class="fa fa-file-o" style="margin-left: 5px"></i>
+    <a ng-href="{{answerfile.url}}"><font size="2px">{{answerfile.name}}</font></a>
+    <font size="2px">&nbsp;{{answerfile.size}}</font>
+</div>
 
-  <div ng-repeat="answerfile in answerfiles" style="background-color: #e6e6e6;height: 80px;line-height: 80px">
-        <i class="fa fa-file-o" style="margin-left: 5px"></i>
-     <a ng-href="{{answerfile.url}}"><font size="3px">{{answerfile.name}} &nbsp;{{answerfile.size}}</font></a>
-    </div>
-
-<button  class="btn btn-info" ng-click="startAnswer()" style="margin-top: 10px">开始答题</button>
-<p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>
+<button class="btn btn-info" ng-click="startAnswer()" style="margin-top: 5px"> 开始答题</button>
+<p ng-if="isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>
 

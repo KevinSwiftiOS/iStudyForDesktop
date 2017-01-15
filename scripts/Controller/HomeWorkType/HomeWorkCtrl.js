@@ -1,24 +1,20 @@
-HomeWorkListModel.controller("HomeWorkCtrl",function ($scope,httpService,subDate,$state,cfpLoadingBar,hostip) {
-
-
-    var ls = window.localStorage ;
-    var courserInfo = angular.fromJson( ls.getItem("courseInfo"));
+HomeWorkListModel.controller("HomeWorkCtrl", function ($scope, httpService, subDate, $state, cfpLoadingBar, hostip) {
+    var ls = window.localStorage;
+    var courserInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
-        authtoken:ls.getItem("authtoken"),
-        courseid:courserInfo.courseid
+        authtoken: ls.getItem("authtoken"),
+        courseid: courserInfo.courseid
     }
-
     var items = [];
     cfpLoadingBar.start();
-    var promise = httpService.post("api/homeworkquery",param);
+    var promise = httpService.post("api/homeworkquery", param);
     promise.then(function (data) {
         cfpLoadingBar.complete();
         //分割日期并进行查看
         items = data;
-        for(var i = 0; i < items.length;i++) {
+        for (var i = 0; i < items.length; i++) {
             var dicStart = subDate.divedeToDay(items[i].datestart);
             var dicEnd = subDate.divedeToDay(items[i].dateend);
-
             items[i].datestart = dicStart.year + "-" + dicStart.month + "-" + dicStart.day;
             items[i].dateend = dicEnd.year + "-" + dicEnd.month + "-" + dicEnd.day;
             var endDate = new Date(dicEnd.year, dicEnd.month - 1, dicEnd.day, dicEnd.hour, dicEnd.min, dicEnd.second);
@@ -34,12 +30,12 @@ HomeWorkListModel.controller("HomeWorkCtrl",function ($scope,httpService,subDate
             }
         }
         $scope.items = items;
-    },function (err) {
+    }, function (err) {
         cfpLoadingBar.complete();
-        swal("请求失败",err,"error");
+        swal("请求失败", err, "error");
         $scope.items = items;
     })
-    //跳转到答题界面 要传4个参数 testid 是否可以阅卷 阅卷后是否可以查看标准答案 查卷时是否答案可见 考虑放到indexdb中 这样可以存储多个 随后从里面取值即可
+    //跳转到答题界面 要传4个参数 testid 是否可以阅卷 阅卷后是否可以查看标准答案 查卷时是否答案可见 都放到localStorage中 这样可以存储多个 随后从里面取值即可
     $scope.answer = function ($index) {
         // window.windowpool = [];
         // var newWin = window.open("Main.html?testid=" + $scope.items[$index].id);
@@ -57,18 +53,13 @@ HomeWorkListModel.controller("HomeWorkCtrl",function ($scope,httpService,subDate
                 redraw: false,
                 drawsetting: ""
             }
-
             ls.setItem("testInfo", angular.toJson(testInfo));
             window.location.href = "Main.html";
-
-        }else{
+        } else {
             //调用jsapi 打开浏览器
             window.open(hostip + "Output/ViewOne/" + $scope.items[$index].usertestid);
         }
-
     }
-
-
     function getParam(paramName) {
         paramValue = "";
         isFound = false;
@@ -87,5 +78,4 @@ HomeWorkListModel.controller("HomeWorkCtrl",function ($scope,httpService,subDate
         }
         return paramValue;
     }
-
 })

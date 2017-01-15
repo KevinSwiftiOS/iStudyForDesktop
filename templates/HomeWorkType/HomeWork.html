@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div style="text-align: center">
-    <p  ng-if = 'items.length > 0 ? false:true' style="font-size: 20px">暂无作业信息</p>
+        <p ng-if='items.length > 0 ? false:true' style="font-size: 20px">暂无作业信息</p>
     </div>
     <div ng-repeat="item in items" class="homeworkItem">
         <div class="row">
@@ -10,7 +10,7 @@
                 <p class="homeworkMarginLeft">截止时间:{{item.dateend}}</p>
             </div>
             <div class="col-xs-3 homeworkMarginTop">
-                <h4 ng-if = "item.isEnd">分数{{item.myscore}}</h4>
+                <h4 ng-if="item.isEnd">分数{{item.myscore}}</h4>
             </div>
             <div class="col-xs-4 homeworkMarginTop" style="text-align: center">
                 <button class="btn btn-info" ng-click="answer($index)">{{item.btnTitle}}</button>

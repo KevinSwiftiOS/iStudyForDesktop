@@ -3,16 +3,16 @@
  */
 //定义公有的http服务
 MainModel.factory("httpService",
-    function($http, $q,hostip) {
+    function ($http, $q, hostip) {
         return {
-            post: function (suburl,params) {
+            post: function (suburl, params) {
                 var defer = $q.defer();
                 $http({
                     method: 'POST',
                     params: params,
                     url: hostip + suburl,
                 }).success(function (data) {
-                    if(data.retcode == 0) {
+                    if (data.retcode == 0) {
                         defer.resolve(data.items);
                     }
                     else
@@ -22,14 +22,14 @@ MainModel.factory("httpService",
                 });
                 return defer.promise;
             },
-            infoPost: function (suburl,params) {
+            infoPost: function (suburl, params) {
                 var defer = $q.defer();
                 $http({
                     method: 'POST',
                     params: params,
                     url: hostip + suburl,
                 }).success(function (data) {
-                    if(data.retcode == 0) {
+                    if (data.retcode == 0) {
                         defer.resolve(data);
                     }
                     else
@@ -46,9 +46,9 @@ MainModel.factory("httpService",
 /**
  * Created by hcnucai on 2016/12/21.
  */
-MainModel.factory("QusService",function () {
+MainModel.factory("QusService", function () {
     return {
-        qusItems:null
+        qusItems: null
     }
 });
 
@@ -56,41 +56,40 @@ MainModel.factory('myModal', function (btfModal) {
     return btfModal({
         controller: 'MyModalCtrl',
 
-        templateUrl:  "QusType/Modal.html"
+        templateUrl: "QusType/Modal.html"
     });
 });
 //答案的副本 在重置的时候有用
-MainModel.factory("AnsCopy",function () {
+MainModel.factory("AnsCopy", function () {
     return {
-        ansCopy:"",
+        ansCopy: "",
     }
 });
 //是否重置
-MainModel.factory("IsReset",function () {
+MainModel.factory("IsReset", function () {
     return {
-        reset: {isReset:0},
+        reset: {isReset: 0},
     }
 });
 //定时器的设置
-MainModel.factory("Timer",function () {
+MainModel.factory("Timer", function () {
     return {
-        times:null
+        times: null
     }
 })
 
 
-
-
-MainModel.directive('fileModel', ['$parse', function ($parse) {
-    return {
-        restrict: 'A',
-        link: function(scope, element, attrs) {
-            element.bind('change', function(){
-                $parse(attrs.fileModel).assign(scope,element[0].files)
-                scope.$MainModelly();
-            });
-        }
-    }}]);
+// MainModel.directive('fileModel', ['$parse', function ($parse) {
+//     return {
+//         restrict: 'A',
+//         link: function (scope, element, attrs) {
+//             element.bind('change', function () {
+//                 $parse(attrs.fileModel).assign(scope, element[0].files)
+//                 scope.$MainModelly();
+//             });
+//         }
+//     }
+// }]);
 
 
 //定义保存的服务

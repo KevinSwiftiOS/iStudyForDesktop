@@ -48,12 +48,10 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
                     for (var j = 0; j < keys.length; j++) {
                         var optionDic = {};
                         var optionkey = "option" + keys[j];
-
                         if (subQus[i][optionkey] != "") {
                             //题目内容
                             optionDic.optionContent = keys[j].toUpperCase() + "." + subQus[i][optionkey];
                             //是否选中
-
                             if (oneAns == keys[j].toUpperCase())
                                 optionDic.isSel = true;
                             else
@@ -75,7 +73,6 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
                     for (var j = 0; j < keys.length; j++) {
                         var optionDic = {};
                         var optionkey = "option" + keys[j];
-
                         if (subQus[i][optionkey] != "") {
                             //题目内容
                             optionDic.optionContent = keys[j].toUpperCase() + "." + subQus[i][optionkey];
@@ -168,27 +165,47 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
                 options[i].isSel = false;
         }
         $scope.subquestions[row].options = options;
+       save();
     }
     //回答多选题
     $scope.answerMulit = function ($index,row) {
         //能选择多个
         $scope.subquestions[row].options[$index].isSel = !$scope.subquestions[row].options[$index].isSel;
-
-
+        save();
+    }
+    //回答填空题
+    $scope.keyDown = function () {
+        save();
     }
     //保存的动作 首先是小题题的封装 之后再是总共的封装
   function save() {
+      var options = $scope.subquestions;
+      var answer = "";
+      for(var i = 0; i < options.length - 1;i++) {
+          answer += assembAns(options[i]) + "~~~";
+      }
+      answer += assembAns(options[options.length - 1]);
+      AnsCopy.ansCopy = answer;
+      if(saveTrigger != null) {
+          clearTimeout(saveTrigger);
+          saveTrigger = null;
+      }
+      saveTrigger = setTimeout(function () {
+
+
         var subQus = $scope.subquestions;
 
         $scope.isSave = true;
-
+        $scope.saveDes = {
+          icon: "fa fa-spinner fa-spin",
+          des: "正在保存答案"
+      }
         var data = {
             testid:testid,
             questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
             answer:AnsCopy.ansCopy,
             answerfile:"",
         }
-        console.log(data);
         var ls = window.localStorage;
         var param = {
             authtoken:ls.getItem("authtoken"),
@@ -216,6 +233,7 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
             $scope.isSave = false;
             swal("保存失败",err,"error");
         })
+      },2000);
     }
     function  assembAns(subQus) {
 
@@ -256,20 +274,7 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
     //重置
     $scope.$watch('subquestions',function (newV,oldV) {
         if(newV != oldV) {
-            var options = $scope.subquestions;
-            var answer = "";
-            for(var i = 0; i < options.length - 1;i++) {
-                answer += assembAns(options[i]) + "~~~";
-            }
-            answer += assembAns(options[options.length - 1]);
-            AnsCopy.ansCopy = answer;
-            if(saveTrigger != null) {
-                clearTimeout(saveTrigger);
-                saveTrigger = null;
-            }
-            saveTrigger = setTimeout(function () {
-                save();
-            },2000);
+
         }
     },true);
     $scope.reset = IsReset.reset;

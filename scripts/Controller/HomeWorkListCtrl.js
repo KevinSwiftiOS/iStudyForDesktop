@@ -2,44 +2,46 @@
  * Created by hcnucai on 2016/12/26.
  */
 
-HomeWorkListModel.controller("HomeWorkListCtrl",function ($scope,$state) {
+HomeWorkListModel.controller("HomeWorkListCtrl", function ($scope, $state) {
     $state.go("HomeWork");
     var selStyle = {
         "background-color": "white",
-        "color":"black"
-
-}
-var unSelStyle = {
-    "background-color": "#3867e8",
-    "color":"white"
-}
+        "color": "black"
+    }
+    var unSelStyle = {
+        "background-color": "#3867e8",
+        "color": "white"
+    }
     $scope.homeWorkStyle = selStyle;
     $scope.experimentStyle = unSelStyle;
     $scope.exerciseStyle = unSelStyle;
- $scope.goToHomeWork = function () {
-     $state.go("HomeWork");
-     $scope.homeWorkStyle = selStyle;
-     $scope.experimentStyle = unSelStyle;
-     $scope.exerciseStyle = unSelStyle;
+    $scope.goToHomeWork = function () {
+        $state.go("HomeWork");
+        $scope.homeWorkStyle = selStyle;
+        $scope.experimentStyle = unSelStyle;
+        $scope.exerciseStyle = unSelStyle;
 
- }
- $scope.goToExerceise = function () {
-     $state.go("Exercise");
-     $scope.homeWorkStyle = unSelStyle;
-     $scope.experimentStyle = unSelStyle;
-     $scope.exerciseStyle = selStyle;
- }
- $scope.goToExperiment = function () {
-     $state.go("Experiment");
-     $scope.homeWorkStyle = unSelStyle;
-     $scope.experimentStyle = selStyle;
-     $scope.exerciseStyle = unSelStyle;
- }
- //返回按钮
+    }
+    $scope.goToExerceise = function () {
+        $state.go("Exercise");
+        $scope.homeWorkStyle = unSelStyle;
+        $scope.experimentStyle = unSelStyle;
+        $scope.exerciseStyle = selStyle;
+    }
+    $scope.goToExperiment = function () {
+        $state.go("Experiment");
+        $scope.homeWorkStyle = unSelStyle;
+        $scope.experimentStyle = selStyle;
+        $scope.exerciseStyle = unSelStyle;
+    }
+    //返回按钮
+    var ls = window.localStorage;
     $scope.back = function () {
         window.location.href = "CourseAndTest.html";
+        //返回键将课程信息和作业信息清除
+        ls.removeItem("courseInfo");
+        ls.removeItem("testInfo");
     }
-    var ls = window.localStorage;
     var userInfo = angular.fromJson(ls.getItem("userInfo"));
     $scope.name = userInfo.name;
     var courseInfo = angular.fromJson(ls.getItem("courseInfo"));

@@ -1,15 +1,14 @@
-
 <div ng-bind-html="content" class="question-face"></div>
 <!--有没有附件-->
-<p ng-if = 'files.length > 0 ? true:false' style="font-weight: bold"><font size="3px">【答题材料】</font> </p>
+<p ng-if='files.length > 0 ? true:false' style="font-weight: bold"><font size="3px">【答题材料】</font></p>
 
-<div ng-repeat="file in files" class="fileStyle" >
+<div ng-repeat="file in files" class="fileStyle">
     <i class="fa fa-file-o" style="margin-left: 5px"></i>
     <a href="{{file.url}}"><font size="3px">{{file.name}}</font></a>
     <font size="3px">{{file.size}}</font>
 
 </div>
-<div>{{beforeE}}</div>
-<textarea  ng-model = "answer" style="width: 100%;height: 500px" ng-keydown="keyDown()" class="form-control"></textarea>
-<div>{{afterE}}</div>
-<p ng-if = "isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>
+<pre>{{beforeE}}
+<textarea ng-model="answer" style="width: 100%;height: 500px;" ng-keydown="keyDown()" class="form-control"></textarea>
+{{afterE}}</pre>
+<p ng-if="isSave"><i class="{{saveDes.icon}}"></i>{{saveDes.des}}</p>

@@ -1,20 +1,21 @@
 /**
  * Created by hcnucai on 2016/12/22.
  */
-MainModel.controller("MulitChoiceCtrl",function ($scope,$stateParams,httpService,QusService,base64,$timeout,AnsCopy,IsReset) {
+MainModel.controller("MulitChoiceCtrl", function ($scope, $stateParams, httpService, QusService, base64, $timeout, AnsCopy, IsReset) {
     var itemsIndex = $stateParams.itemsIndex;
     var qusIndex = $stateParams.qusIndex;
     //传过来的值还有testId
     var testid = $stateParams.testid;
     var keys = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j"];
-   var saveTrigger = null;
-   //监听值改变
-
-    $scope.answer  = function ($index) {
-        $scope.options[$index].isSel = ! $scope.options[$index].isSel;
+    var saveTrigger = null;
+    //监听值改变
+    $scope.answer = function ($index) {
+        save();
+        $scope.options[$index].isSel = !$scope.options[$index].isSel;
     }
     $scope.changed = function ($index) {
-        $scope.options[$index].isSel = ! $scope.options[$index].isSel;
+        save();
+        $scope.options[$index].isSel = !$scope.options[$index].isSel;
     }
 //初始化界面
     initView();
@@ -25,7 +26,6 @@ MainModel.controller("MulitChoiceCtrl",function ($scope,$stateParams,httpService
         $scope.files = qus.files;
         $scope.content = content;
         //如果有匹配的就加上
-
         //进行比较看有几个 初始化
         var options = [];
         for (var i = 0; i < keys.length; i++) {
@@ -48,23 +48,20 @@ MainModel.controller("MulitChoiceCtrl",function ($scope,$stateParams,httpService
         $scope.options = options;
     }
 
-
-    $scope.isSave = false;
-    $scope.saveDes = {
-        icon:"fa fa-spinner fa-spin",
-        des:"正在保存答案"
-    }
     //保存的按钮
     $scope.reset = IsReset.reset;
-    $scope.$watch('reset',function (newV,oldV) {
-        if(newV != oldV) {
+    $scope.$watch('reset', function (newV, oldV) {
+        if (newV != oldV) {
 
-            initView();
+              initView();
         }
-    },true);
-    $scope.$watch('options',function (newV,oldV) {
-        if(newV != oldV) {
+    }, true);
+    $scope.$watch('options', function (newV, oldV) {
+        if (newV != oldV) {
 
+        }
+    })
+        function save() {
             var options = $scope.options;
             var answer = "";
             var cnt = 1000;
@@ -74,31 +71,33 @@ MainModel.controller("MulitChoiceCtrl",function ($scope,$stateParams,httpService
                     arr.push(keys[i].toUpperCase());
             answer = arr.join("&&&");
             AnsCopy.ansCopy = answer;
-            if(saveTrigger != null) {
+            if (saveTrigger != null) {
                 clearTimeout(saveTrigger);
                 saveTrigger = null;
             }
             saveTrigger = setTimeout(function () {
                 $scope.isSave = true;
-
-                var data = {
-                    testid:testid,
-                    questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
-                    answer:AnsCopy.ansCopy,
-                    answerfile:"",
+                $scope.saveDes = {
+                    icon: "fa fa-spinner fa-spin",
+                    des: "正在保存答案"
                 }
-
+                var data = {
+                    testid: testid,
+                    questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
+                    answer: AnsCopy.ansCopy,
+                    answerfile: "",
+                }
                 var ls = window.localStorage;
                 var param = {
-                    authtoken:ls.getItem("authtoken"),
-                    data:base64.encode(angular.toJson(data)),
+                    authtoken: ls.getItem("authtoken"),
+                    data: base64.encode(angular.toJson(data)),
                 }
-                var promise = httpService.post(  "api/submitquestion",param);
+                var promise = httpService.post("api/submitquestion", param);
                 promise.then(function (res) {
 
                     $scope.saveDes = {
-                        icon:"fa  fa-check",
-                        des:"保存成功"
+                        icon: "fa  fa-check",
+                        des: "保存成功"
                     }
                     $timeout(function () {
                         $scope.isSave = false;
@@ -107,19 +106,16 @@ MainModel.controller("MulitChoiceCtrl",function ($scope,$stateParams,httpService
                     QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle";
                     clearTimeout(saveTrigger);
                     saveTrigger = null;
-                },function (err) {
+                }, function (err) {
                     $scope.isSave = false;
-                    swal("保存失败",err,"error");
+                    swal("保存失败", err, "error");
                     clearTimeout(saveTrigger);
                     saveTrigger = null;
                 })
-            },2000);
-
-
+            }, 2000);
 
 
         }
-        },true);
     //保存
 
 })

@@ -13,7 +13,9 @@ MainModel.controller("DesignCtrl",function ($scope,$stateParams,httpService,QusS
         //看是文件上传类型题目还是富文本题目
         $scope.files = qus.files;
         $scope.answerfiles = qus.answerfiles;
-
+        console.log(qus);
+        console.log($scope.files);
+        console.log($scope.answerfiles);
         //答案
         var answer = qus.answer;
         $scope.Ans = {
@@ -33,14 +35,16 @@ $scope.startAnswer = function () {
     //保存的按钮
     $scope.save = function () {
         $scope.isSave = true;
+        $scope.saveDes = {
+            icon: "fa fa-spinner fa-spin",
+            des: "正在保存答案"
+        }
         var data = {
             testid:testid,
             questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
             answer:AnsCopy.ansCopy.answer,
             answerfile:"",
         }
-
-
         var param = {
             authtoken:ls.getItem("authtoken"),
             data:base64.encode(angular.toJson(data)),
@@ -88,5 +92,4 @@ $scope.startAnswer = function () {
             initView();
         }
     },true);
-    
 })

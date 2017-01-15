@@ -1,101 +1,104 @@
 /**
  * Created by hcnucai on 2016/12/23.
  */
-MainModel.controller("ProgramDesCtrl",function ($scope,QusService,httpService,$stateParams,IsReset,AnsCopy,myModal,base64,$timeout,Timer,$interval) {
+MainModel.controller("ProgramDesCtrl", function ($scope, QusService, httpService, $stateParams, IsReset, AnsCopy, myModal, base64, $timeout, Timer, $interval) {
     var itemsIndex = $stateParams.itemsIndex;
     var qusIndex = $stateParams.qusIndex;
     //传过来的值还有testId
     var testid = $stateParams.testid;
     var saveTrigger = null;
     initView();
+    function initView() {
+        var pattern = new RegExp("^\[E\]([\s\S]*?)\[/E\]\r?");
+        var qus = QusService.qusItems[itemsIndex].questions[qusIndex];
+        var answer = qus.answer;
+        $scope.files = qus.files;
+        var content = qus.content;
+        //默认的答案
+        var defaultanswer = qus.defaultanswer;
+        var type = QusService.qusItems[itemsIndex].type;
+        var hase = false;
+        //前一段和后一段
+        var beforeE = "", afterE = "";
 
+        if (defaultanswer != null && defaultanswer != "") {
+            if (defaultanswer.indexOf("[E]") != -1 && defaultanswer.indexOf("[/E]") != -1) {
+                hase = true;
+                for (var i = 0; i < defaultanswer.indexOf("[E]"); i++)
+                    beforeE += defaultanswer[i];
+                for (var i = defaultanswer.indexOf("[/E]") + 4; i < defaultanswer.length; i++)
+                    afterE += defaultanswer[i];
 
-   function initView() {
-       var pattern = new RegExp("^\[E\]([\s\S]*?)\[/E\]\r?");
-       var qus = QusService.qusItems[itemsIndex].questions[qusIndex];
-       var answer = qus.answer;
-       $scope.files = qus.files;
-       var content = qus.content;
-       //默认的答案
-       var defaultanswer = qus.defaultanswer;
-       var type =  QusService.qusItems[itemsIndex].type;
-       var hase = false;
-       //前一段和后一段
-       var beforeE = "",afterE = "";
-      if(defaultanswer != null && defaultanswer != "") {
-          if (defaultanswer.indexOf("[E]") != -1 && defaultanswer.indexOf("[/E]") != -1) {
-              hase = true;
-              for (var i = 0; i < defaultanswer.indexOf("[E]"); i++)
-                  beforeE += defaultanswer[i];
-              for (var i = defaultanswer.indexOf("[/E]") + 4; i < defaultanswer.length; i++)
-                  afterE += defaultanswer[i];
+            }
 
-          }
+        }
 
-      }
-       if(hase) {
-          $scope.beforeE = beforeE;
-          $scope.afterE = afterE;
-          if(answer != null && answer != "")
-              $scope.answer = answer;
-          else
-              $scope.answer = "";
-      }else {
+        if (hase) {
+            $scope.beforeE = beforeE;
 
-          //看是程序改错题还是程序设计题
-           if (type == "PROGRAM_CORRECT") {
+            $scope.afterE = afterE;
+            if (answer != null && answer != "")
+                $scope.answer = answer;
+            else
+                $scope.answer = "";
+        } else {
 
-             if(answer != null && answer != "") {
-                 $scope.answer = answer;
-             }
-              else if(defaultanswer != null && defaultanswer != "") {
-                 $scope.answer = defaultanswer;
-              }
-              else
-                  $scope.answer = "";
+            //看是程序改错题还是程序设计题
+            if (type == "PROGRAM_CORRECT") {
 
-          } else {
-              if (answer != null && answer != "") {
-                  $scope.answer = answer;
-              } else {
-                  $scope.answer = "";
-              }
-          }
-      }
+                if (answer != null && answer != "") {
+                    $scope.answer = answer;
+                }
+                else if (defaultanswer != null && defaultanswer != "") {
+                    $scope.answer = defaultanswer;
+                }
+                else
+                    $scope.answer = "";
 
-       $scope.content = content;
-   }
-    $scope.isSave = false;
-    $scope.saveDes = {
-        icon:"fa fa-spinner fa-spin",
-        des:"正在保存答案"
+            } else {
+                $scope.beforeE = defaultanswer;
+                if (answer != null && answer != "") {
+                    $scope.answer = answer;
+                } else {
+                    $scope.answer = "";
+                }
+            }
+        }
+
+        $scope.content = content;
     }
+
+    $scope.isSave = false;
     //保存的按钮 这里是直接阅卷
-   //键盘的侦听事件
+    //键盘的侦听事件
     $scope.keyDown = function () {
-        if(saveTrigger != null) {
+        if (saveTrigger != null) {
             clearTimeout(saveTrigger);
             saveTrigger = null;
         }
         saveTrigger = setTimeout(function () {
             $scope.isSave = true;
+            $scope.saveDes = {
+                icon: "fa fa-spinner fa-spin",
+                des: "正在保存答案"
+            }
             var data = {
-                testid:testid,
+                testid: testid,
                 questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
-                answer:AnsCopy.ansCopy,
-                answerfile:"",
+                answer: AnsCopy.ansCopy,
+                answerfile: "",
             }
             var ls = window.localStorage;
             var param = {
-                authtoken:ls.getItem("authtoken"),
-                data:base64.encode(angular.toJson(data)),
+                authtoken: ls.getItem("authtoken"),
+                data: base64.encode(angular.toJson(data)),
             }
-            var promise = httpService.post( "api/submitquestion",param);
+            var promise = httpService.post("api/submitquestion", param);
             promise.then(function (res) {
 
                 $scope.saveDes = {
-                    icon:"fa  fa-check",
-                    des:"保存成功"
+                    icon: "fa  fa-check",
+                    des: "保存成功"
                 }
                 $timeout(function () {
                     $scope.isSave = false;
@@ -104,32 +107,29 @@ MainModel.controller("ProgramDesCtrl",function ($scope,QusService,httpService,$s
                 QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle";
                 clearTimeout(saveTrigger);
                 saveTrigger = null;
-            },function (err) {
+            }, function (err) {
                 $scope.isSave = false;
-                swal("保存失败",err,"error");
+                swal("保存失败", err, "error");
                 clearTimeout(saveTrigger);
                 saveTrigger = null;
             })
 
-        },2000);
+        }, 2000);
     }
-
-
-
     $scope.reset = IsReset.reset;
-    $scope.$watch('reset',function (newV,oldV) {
-        if(newV != oldV) {
+    $scope.$watch('reset', function (newV, oldV) {
+        if (newV != oldV) {
 
             initView();
         }
-    },true);
-    $scope.$watch("answer",function (newV,oldV) {
-        if(newV != oldV) {
+    }, true);
+    $scope.$watch("answer", function (newV, oldV) {
+        if (newV != oldV) {
             AnsCopy.ansCopy = newV;
         }
     })
     //保存的按钮 在这里要进行阅卷
-  //定时器还有些问题
+    //定时器还有些问题
     // var updateClock = null;
     // angular.element(document).ready(function () {
     //   console.log("angularReady");
@@ -162,8 +162,6 @@ MainModel.controller("ProgramDesCtrl",function ($scope,QusService,httpService,$s
     // })
 
     angular.element(document).ready(function () {
-
-
 
 
     });

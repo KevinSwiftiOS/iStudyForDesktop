@@ -11,110 +11,105 @@
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../libs/angular-modal-service/modal.css" rel="stylesheet" type="text/css">
     <link href="../libs/angular-modal-service/demo-modal.css" rel="stylesheet" type="text/css">
-<link href="../css/file.css" type="text/css" rel="stylesheet">
-
-
-
 
 
     <script src="../libs/js/jquery.min.js"></script>
     <!-- compiled css output -->
     <script src="../libs/angular-1.5.3/angular.js"></script>
     <script src="../libs/angular-1.5.3/angular-animate.min.js"></script>
-   <script src = "../libs/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../libs/angular-sanitize/angular-sanitize.js"></script>
     <script src="../libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../libs/sweetalert/dist/sweetalert.min.js"></script>
 
     <script src="../libs/js/bootstrap.min.js"></script>
     <!--base64加密-->
-    <script src = "../libs/angular-utf8-base64/angular-utf8-base64/angular-utf8-base64.js"></script>
+    <script src="../libs/angular-utf8-base64/angular-utf8-base64/angular-utf8-base64.js"></script>
     <!--阅卷时候的模态框-->
 
     <script src="../libs/angular-modal-service/modal.js"></script>
 
 
-
-    <script src = "../scripts/Service/MainRoutes.js"></script>
-    <script src = "../scripts/Service/MainService.js"></script>
-   <script src = "../scripts/Controller/MainCtrl.js"></script>
-    <script src = "../scripts/Controller/QusType/SingleChoiceCtrl.js"></script>
-    <script src = "../scripts/Controller/QusType/CompletionCtrl.js"></script>
-    <script src = "../scripts/Controller/QusType/MulitChoiceCtrl.js"></script>
-    <script src = "../scripts/Controller/QusType/ComplexCtrl.js"></script>
-    <script src = "../scripts/Controller/QusType/DesignCtrl.js"></script>
-    <script src = "../scripts/Controller/QusType/ProgramDesCtrl.js"></script>
-    <script src = "../scripts/Controller/MyModalCtrl.js"></script>
+    <script src="../scripts/Service/MainRoutes.js"></script>
+    <script src="../scripts/Service/MainService.js"></script>
+    <script src="../scripts/Controller/MainCtrl.js"></script>
+    <script src="../scripts/Controller/QusType/SingleChoiceCtrl.js"></script>
+    <script src="../scripts/Controller/QusType/CompletionCtrl.js"></script>
+    <script src="../scripts/Controller/QusType/MulitChoiceCtrl.js"></script>
+    <script src="../scripts/Controller/QusType/ComplexCtrl.js"></script>
+    <script src="../scripts/Controller/QusType/DesignCtrl.js"></script>
+    <script src="../scripts/Controller/QusType/ProgramDesCtrl.js"></script>
+    <script src="../scripts/Controller/MyModalCtrl.js"></script>
 
 </head>
 
-<body ng-app="MainModel" ng-controller = "MainCtrl">
+<body ng-app="MainModel" ng-controller="MainCtrl">
 <div class="container-fluid">
     <div class="row head">
-      <h2>{{title}}</font></h2>
+        <h2>{{title}}</h2>
     </div>
-<p></p>
+    <p></p>
 
     <div class="row">
         <div class="col-xs-2 col-md-2 col-lg-2" style="background-color: white;">
-       <table class="table table-responsive table-bordered">
-       <tr ng-repeat="item in items">
-          <td>
-           <div class="qusPointer"  ng-click="showQusList($index)">
-               <i class="{{item.icon}}"></i>
-               <font size="3px">{{item.title}}</font></div>
-
-      <table>
-       <tr ng-repeat="qus in item.questions" ng-if = "item.isShow">
-        <td>
-            <div class="qusPointer" ng-style="qus.style" ng-click="showQus($index,item.itemIndex)">
-                &nbsp;&nbsp;<i class="{{qus.icon}}"> </i>
-            {{qus.qusDesRow}}
-            </div>
-       </td>
-           </tr>
-
-      </table>
-          </td>
-       </tr>
-       </table>
-   </div>
+            <table class="table table-responsive table-bordered">
+                <tr ng-repeat="item in items">
+                    <td>
+                        <div class="qusPointer" ng-click="showQusList($index)">
+                            <i class="{{item.icon}}"></i>
+                            <font size="3px">{{item.title}}</font></div>
+                        <table>
+                            <tr ng-repeat="qus in item.questions" ng-if="item.isShow">
+                                <td>
+                                    <div class="qusPointer" ng-style="qus.style"
+                                         ng-click="showQus($index,item.itemIndex)">
+                                        &nbsp;&nbsp;<i class="{{qus.icon}}"> </i>
+                                        {{qus.qusDesRow}}
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </div>
         <div class="col-xs-8 col-md-8 col-lg-8" style="background-color: white;">
             <p></p>
             <div class="tabBtns">
                 <button class="btn btn-info" ng-click="goOver()" style="margin-bottom: 2px">阅卷</button>
                 <button class="btn btn-warning" ng-click="reset()" style="margin-bottom: 2px">重做</button>
-                 <button  class="btn btn-info" ng-click="forwardQus()" style="margin-bottom: 2px">上一题</button>
-                 <button  class="btn btn-info" ng-click="nextQus()" style="margin-bottom: 2px">下一题</button>
+                <button class="btn btn-info" ng-click="forwardQus()" style="margin-bottom: 2px">上一题</button>
+                <button class="btn btn-info" ng-click="nextQus()" style="margin-bottom: 2px">下一题</button>
             </div>
             <div class="row" style="margin-top: 10px">
-            <p ng-if="!hasQus"><i class="fa fa-spinner fa-spin"></i>正在加载题目 请稍后</p>
+                <p ng-if="!hasQus"><i class="fa fa-spinner fa-spin"></i>正在加载题目 请稍后</p>
                 <div class="col-xs-9 col-md-8">
                     <div ui-view></div>
                 </div>
                 <div class="col-xs-3 col-md-4" style="text-align: center">
-               <p class="scoreStyle"><font size="3px"> 分数:{{score}}</font></p>
+                    <p class="scoreStyle"><font size="3px"> 分数:{{score}}</font></p>
                 </div>
             </div>
         </div>
 
-        <div class="col-xs-2 col-md-2 col-lg-2 infoStyle" >
+        <div class="col-xs-2 col-md-2 col-lg-2 infoStyle">
             <p></p>
-            <div><button class="btn btn-info" ng-click="submitHomeWork()">
-                <span ng-if = 'isTest'>交卷</span>
-                <span ng-if = '!isTest'>提交作业</span></button></div>
+            <div>
+                <button class="btn btn-info" ng-click="submitHomeWork()">
+                    <span ng-if='isTest'>交卷</span>
+                    <span ng-if='!isTest'>提交作业</span></button>
+            </div>
             <p></p>
-            <img src = "{{info.avtarurl}}" class="avaturlStyle">
+            <img src="{{info.avtarurl}}" class="avaturlStyle">
             <p></p>
             <p>姓名:{{info.name}}</p>
             <p>{{username}}</p>
-            <p ng-if = "isTest">剩余时间</p>
-            <font color="red" size="5px">{{timeLimited}}</font>
+            <p ng-if="isTest">剩余时间</p>
+            <!--这是剩余时间和剩余时间的提醒-->
+            <font color="red" size="5px">{{slideTimes}}</font>
             <p></p>
-            <font color="red" size="4px" ng-if = "remainLess">距离考试结束时间不多了,请注意!</font>
+            <font color="red" size="4px" ng-if="remainLess">距离考试结束时间不多了,请注意!</font>
         </div>
-
-</div>
-
     </div>
+</div>
 </body>
 </html>

@@ -1,28 +1,30 @@
 <div class="total">
-<div class="btf-modal demo-modal">
-   <a class="demo-modal-close" href ng-click="closeMe()">
-      <font size="5px"><i class="fa fa-close" aria-hidden="true"></i></font>
-   </a>
-  当前题目{{currentQus}}
-    <div ng-if = "isGoOver"><i class="fa fa-spinner fa-spin"></i> 正在阅卷中 请稍后</div>
-    <p>{{isSuss}}</p>
-    <table class="table table-bordered" ng-if = "points.length > 0 ? true :false">
-        <tr>
-            <th style="text-align: center;width: 100px">知识点</th>
-            <th style="text-align: center;width: 100px" >结果</th>
-            <th style="text-align: center;width: 100px">得分</th>
-            <th style="text-align: center;width: 100px">参考答案</th>
-            <th style="text-align: center;width: 100px">信息</th>
-        </tr>
-        <td style="text-align: center" rowspan="{{points.length + 1}}">{{knowledge}}</td>
-        <tr ng-repeat="point in points">
+    <div class="btf-modal demo-modal">
+        <a class="demo-modal-close" href ng-click="closeMe()">
+            <font size="5px"><i class="fa fa-close" aria-hidden="true"></i></font>
+        </a>
+        当前题目{{currentQus}}
+        <div ng-if="isGoOver"style="text-align: center;margin-top: 10%"><font size="5px"><i class="fa fa-spinner fa-spin"></i> 正在阅卷中 请稍后</font> </div>
+        <p>{{isSuss}}</p>
+        <table class="table table-bordered" ng-if="points.length > 0 ? true :false">
+            <tr>
+                <th style="text-align: center;width: 100px">知识点</th>
+                <th style="text-align: center;width: 100px">结果</th>
+                <th style="text-align: center;width: 100px">得分</th>
+                <th style="text-align: center;width: 100px">参考答案</th>
+                <th style="text-align: center;width: 100px">信息</th>
+            </tr>
+            <td style="text-align: center" rowspan="{{points.length + 1}}">{{knowledge}}</td>
+            <tr ng-repeat="point in points">
 
-           <td style="text-align: center;width: auto"><font color="{{point.color}}">{{point.comment}}</font></td>
-            <td style="text-align: center">{{point.gotscore}} / {{point.fullscore}}</td>
-            <td style="text-align: center"> <div ng-bind-html="point.key"></div></td>
-            <td style="text-align: center">{{point.message}}</td>
-        </tr>
+                <td style="text-align: center;width: auto"><font color="{{point.color}}">{{point.comment}}</font></td>
+                <td style="text-align: center">{{point.gotscore}} / {{point.fullscore}}</td>
+                <td style="text-align: center">
+                    <div ng-bind-html="point.key"></div>
+                </td>
+                <td style="text-align: center">{{point.message}}</td>
+            </tr>
 
-    </table>
-</div>
+        </table>
+    </div>
 </div>

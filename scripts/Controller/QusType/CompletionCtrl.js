@@ -1,7 +1,7 @@
 /**
  * Created by hcnucai on 2016/12/21.
  */
-MainModel.controller("CompletionCtrl",function ($scope,$stateParams,QusService,httpService,base64,$timeout,AnsCopy,IsReset) {
+MainModel.controller("CompletionCtrl", function ($scope, $stateParams, QusService, httpService, base64, $timeout, AnsCopy, IsReset) {
     var itemsIndex = $stateParams.itemsIndex;
     var qusIndex = $stateParams.qusIndex;
     var testid = $stateParams.testid;
@@ -27,8 +27,8 @@ MainModel.controller("CompletionCtrl",function ($scope,$stateParams,QusService,h
                 var dic = {};
                 dic.value = "";
                 //看是否有选项的描述
-                var blank = "blank" + (i+1);
-                if(qus[blank] != null && qus[blank] != "")
+                var blank = "blank" + (i + 1);
+                if (qus[blank] != null && qus[blank] != "")
                     dic.blank = qus[blank];
                 else
                     dic.blank = "";
@@ -41,12 +41,12 @@ MainModel.controller("CompletionCtrl",function ($scope,$stateParams,QusService,h
             //将自己答题的内容进行分割 随后填入options的数组中
             //进行遍历
             var arr = answer.split("&&&");
-            for(var i = 0; i < arr.length;i++) {
+            for (var i = 0; i < arr.length; i++) {
                 var dic = {};
                 dic.value = arr[i];
-                var blank = "blank" + (i+1);
+                var blank = "blank" + (i + 1);
 
-                if(qus[blank] != null && qus[blank] != "")
+                if (qus[blank] != null && qus[blank] != "")
                     dic.blank = qus[blank];
                 else
                     dic.blank = "";
@@ -60,87 +60,85 @@ MainModel.controller("CompletionCtrl",function ($scope,$stateParams,QusService,h
     //保存的按钮
     $scope.isSave = false;
     $scope.saveDes = {
-        icon:"fa fa-spinner fa-spin",
-        des:"正在保存答案"
-    }
-    $scope.save = function () {
-
+        icon: "fa fa-spinner fa-spin",
+        des: "正在保存答案"
     }
     //监听值有没有发生变化
     //重置
 
     $scope.reset = IsReset.reset;
-    $scope.$watch('reset',function (newV,oldV) {
-        if(newV != oldV) {
+    $scope.$watch('reset', function (newV, oldV) {
+        if (newV != oldV) {
 
             initView();
         }
-    },true);
+    }, true);
 
-    $scope.$watch('options',function (newV,oldV) {
-        if(newV != oldV) {
+    $scope.$watch('options', function (newV, oldV) {
+        if (newV != oldV) {
             options = $scope.options;
             answer = "";
-            for(var i = 0; i < options.length - 1;i++) {
+            for (var i = 0; i < options.length - 1; i++) {
                 answer += options[i].value + "&&&";
             }
             answer += options[options.length - 1].value;
             AnsCopy.ansCopy = answer;
         }
-    },true);
-
+    }, true);
     //监听keyDown
     $scope.keyDown = function () {
         //清空
-       if(saveTrigger != null) {
-           clearTimeout(saveTrigger);
-           saveTrigger = null;
-       }
-       saveTrigger = setTimeout(function () {
-           $scope.isSave = true;
-           //请求服务器 保存答案 随后本地保存一份
-           var data = {
-               testid:testid,
-               questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
-               answer:AnsCopy.ansCopy,
-               answerfile:"",
-           }
-           var ls = window.localStorage;
-           var param = {
-               authtoken:ls.getItem("authtoken"),
-               data:base64.encode(angular.toJson(data)),
-           }
-           var promise = httpService.post( "api/submitquestion",param);
-           promise.then(function (res) {
-               $scope.saveDes = {
-                   icon:"fa  fa-check",
-                   des:"保存成功"
-               }
-               clearTimeout(saveTrigger);
-               saveTrigger = null;
-               $timeout(function () {
-                   $scope.isSave = false;
-               }, 1000);
-               QusService.qusItems[itemsIndex].questions[qusIndex].answer = AnsCopy.ansCopy;
-               QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle";
-           },function (err) {
-               $timeout(function () {
-                   $scope.isSave = false;
-               }, 1000);
-               clearTimeout(saveTrigger);
-               saveTrigger = null;
-               $scope.isSave = false;
-               swal("保存失败",err,"error");
-           })
-           //保存成功后 也要clearTimeout
-       },1000);
+        if (saveTrigger != null) {
+            clearTimeout(saveTrigger);
+            saveTrigger = null;
+        }
+        saveTrigger = setTimeout(function () {
+            $scope.isSave = true;
+            $scope.saveDes = {
+                icon: "fa fa-spinner fa-spin",
+                des: "正在保存答案"
+            }
+            //请求服务器 保存答案 随后本地保存一份
+            var data = {
+                testid: testid,
+                questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
+                answer: AnsCopy.ansCopy,
+                answerfile: "",
+            }
+            var ls = window.localStorage;
+            var param = {
+                authtoken: ls.getItem("authtoken"),
+                data: base64.encode(angular.toJson(data)),
+            }
+            var promise = httpService.post("api/submitquestion", param);
+            promise.then(function (res) {
+                $scope.saveDes = {
+                    icon: "fa  fa-check",
+                    des: "保存成功"
+                }
+                clearTimeout(saveTrigger);
+                saveTrigger = null;
+                $timeout(function () {
+                    $scope.isSave = false;
+                }, 1000);
+                QusService.qusItems[itemsIndex].questions[qusIndex].answer = AnsCopy.ansCopy;
+                QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle";
+            }, function (err) {
+                $timeout(function () {
+                    $scope.isSave = false;
+                }, 1000);
+                clearTimeout(saveTrigger);
+                saveTrigger = null;
+                $scope.isSave = false;
+                swal("保存失败", err, "error");
+            })
+            //保存成功后 也要clearTimeout
+        }, 1000);
     }
 
 
-
-
-$scope.$on("$viewContentLoaded",function () {
-
-})
+    $scope.$on("$viewContentLoaded", function () {
 
     })
+
+})

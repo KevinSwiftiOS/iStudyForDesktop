@@ -5,38 +5,36 @@
     <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     <meta name="format-detection" content="telephone=no">
     <title></title>
-    <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../css/SelfSelQus.css" rel=" stylesheet" type="text/css">
+    <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css" media="all">
     <!-- compiled css output -->
     <script src="../libs/angular-1.5.3/angular.js"></script>
     <script src="../libs/angular-1.5.3/angular-animate.min.js"></script>
-    <script src = "../libs/angular-sanitize/angular-sanitize.js"></script>
+    <script src="../libs/angular-sanitize/angular-sanitize.js"></script>
     <script src="../libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../libs/sweetalert/dist/sweetalert.min.js"></script>
     <script src="../libs/js/jquery.min.js"></script>
     <script src="../libs/js/bootstrap.min.js"></script>
 
-    <script src = "../libs/angular-loading-bar/src/loading-bar.js"></script>
+    <script src="../libs/angular-loading-bar/src/loading-bar.js"></script>
     <!--阅卷时候的模态框-->
-    <script src = "../scripts/Service/SelfSelQusService.js"></script>
-    <script src = "../scripts/Controller/SelfSelQusCtrl.js"></script>
+    <script src="../scripts/Service/SelfSelQusService.js"></script>
+    <script src="../scripts/Controller/SelfSelQusCtrl.js"></script>
 
 </head>
-<body ng-app = "SelfSelModel" ng-controller="selfSelCtrl">
+<body ng-app="SelfSelModel" ng-controller="selfSelCtrl">
 <div class="head">
     <div class="head-inner container">
         <div class="logo">
             <font size="5px"><i class="fa fa-arrow-left backStyle" ng-click="back()"></i></font>
-
-
         </div>
         <div class="courseName">
             {{testTitle}}
         </div>
-        <div id = "user_actions">
+        <div id="user_actions">
             <span id="user_info">您好,{{name}}!</span>
 
             <font color="white" ng-click="exit()"><i class="fa fa-power-off"></i></font>
@@ -46,19 +44,11 @@
 
 <div class="dashed"></div>
 <p></p>
-
-
-
-
-
-
-
-
 <div ng-repeat="item in items" class="topicStyle">
-   <p> {{item.topicname}}</p>
+    <p> {{item.topicname}}</p>
 
-    <select ng-model = "item.selBundle">
-        <option  ng-repeat="x in item.range">第{{x}}套</option>
+    <select ng-model="item.selBundle">
+        <option ng-repeat="x in item.range">第{{x}}套</option>
     </select>
 
 </div>
