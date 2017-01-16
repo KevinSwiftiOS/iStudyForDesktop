@@ -6,6 +6,7 @@
     <meta name="format-detection" content="telephone=no">
     <title></title>
     <!-- compiled css output -->
+    <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/account_login.css" rel="stylesheet"/>
@@ -22,6 +23,8 @@
 </head>
 <body ng-app="LoginModel" ng-controller="LoginCtrl">
 <div class="container-fluid">
+    <font size="5px" color="white">  <i class="fa fa-question qusIcon" ng-click="openCai()"></i></font>
+   <font size="5px" color="white"> <i class="fa fa-cog settingIcon"  ng-click="openSetting()"></i></font>
     <form class="form-signin">
         <h2 class="form-signin-heading">欢迎登录</h2>
         <label for="username" class="sr-only">账号</label>
@@ -32,7 +35,25 @@
                required/>
         <p></p>
         <button class="btn btn-lg btn-warning btn-block" ng-click="submit()">登录</button>
+        <div class="form-signin-footer">
+            <span id="ipaddr"></span>
+            <a href="javascript:;" id="forgotpwd" onclick="jsapi.openWindowsDefaultBrowser('http://dodo.hznu.edu.cn/account/forgot');">忘记密码?</a>
+        </div>
     </form>
 </div>
+<script>
+    (function ($, api) {
+        if (!api || api == undefined) {
+            alert('SDK注册失败，请重启程序。');
+        } else {
+            var envObj = JSON.parse(api.getEnv());
+            $('#ipaddr').text("IP地址：" + envObj.IPAddr);
+            //$('#forgotpwd').attr('href', forgoturl);
+        }
+        //api.showDevTools();
+    })(jQuery, jsapi);
+</script>
+
+
 </body>
 </html>

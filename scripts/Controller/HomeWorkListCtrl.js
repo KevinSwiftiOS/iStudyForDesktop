@@ -4,35 +4,39 @@
 
 HomeWorkListModel.controller("HomeWorkListCtrl", function ($scope, $state) {
     $state.go("HomeWork");
-    var selStyle = {
-        "background-color": "white",
-        "color": "black"
-    }
-    var unSelStyle = {
-        "background-color": "#3867e8",
-        "color": "white"
-    }
-    $scope.homeWorkStyle = selStyle;
-    $scope.experimentStyle = unSelStyle;
-    $scope.exerciseStyle = unSelStyle;
+   $scope.isHomeWork = true;
+    $scope.isExperiment = false;
+    $scope.isExercice = false;
+    // $scope.homeWorkStyle = selStyle;
+    // $scope.experimentStyle = unSelStyle;
+    // $scope.exerciseStyle = unSelStyle;
     $scope.goToHomeWork = function () {
         $state.go("HomeWork");
-        $scope.homeWorkStyle = selStyle;
-        $scope.experimentStyle = unSelStyle;
-        $scope.exerciseStyle = unSelStyle;
+        // $scope.homeWorkStyle = selStyle;
+        // $scope.experimentStyle = unSelStyle;
+        // $scope.exerciseStyle = unSelStyle;
+        $scope.isHomeWork = true;
+        $scope.isExperiment = false;
+        $scope.isExercice = false;
 
     }
     $scope.goToExerceise = function () {
         $state.go("Exercise");
-        $scope.homeWorkStyle = unSelStyle;
-        $scope.experimentStyle = unSelStyle;
-        $scope.exerciseStyle = selStyle;
+        // $scope.homeWorkStyle = unSelStyle;
+        // $scope.experimentStyle = unSelStyle;
+        // $scope.exerciseStyle = selStyle;
+        $scope.isHomeWork = false;
+        $scope.isExperiment = false;
+        $scope.isExercice = true;
     }
     $scope.goToExperiment = function () {
         $state.go("Experiment");
-        $scope.homeWorkStyle = unSelStyle;
-        $scope.experimentStyle = selStyle;
-        $scope.exerciseStyle = unSelStyle;
+        // $scope.homeWorkStyle = unSelStyle;
+        // $scope.experimentStyle = selStyle;
+        // $scope.exerciseStyle = unSelStyle;
+        $scope.isHomeWork = false;
+        $scope.isExperiment = true;
+        $scope.isExercice = false;
     }
     //返回按钮
     var ls = window.localStorage;

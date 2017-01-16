@@ -36,4 +36,10 @@ loginModel.controller("LoginCtrl", function ($scope, httpService, hostip) {
             swal("请求失败", err, "error");
         })
     }
+    $scope.openSetting = function () {
+        alert("setting");
+    }
+    $scope.openCai = function () {
+        alert("cai");
+    }
 })

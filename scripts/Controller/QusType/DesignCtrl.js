@@ -13,9 +13,6 @@ MainModel.controller("DesignCtrl",function ($scope,$stateParams,httpService,QusS
         //看是文件上传类型题目还是富文本题目
         $scope.files = qus.files;
         $scope.answerfiles = qus.answerfiles;
-        console.log(qus);
-        console.log($scope.files);
-        console.log($scope.answerfiles);
         //答案
         var answer = qus.answer;
         $scope.Ans = {

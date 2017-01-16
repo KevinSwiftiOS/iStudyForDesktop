@@ -44,10 +44,15 @@
     </div>
 </div>
 <p></p>
-<div class="tabCommon" ng-click="goToHomeWork()" ng-style="homeWorkStyle"><font size="5px">我的作业</font></div>
-<div class="tabCommon" ng-click="goToExperiment()" ng-style="experimentStyle"><font size="5px;">我的实验</font></div>
-<div class="tabCommon" ng-click="goToExerceise()" ng-style="exerciseStyle"><font size="5px">模拟练习</font></div>
-<div class="dashed"></div>
+<!--<div class="tabCommon" ng-click="goToHomeWork()" ng-style="homeWorkStyle"><font size="5px">我的作业</font></div>-->
+<!--<div class="tabCommon" ng-click="goToExperiment()" ng-style="experimentStyle"><font size="5px;">我的实验</font></div>-->
+<!--<div class="tabCommon" ng-click="goToExerceise()" ng-style="exerciseStyle"><font size="5px">模拟练习</font></div>-->
+<ul class="nav nav-pills" role="tablist">
+    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isHomeWork]" ng-click="goToHomeWork()" style="width: 33.3%;text-align: center;float: left"><a href="HomeWorkList.html#/HomeWork"><font size="4px"> 我的作业</font></a></li>
+    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isExperiment]" ng-click="goToExperiment()" style="width: 32%;text-align: center"><a  href="HomeWorkList.html#/Experiment"> <font size="4px">我的实验</font></a></li>
+    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isExercice]" ng-click="goToExerceise()" style="width: 33.3%;text-align: center;float: right"><a href="HomeWorkList.html#/Exercise"><font size="4px">我的练习</font></a></li>
+</ul>
+<p></p>
 <div ui-view></div>
 </body>
 </html>

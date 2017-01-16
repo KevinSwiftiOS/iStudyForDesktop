@@ -23,6 +23,7 @@ MainModel.controller("CompletionCtrl", function ($scope, $stateParams, QusServic
         $scope.options = [];
         //如果自己没有答题
         if (answer == "" || answer == null) {
+            options = [];
             for (var i = 0; i < count; i++) {
                 var dic = {};
                 dic.value = "";
@@ -38,6 +39,7 @@ MainModel.controller("CompletionCtrl", function ($scope, $stateParams, QusServic
             $scope.options = options;
         }
         else {
+            options = [];
             //将自己答题的内容进行分割 随后填入options的数组中
             //进行遍历
             var arr = answer.split("&&&");

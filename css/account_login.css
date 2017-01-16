@@ -77,3 +77,13 @@
     color: #eee;
     float: right;
 }
+.settingIcon{
+    float:right;
+    margin-right: 10px;
+    cursor:pointer;
+}
+.qusIcon{
+    float:right;
+    margin-right: 5%;
+    cursor: pointer
+}

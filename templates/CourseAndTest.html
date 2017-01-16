@@ -41,7 +41,7 @@
     </div>
 </div>
 <h2 class="title">我的考试</h2>
-<div class="dashed"></div>
+
 <div class="btnCenter">
     <p ng-if='tests.length > 0 ? false:true' style="font-size: 20px">暂无考试信息</p>
     <font color="red" size="5px">
@@ -79,7 +79,6 @@
     </div>
 </div>
 <h2 class="title">我的课程</h2>
-<div class="dashed"></div>
 <div class="btnCenter">
     <p ng-if='courses.length > 0 ? false:true' style="font-size: 20px">暂无课程信息</p>
 </div>
@@ -93,7 +92,7 @@
             </div>
         </div>
         <div class="col-xs-7">
-            <h2>{{course.title}}</h2>
+            <h2 class="testTitle">{{course.title}}</h2>
             <div ng-bind-html=" course.memo"></div>
             <p></p>
             <i class="fa fa-envelope"></i>&nbsp;{{course.teacher}}

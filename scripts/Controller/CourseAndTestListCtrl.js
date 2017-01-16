@@ -17,6 +17,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
     //先请求考试的数据 后请求练习的数据
     var testPromise = httpService.post("api/testquery", param);
     testPromise.then(function (data) {
+        console.log(data);
         cfpLoadingBar.complete();
         var tests = [];
         tests = data;
@@ -181,14 +182,16 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
         var testInfo = {
             testid: $scope.tests[$index].id,
             title: $scope.tests[$index].title,
-            enableClientJudge: true,
+            enableClientJudge: false,
             keyVisible: false,
             viewOneWithAnswerKey: false,
             redraw: false,
             drawsetting: "",
             timelimit: $scope.tests[$index].timelimit,
             //是否是考试
-            isTest: true
+            isTest: true,
+            //是否自动交卷
+            forcesubmit:$scope.tests[$index].forcesubmit
         }
         //剩余时间的检测
         var timeSlides = angular.fromJson(ls.getItem("timeSlides"));

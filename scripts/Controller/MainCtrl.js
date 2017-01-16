@@ -22,6 +22,8 @@ MainModel.controller("MainCtrl", function ($scope, $state, httpService, QusServi
     var timeSlide = null;
     //从本地提取timeSlide
     var timeSlides = [];
+    //是否可以阅卷的按钮隐藏
+    $scope.enableClientJudge = testInfo.enableClientJudge;
     timeSlides = angular.fromJson(ls.getItem("timeSlides"));
     if (timeSlides != null) {
         for (var i = 0; i < timeSlides.length; i++) {
@@ -239,6 +241,7 @@ MainModel.controller("MainCtrl", function ($scope, $state, httpService, QusServi
                 $state.go("PROGRAM_DESIGN", {itemsIndex: itemsIndex, qusIndex: qusIndex, testid: testid});
                 break;
             case "PROGRAM_CORRECT":
+            case "OPENEXAM_INPUT":
                 $state.go("PROGRAM_DESIGN", {itemsIndex: itemsIndex, qusIndex: qusIndex, testid: testid});
                 break;
             default:
@@ -367,7 +370,8 @@ MainModel.controller("MainCtrl", function ($scope, $state, httpService, QusServi
                                 width: 100,
                             },
                             function () {
-                                //根据apil来确定是否要交卷
+                                //根据api来确定是否要交卷
+                                 if(testInfo.forcesubmit)
                                 submitHomeWork();
                             });
                     }
