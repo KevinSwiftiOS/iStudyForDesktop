@@ -1,9 +1,10 @@
 /**
  * Created by hcnucai on 2016/12/21.
  */
-MainModel.controller("MainCtrl", function ($scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, Timer, $interval) {
+MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, Timer, $interval) {
     //获取参数
     //请求数据
+
     var ls = window.localStorage;
     //初始化
     var userInfo = angular.fromJson(ls.getItem("userInfo"));
@@ -316,8 +317,10 @@ MainModel.controller("MainCtrl", function ($scope, $state, httpService, QusServi
             for (var j = 0; j < qus.length; j++) {
                 //每一行描述第几题 和是否已经完成
                 qus[j].qusDesRow = "第" + (j + 1) + "题";
-                if (qus[j].answer != null && qus[j].answer != "")
+                if (qus[j].answer != null && qus[j].answer != "") {
                     qus[j].icon = "fa fa-circle";
+
+                }
                 else
                     qus[j].icon = "fa fa-circle-thin";
 

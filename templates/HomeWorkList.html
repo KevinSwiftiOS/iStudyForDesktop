@@ -7,9 +7,13 @@
     <title></title>
     <link href="../css/HomeWorkList.css" rel="stylesheet" type="text/css">
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
+    <!--自主选题的样式-->
+    <link href="../css/SelfSelQus.css" rel="stylesheet" type="text/css">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css" media="all">
+    <link href="../libs/angular-modal-service/modal.css" rel="stylesheet" type="text/css">
+    <link href="../libs/angular-modal-service/demo-modal.css" rel="stylesheet" type="text/css">
     <!-- compiled css output -->
     <script src="../libs/angular-1.5.3/angular.js"></script>
     <script src="../libs/angular-1.5.3/angular-animate.min.js"></script>
@@ -20,15 +24,18 @@
     <script src="../libs/js/bootstrap.min.js"></script>
 
     <script src="../libs/angular-loading-bar/src/loading-bar.js"></script>
-
+     <!--自主选择时候的模态框-->
+    <script src="../libs/angular-modal-service/modal.js"></script>
     <script src="../scripts/Service/HomeWorkListRoutes.js"></script>
     <script src="../scripts/Service/HomeWorkListService.js"></script>
     <script src="../scripts/Controller/HomeWorkListCtrl.js"></script>
+    <script src="../scripts/Controller/HomeWorkType/SelfSelQusCtrl.js"></script>
     <script src="../scripts/Controller/HomeWorkType/HomeWorkCtrl.js"></script>
     <script src="../scripts/Controller/HomeWorkType/ExerciseCtrl.js"></script>
     <script src="../scripts/Controller/HomeWorkType/ExperimentCtrl.js"></script>
+
 </head>
-<body ng-app="HomeWorkListModel" ng-controller="HomeWorkListCtrl">
+<body ng-app="HomeWorkListModel" ng-controller="HomeWorkListCtrl" style="background: #e6e6e6;">
 <div class="head">
     <div class="head-inner container">
         <div class="logo">
@@ -48,11 +55,11 @@
 <!--<div class="tabCommon" ng-click="goToExperiment()" ng-style="experimentStyle"><font size="5px;">我的实验</font></div>-->
 <!--<div class="tabCommon" ng-click="goToExerceise()" ng-style="exerciseStyle"><font size="5px">模拟练习</font></div>-->
 <ul class="nav nav-pills" role="tablist">
-    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isHomeWork]" ng-click="goToHomeWork()" style="width: 33.3%;text-align: center;float: left"><a href="HomeWorkList.html#/HomeWork"><font size="4px"> 我的作业</font></a></li>
-    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isExperiment]" ng-click="goToExperiment()" style="width: 32%;text-align: center"><a  href="HomeWorkList.html#/Experiment"> <font size="4px">我的实验</font></a></li>
-    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isExercice]" ng-click="goToExerceise()" style="width: 33.3%;text-align: center;float: right"><a href="HomeWorkList.html#/Exercise"><font size="4px">我的练习</font></a></li>
+    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isHomeWork]" ng-click="goToHomeWork()"     class="tabBtn" style= "float: left"><a href="HomeWorkList.html#/HomeWork"><font size="4px"> 我的作业</font></a></li>
+    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isExperiment]" ng-click="goToExperiment()" class="tabBtn"><a  href="HomeWorkList.html#/Experiment"> <font size="4px">我的实验</font></a></li>
+    <li role="presentation" ng-class="{true: 'active', false: 'inactive'}[isExercice]" ng-click="goToExerceise()" class="tabBtn" style="float: right"><a href="HomeWorkList.html#/Exercise"><font size="4px">我的练习</font></a></li>
 </ul>
 <p></p>
-<div ui-view></div>
+<div ui-view class="itemDiv"></div>
 </body>
 </html>

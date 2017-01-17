@@ -25,7 +25,7 @@
     <script src="../scripts/Controller/CourseAndTestListCtrl.js"></script>
     <script src="../scripts/Service/CourseAndTestListService.js"></script>
 </head>
-<body ng-app="CourseAndTestListModel" ng-controller="CourseAndTestListCtrl">
+<body ng-app="CourseAndTestListModel" ng-controller="CourseAndTestListCtrl" style="background: #e6e6e6">
 <!--导航条-->
 <div class="head">
     <div class="head-inner container">
@@ -40,10 +40,9 @@
         </div>
     </div>
 </div>
-<h2 class="title">我的考试</h2>
+<h2 class="title"  ng-if='tests.length > 0 ? true:false'>我的考试</h2>
 
 <div class="btnCenter">
-    <p ng-if='tests.length > 0 ? false:true' style="font-size: 20px">暂无考试信息</p>
     <font color="red" size="5px">
         <span ng-if="remainS > 0 || remainM > 0">离考试开始还有{{remainM}}分{{remainS}}秒</span>
     </font>
@@ -78,9 +77,8 @@
         </div>
     </div>
 </div>
-<h2 class="title">我的课程</h2>
+<h2 class="title"  ng-if='courses.length > 0 ? true:false'>我的课程</h2>
 <div class="btnCenter">
-    <p ng-if='courses.length > 0 ? false:true' style="font-size: 20px">暂无课程信息</p>
 </div>
 <div class="courseItem" ng-repeat="course in courses">
     <div class="row">
@@ -93,9 +91,9 @@
         </div>
         <div class="col-xs-7">
             <h2 class="testTitle">{{course.title}}</h2>
-            <div ng-bind-html=" course.memo"></div>
+            <div ng-bind-html=" course.memo" class="memoStyle"></div>
             <p></p>
-            <i class="fa fa-envelope"></i>&nbsp;{{course.teacher}}
+         &nbsp;{{course.teacher}}
         </div>
         <div class="col-xs-3 goToStudy">
             <button class="btn btn-info" ng-click="goToStudy($index)">立即学习</button>

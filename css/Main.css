@@ -2,6 +2,7 @@
     background-color: #3867e8;
     text-align: center;
     color: white;
+    height: 65px;
 }
 .qusPointer{
     cursor: pointer
@@ -66,16 +67,21 @@ border-bottom-width: 1px
 .scoreStyle{
     border-style: solid;
     border-width: 1px;
-    max-width: 100px;
+    min-width: 80px;
     float: right;
     padding: 5px;
     margin-right: 50px;
+
 }
 .infoStyle{
    text-align: center;
     background-color: #e6e6e6;
     margin-top: -10px;
-    width: 100%;
+
+    height: 1000px;
+     width: 195px;
+    float: right;
+    margin-right: -15px
 
 }
 .avaturlStyle{
@@ -87,4 +93,24 @@ border-bottom-width: 1px
     background-color: #e6e6e6;
     height: 80px;
     line-height: 80px
+}
+.qusIconStyle{
+    color: lawngreen;
+}
+.middleDiv{
+    background-color: white;
+    padding-left: 20px;
+    float: left;
+}
+.leftDiv{
+    padding: 10px;
+    overflow-y:auto;
+    height: 100%;
+    width: 180px;
+    float: left;
+}
+.mainDiv{
+    margin-top: 10px;
+    overflow: auto;
+    height: 150%;
 }

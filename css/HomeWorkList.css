@@ -63,11 +63,11 @@ body {
     border-width: 1px;
     margin-top: 50px;
 }
-.homeworkItem{
+.workItem{
 
     margin-left: 5%;
     margin-right: 5%;
-    background: whitesmoke;
+
     border-bottom: 1px dashed #E7E4E4;
 }
 .homeworkMarginLeft{
@@ -91,4 +91,13 @@ body {
 .testTitle {
     color: #545454;
     margin-left: 5px
+}
+.tabBtn{
+    width: 33%;
+    text-align: center;
+}
+.itemDiv{
+    margin-left: 50px;
+    margin-right: 50px;
+    background: white;
 }

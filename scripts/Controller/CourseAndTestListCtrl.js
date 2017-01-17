@@ -17,7 +17,6 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
     //先请求考试的数据 后请求练习的数据
     var testPromise = httpService.post("api/testquery", param);
     testPromise.then(function (data) {
-        console.log(data);
         cfpLoadingBar.complete();
         var tests = [];
         tests = data;
@@ -105,11 +104,13 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
                 if (tests[i].startH == currentHour && tests[i].startMin - currentMin <= 5 && tests[i].startMin - currentMin > 0) {
                     $interval.cancel(totalStartInterval);
                     swal("提醒", tests[i].title + "快开始了", "warning");
+                    $scope.courses = [];
                     break;
                 }
             }
             if (tests[i].startH - currentHour == 1 && 60 - currentMin <= 5) {
                 $interval.cancel(totalStartInterval);
+                $scope.courses = [];
                 swal("提醒", tests[i].title + "快开始了", "warning");
                 break;
             }
@@ -120,6 +121,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
             var remainM = tests[i].startMin - now.getMinutes() - 1;
             var remainS = 60 - now.getSeconds();
             var countDownInterval = $interval(function () {
+                $scope.courses = [];
                 if (remainS > 0) {
                     remainS--;
                 } else {

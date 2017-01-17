@@ -1,8 +1,9 @@
+<a class="demo-modal-close" href ng-click="closeMe()">
+    <font size="5px"><i class="fa fa-close" aria-hidden="true"></i></font>
+</a>
 <div class="total">
+
     <div class="btf-modal demo-modal">
-        <a class="demo-modal-close" href ng-click="closeMe()">
-            <font size="5px"><i class="fa fa-close" aria-hidden="true"></i></font>
-        </a>
         当前题目{{currentQus}}
         <div ng-if="isGoOver"style="text-align: center;margin-top: 10%"><font size="5px"><i class="fa fa-spinner fa-spin"></i> 正在阅卷中 请稍后</font> </div>
         <p>{{isSuss}}</p>

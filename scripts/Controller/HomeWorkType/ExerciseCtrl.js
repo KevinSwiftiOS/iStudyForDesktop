@@ -1,7 +1,7 @@
 /**
  * Created by hcnucai on 2016/12/27.
  */
-HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subDate, $state, cfpLoadingBar, hostip) {
+HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subDate, $state, cfpLoadingBar, hostip,myModal) {
     var ls = window.localStorage;
     var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
@@ -77,6 +77,6 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
             redraw: true
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
-        window.location.href = "SelfSelQus.html";
+        myModal.activate();
     }
 })

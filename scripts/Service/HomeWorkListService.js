@@ -58,4 +58,11 @@ HomeWorkListModel.factory("subDate", function () {
             return {year: year, month: month, day: day, hour: hour, min: min, second: second};
         }
     }
-});
+})
+    HomeWorkListModel.factory('myModal', function (btfModal) {
+        return btfModal({
+            controller: 'SelfSelQusCtrl',
+
+            templateUrl: "HomeWorkType/SelfSelQus.html"
+        });
+    });

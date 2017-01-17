@@ -87,3 +87,8 @@
     margin-right: 5%;
     cursor: pointer
 }
+.iconStyle{
+     size: 5px;
+    color: white;
+    font-size: 18px
+}
