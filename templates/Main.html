@@ -49,73 +49,75 @@
     </div>
     <p></p>
     <div  class="leftDiv"  ng-style="resizeWithOffset(80)"
+          resize
+          notifier="notifyServiceOnChage(params)">
+        <table class="table table-responsive table-bordered">
+            <tr ng-repeat="item in items">
+                <td>
+                    <div class="qusPointer" ng-click="showQusList($index)">
+                        <i class="{{item.icon}}"></i>
+                        {{item.title}}</div>
+                    <table style="margin-top: 5px">
+                        <tr ng-repeat="qus in item.questions" ng-if="item.isShow">
+                            <td>
+                                <div class="qusPointer" ng-style="qus.style"
+                                     ng-click="showQus($index,item.itemIndex)">
+                                    &nbsp;&nbsp;<i class="{{qus.icon}}" ng-class="{true: 'qusIconStyle', false: 'inactive'}[qus.icon == 'fa fa-circle']"> </i>
+                                    {{qus.qusDesRow}}
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div  class="middleDiv" ng-style="resizeWitdhWithOffset(405)"
+          widthresize
+          notifier="notifyServiceOnChageWidth(params)">
+        <p></p>
+        <div class="tabBtns">
+            <button class="btn btn-info" ng-click="goOver()" style="margin-bottom: 8px" ng-if = "enableClientJudge">阅卷</button>
+            <button class="btn btn-warning" ng-click="reset()" style="margin-bottom: 8px">重做</button>
+            <button class="btn btn-info" ng-click="forwardQus()" style="margin-bottom: 8px">上一题</button>
+            <button class="btn btn-info" ng-click="nextQus()" style="margin-bottom: 8px">下一题</button>
+        </div>
+        <div class="row mainDiv"    ng-style="resizeWithOffset(120)"
              resize
              notifier="notifyServiceOnChage(params)">
-            <table class="table table-responsive table-bordered">
-                <tr ng-repeat="item in items">
-                    <td>
-                        <div class="qusPointer" ng-click="showQusList($index)">
-                            <i class="{{item.icon}}"></i>
-                          {{item.title}}</div>
-                        <table style="margin-top: 5px">
-                            <tr ng-repeat="qus in item.questions" ng-if="item.isShow">
-                                <td>
-                                    <div class="qusPointer" ng-style="qus.style"
-                                         ng-click="showQus($index,item.itemIndex)">
-                                        &nbsp;&nbsp;<i class="{{qus.icon}}" ng-class="{true: 'qusIconStyle', false: 'inactive'}[qus.icon == 'fa fa-circle']"> </i>
-                                        {{qus.qusDesRow}}
-                                    </div>
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
-            </table>
-        </div>
-        <div  class="middleDiv" ng-style="resizeWitdhWithOffset(405)"
-              widthresize
-              notifier="notifyServiceOnChageWidth(params)">
-            <p></p>
-            <div class="tabBtns">
-                <button class="btn btn-info" ng-click="goOver()" style="margin-bottom: 8px" ng-if = "enableClientJudge">阅卷</button>
-                <button class="btn btn-warning" ng-click="reset()" style="margin-bottom: 8px">重做</button>
-                <button class="btn btn-info" ng-click="forwardQus()" style="margin-bottom: 8px">上一题</button>
-                <button class="btn btn-info" ng-click="nextQus()" style="margin-bottom: 8px">下一题</button>
+            <p ng-if="!hasQus"><i class="fa fa-spinner fa-spin"></i>正在加载题目 请稍后</p>
+            <div class="col-xs-9 col-md-8">
+                <div ui-view ></div>
             </div>
-            <div class="row mainDiv"    ng-style="resizeWithOffset(120)"
-                 resize
-                 notifier="notifyServiceOnChage(params)">
-                <p ng-if="!hasQus"><i class="fa fa-spinner fa-spin"></i>正在加载题目 请稍后</p>
-                <div class="col-xs-9 col-md-8">
-                    <div ui-view ></div>
-                </div>
-                <div class="col-xs-3 col-md-4" style="text-align: center">
-                    <p class="scoreStyle"><font size="3px"> 分数:{{score}}</font></p>
-                </div>
+            <div class="col-xs-3 col-md-4" style="text-align: center">
+                <p class="scoreStyle"><font size="3px"> 分数:{{score}}</font></p>
             </div>
-
         </div>
 
-        <div class="infoStyle">
-            <p></p>
-            <div>
-                <button class="btn btn-info" ng-click="submitHomeWork()">
-                    <span ng-if='isTest'>交卷</span>
-                    <span ng-if='!isTest'>提交作业</span></button>
-            </div>
-            <p></p>
-            <img src="{{info.avtarurl}}" class="avaturlStyle">
-            <p></p>
-            <p>姓名:{{info.name}}</p>
-            <p>{{username}}</p>
-            <p ng-if="isTest">剩余时间</p>
-            <!--这是剩余时间和剩余时间的提醒-->
-
-            <span   style = "color:red; font-size: 25px">{{slideTimes}}</span>
-            <p></p>
-            <span style = "color:red;font-size: 23px" ng-if="remainLess">距离考试结束时间不多了,请注意!</span>
-        </div>
     </div>
+
+    <div class="infoStyle" ng-style="resizeWithOffset(0)"
+         resize
+         notifier="notifyServiceOnChage(params)">
+        <p></p>
+        <div>
+            <button class="btn btn-info" ng-click="submitHomeWork()">
+                <span ng-if='isTest'>交卷</span>
+                <span ng-if='!isTest'>提交作业</span></button>
+        </div>
+        <p></p>
+        <img src="{{info.avtarurl}}" class="avaturlStyle">
+        <p></p>
+        <p>姓名:{{info.name}}</p>
+        <p>{{username}}</p>
+        <p ng-if="isTest">剩余时间</p>
+        <!--这是剩余时间和剩余时间的提醒-->
+
+        <span   style = "color:red; font-size: 25px">{{slideTimes}}</span>
+        <p></p>
+        <span style = "color:red;font-size: 23px" ng-if="remainLess">距离考试结束时间不多了,请注意!</span>
+    </div>
+</div>
 </div>
 </body>
 </html>

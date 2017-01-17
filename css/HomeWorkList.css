@@ -19,6 +19,7 @@
     float: left;
     font-size: 25px;
     color: #fff;
+
 }
 .courseName {
 
@@ -32,22 +33,23 @@
     float: right;
     height: 60px;
     line-height: 60px;
-    margin-top: -60px;
     color: #fff;
+    font-size: 20px;
+    margin-right: 10%;
     cursor: pointer;
 
 }
 #user_info {
-    margin-right: 10px;
+
     cursor: pointer;
 }
 body {
     background-color: #e6e6e6;
-    font-size: 14px;
+
     line-height: 1.428571429;
 }
 .backStyle{
-    margin-left: 10px;
+    margin-left: 20%;
     margin-top: 10px
 }
 .tabCommon{
@@ -71,7 +73,7 @@ body {
     border-bottom: 1px dashed #E7E4E4;
 }
 .homeworkMarginLeft{
-   margin-left: 5px
+    margin-left: 5px
 }
 .homeworkMarginTop{
     margin-top: 30px;
@@ -86,7 +88,7 @@ body {
     margin-right: 5px
 }
 .exerciseSelfSelBtn{
-  float: left;
+    float: left;
 }
 .testTitle {
     color: #545454;

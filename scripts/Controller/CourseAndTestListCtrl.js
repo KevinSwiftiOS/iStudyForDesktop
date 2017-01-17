@@ -239,9 +239,28 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
     }
     //退出系统
     $scope.exit = function () {
-        ls.clear();
-        window.location.href = "Login.html";
-    }
+
+        swal({
+                title: "提醒",
+                text: "您确认退出吗?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+
+
+                    ls.clear();
+                    window.location.href = "Login.html";
+                }
+            }
+        )
+    };
 })
 
 

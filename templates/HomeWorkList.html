@@ -24,7 +24,7 @@
     <script src="../libs/js/bootstrap.min.js"></script>
 
     <script src="../libs/angular-loading-bar/src/loading-bar.js"></script>
-     <!--自主选择时候的模态框-->
+    <!--自主选择时候的模态框-->
     <script src="../libs/angular-modal-service/modal.js"></script>
     <script src="../scripts/Service/HomeWorkListRoutes.js"></script>
     <script src="../scripts/Service/HomeWorkListService.js"></script>
@@ -37,17 +37,16 @@
 </head>
 <body ng-app="HomeWorkListModel" ng-controller="HomeWorkListCtrl" style="background: #e6e6e6;">
 <div class="head">
-    <div class="head-inner container">
-        <div class="logo">
-            <font size="5px"><i class="fa fa-arrow-left backStyle" ng-click="back()"></i></font>
-        </div>
-        <div class="courseName">
-            {{coursename}}
-        </div>
-        <div id="user_actions">
-            <span id="user_info">您好,{{name}}!</span>
-            <font color="white" ng-click="exit()"><i class="fa fa-power-off"></i></font>
-        </div>
+
+    <div class="logo">
+        <font size="5px"><i class="fa fa-arrow-left backStyle" ng-click="back()"></i></font>
+    </div>
+    <div class="courseName">
+        {{coursename}}
+    </div>
+    <div id="user_actions">
+        <span id="user_info">您好,{{name}}!</span>
+        <font color="white" ng-click="exit()"><i class="fa fa-power-off"></i></font>
     </div>
 </div>
 <p></p>
