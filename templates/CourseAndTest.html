@@ -28,17 +28,17 @@
 <body ng-app="CourseAndTestListModel" ng-controller="CourseAndTestListCtrl" style="background: #e6e6e6">
 <!--导航条-->
 <div class="head">
-    <div class="head-inner container">
-        <div class="logo">
-            <i class="fa fa-graduation-cap">
-            </i>
-            &nbsp;iStudy通用实践平台
-        </div>
-        <div id="user_actions">
-            <span id="user_info">您好,{{name}}!</span>
-            <font color="white" ng-click="exit()"><i class="fa fa-power-off"></i></font>
-        </div>
+
+    <div class="logo">
+        <i class="fa fa-graduation-cap">
+        </i>
+        &nbsp;iStudy通用实践平台
     </div>
+    <div id="user_actions">
+        <span id="user_info">您好,{{name}}!</span>
+        <font color="white" ng-click="exit()"><i class="fa fa-power-off"></i></font>
+    </div>
+
 </div>
 <h2 class="title"  ng-if='tests.length > 0 ? true:false'>我的考试</h2>
 
@@ -50,7 +50,7 @@
 <div ng-repeat="test in tests" class="testItem">
     <div class="row">
         <div class="col-xs-12">
-            <h3 class="testTitle">{{test.title}}</h3>
+            <p class="testTitle">{{test.title}}</p>
         </div>
     </div>
     <div class="row">
@@ -83,7 +83,7 @@
 <div class="courseItem" ng-repeat="course in courses">
     <div class="row">
         <div class="col-xs-2 coursePicDiv">
-            <img   src = "{{course.pic}}" ng-if="course.pic != ''" style="width: 100%">
+            <img   src = "{{course.pic}}" ng-if="course.pic != ''" style="width: 100%;height: 100px">
 
             <div class="courseRGB" ng-style="course.style" ng-if="course.pic == ''">
                 <div class="coursePit"><font color="white">{{course.pictit}}</font></div>
@@ -93,7 +93,7 @@
             <h2 class="testTitle">{{course.title}}</h2>
             <div ng-bind-html=" course.memo" class="memoStyle"></div>
             <p></p>
-         &nbsp;{{course.teacher}}
+            &nbsp;{{course.teacher}}
         </div>
         <div class="col-xs-3 goToStudy">
             <button class="btn btn-info" ng-click="goToStudy($index)">立即学习</button>

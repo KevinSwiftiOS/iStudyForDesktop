@@ -35,7 +35,7 @@ img{
     padding: 0px 5px;
     margin-left: -5px;
 
-     cursor: pointer;
+    cursor: pointer;
     border: 2px solid transparent;
 }
 
@@ -61,8 +61,8 @@ img{
 
 }
 .tabBtns{
-   border-bottom-style: solid;
-border-bottom-width: 1px
+    border-bottom-style: solid;
+    border-bottom-width: 1px
 }
 .scoreStyle{
     border-style: solid;
@@ -74,12 +74,11 @@ border-bottom-width: 1px
 
 }
 .infoStyle{
-   text-align: center;
+    text-align: center;
     background-color: #e6e6e6;
     margin-top: -10px;
 
-    height: 1000px;
-     width: 195px;
+    width: 195px;
     float: right;
     margin-right: -15px
 
@@ -95,7 +94,7 @@ border-bottom-width: 1px
     line-height: 80px
 }
 .qusIconStyle{
-    color: lawngreen;
+    color: #1CAD1B;
 }
 .middleDiv{
     background-color: white;

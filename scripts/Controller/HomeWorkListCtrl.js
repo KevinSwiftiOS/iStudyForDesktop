@@ -51,7 +51,25 @@ HomeWorkListModel.controller("HomeWorkListCtrl", function ($scope, $state) {
     var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
     $scope.coursename = courseInfo.coursename;
     $scope.exit = function () {
-        ls.clear();
-        window.location.href = "Login.html";
+        swal({
+                title: "提醒",
+                text: "您确认退出吗?",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确定",
+                cancelButtonText: "取消",
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+
+
+                    ls.clear();
+                    window.location.href = "Login.html";
+                }
+            }
+        )
     }
 });
