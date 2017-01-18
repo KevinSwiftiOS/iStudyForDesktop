@@ -1,6 +1,10 @@
 ﻿body {
     background-color: #ffffff;
     background: url(../images/logo.jpg) center top no-repeat;
+
+    font-size: 14px;
+    line-height: 1.428571429;
+
 }
 
 .container-fluid {

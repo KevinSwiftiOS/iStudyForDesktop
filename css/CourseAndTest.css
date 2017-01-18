@@ -6,7 +6,11 @@
 .container {
 
 }
-
+body {
+    background-color: #e6e6e6;
+    font-size: 14px;
+    line-height: 1.428571429;
+}
 .head {
     height: 61px;
     background-color: #3867e8;
