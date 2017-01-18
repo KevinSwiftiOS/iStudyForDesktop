@@ -61,7 +61,7 @@
                         <tr ng-repeat="qus in item.questions" ng-if="item.isShow">
                             <td>
                                 <div class="qusPointer" ng-style="qus.style"
-                                     ng-click="showQus($index,item.itemIndex)">
+                                     ng-click="showQus($index,item.itemIndex)" style="margin-left: 10px">
                                     &nbsp;&nbsp;<i class="{{qus.icon}}" ng-class="{true: 'qusIconStyle', false: 'inactive'}[qus.icon == 'fa fa-circle']"> </i>
                                     {{qus.qusDesRow}}
                                 </div>
@@ -82,21 +82,23 @@
             <button class="btn btn-info" ng-click="forwardQus()" style="margin-bottom: 8px">上一题</button>
             <button class="btn btn-info" ng-click="nextQus()" style="margin-bottom: 8px">下一题</button>
         </div>
-        <div class="row mainDiv"    ng-style="resizeWithOffset(120)"
+        <div class="mainDiv"    ng-style="resizeWithOffset(120)"
              resize
              notifier="notifyServiceOnChage(params)">
             <p ng-if="!hasQus"><i class="fa fa-spinner fa-spin"></i>正在加载题目 请稍后</p>
-            <div class="col-xs-9 col-md-8">
-                <div ui-view style="padding-bottom: 100px"></div>
-            </div>
-            <div class="col-xs-3 col-md-4" style="text-align: center">
-                <p class="scoreStyle"><font size="3px"> 分数:{{score}}</font></p>
+
+                <div ui-view style="padding-bottom: 100px;float: left;" ng-style="resizeWitdhWithOffset(550)"
+                     widthresize
+                     notifier="notifyServiceOnChageWidth(params)"></div>
+
+            <div class="scoreStyle">
+                <p ><font size="3px"> 分数：{{score}}</font></p>
             </div>
         </div>
 
     </div>
 
-    <div class="infoStyle" ng-style="resizeWithOffset(0)"
+    <div class="rightDiv" ng-style="resizeWithOffset(0)"
          resize
          notifier="notifyServiceOnChage(params)">
         <p></p>

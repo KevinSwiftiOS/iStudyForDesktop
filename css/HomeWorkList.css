@@ -45,7 +45,7 @@
 }
 body {
     background-color: #e6e6e6;
-
+    font-size: 14px;
     line-height: 1.428571429;
 }
 .backStyle{
@@ -73,7 +73,9 @@ body {
     border-bottom: 1px dashed #E7E4E4;
 }
 .homeworkMarginLeft{
-    margin-left: 5px
+    margin-left: 5px;
+    color: darkgray;
+
 }
 .homeworkMarginTop{
     margin-top: 30px;

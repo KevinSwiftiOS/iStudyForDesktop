@@ -9,7 +9,7 @@
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
-    <link href="../libs/angular-loading-bar/src/loading-bar.css" rel="stylesheet" type="text/css">
+
 
     <script src="../libs/js/jquery.min.js"></script>
     <!-- compiled css output -->
@@ -21,7 +21,7 @@
 
     <script src="../libs/js/bootstrap.min.js"></script>
     <!--base64加密-->
-    <script src="../libs/angular-loading-bar/src/loading-bar.js"></script>
+
     <script src="../scripts/Controller/CourseAndTestListCtrl.js"></script>
     <script src="../scripts/Service/CourseAndTestListService.js"></script>
 </head>
@@ -40,7 +40,7 @@
     </div>
 
 </div>
-<h2 class="title"  ng-if='tests.length > 0 ? true:false'>我的考试</h2>
+<p class="title"  ng-if='tests.length > 0 ? true:false'>我的考试</p>
 
 <div class="btnCenter">
     <font color="red" size="5px">
@@ -55,33 +55,33 @@
     </div>
     <div class="row">
         <div class="col-xs-9">
-        <span class="testTime">开始时间:{{test.datestart}}
-            <span class="testTime">截止时间:{{test.dateend}}</span>
+        <span class="testTime">开始时间：{{test.datestart}}
+            &nbsp;&nbsp;<span class="testTime">截止时间：{{test.dateend}}</span>
         </span>
         </div>
         <div class="col-xs-3 btnCenter">
-            <button class="btn btn-info" ng-if="!test.isEnd && test.isStart && !test.issubmited && !test.isforbid"
+            <button class="btn btn-info" ng-if="test.isStart && !test.issubmited && !test.isforbid && !test.isEnd"
                     ng-click="goToTest($index)">开始答题
             </button>
             <p ng-if="test.isforbid && test.isStart && !test.isEnd">被禁考</p>
-            <p ng-if="!test.isStart">还未开始
+            <p ng-if="!test.isStart">未开始
 
-            <p ng-if="test.issubmited">已交卷</p>
-            <p ng-if="!test.isSubmit && test.isEnd">已截止</p>
+            <p ng-if="test.issubmited && !test.isEnd && test.isStart">已交卷</p>
+            <p ng-if="test.isEnd">已截止</p>
         </div>
     </div>
-    <div class="row">
+    <div class="row" style="padding-bottom: 20px">
         <div class="col-xs-10">
-            <span class="testTime">考试时长:{{test.timelimit}}分钟</span>
-            <span ng-if="test.issubmited || test.isEnd ">成绩:{{test.myscore}}</span>
+            <span class="testTime">考试时长：{{test.timelimit}}分钟</span>
+           &nbsp;&nbsp; <span ng-if="test.issubmited || test.isEnd" class="testTime">成绩：{{test.myscore}}</span>
         </div>
     </div>
 </div>
-<h2 class="title"  ng-if='courses.length > 0 ? true:false'>我的课程</h2>
+<p class="title"  ng-if='courses.length > 0 ? true:false'>我的课程</p>
 <div class="btnCenter">
 </div>
 <div class="courseItem" ng-repeat="course in courses">
-    <div class="row">
+    <div class="row" style="padding-top: 15px;padding-bottom: 15px">
         <div class="col-xs-2 coursePicDiv">
             <img   src = "{{course.pic}}" ng-if="course.pic != ''" style="width: 100%;height: 100px">
 

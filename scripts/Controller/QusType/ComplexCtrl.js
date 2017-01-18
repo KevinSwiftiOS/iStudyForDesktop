@@ -179,13 +179,7 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
     }
     //保存的动作 首先是小题题的封装 之后再是总共的封装
   function save() {
-      var options = $scope.subquestions;
-      var answer = "";
-      for(var i = 0; i < options.length - 1;i++) {
-          answer += assembAns(options[i]) + "~~~";
-      }
-      answer += assembAns(options[options.length - 1]);
-      AnsCopy.ansCopy = answer;
+
       if(saveTrigger != null) {
           clearTimeout(saveTrigger);
           saveTrigger = null;
@@ -231,7 +225,7 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
             clearTimeout(saveTrigger);
             saveTrigger = null;
             $scope.isSave = false;
-            swal("保存失败",err,"error");
+            swal(err,"请再次保存","error");
         })
       },2000);
     }
@@ -274,7 +268,13 @@ MainModel.controller("ComplexCtrl",function ($scope,$stateParams,QusService,http
     //重置
     $scope.$watch('subquestions',function (newV,oldV) {
         if(newV != oldV) {
-
+            var options = $scope.subquestions;
+            var answer = "";
+            for(var i = 0; i < options.length - 1;i++) {
+                answer += assembAns(options[i]) + "~~~";
+            }
+            answer += assembAns(options[options.length - 1]);
+            AnsCopy.ansCopy = answer;
         }
     },true);
     $scope.reset = IsReset.reset;

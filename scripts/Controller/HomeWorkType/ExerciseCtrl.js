@@ -1,7 +1,7 @@
 /**
  * Created by hcnucai on 2016/12/27.
  */
-HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subDate, $state, cfpLoadingBar, hostip,myModal) {
+HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subDate, $state, hostip,myModal) {
     var ls = window.localStorage;
     var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
@@ -10,10 +10,10 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
     }
 
     var items = [];
-    cfpLoadingBar.start();
+
     var promise = httpService.post("api/exercisequery", param);
     promise.then(function (data) {
-        cfpLoadingBar.complete();
+
         //分割日期并进行查看
         items = data;
         for (var i = 0; i < items.length; i++) {
@@ -34,7 +34,7 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
         }
         $scope.items = items;
     }, function (err) {
-        cfpLoadingBar.complete();
+
         swal("请求失败", err, "error");
         $scope.items = items;
     })

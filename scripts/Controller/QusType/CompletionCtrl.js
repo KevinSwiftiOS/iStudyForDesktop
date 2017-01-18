@@ -132,7 +132,7 @@ MainModel.controller("CompletionCtrl", function ($scope, $stateParams, QusServic
                 clearTimeout(saveTrigger);
                 saveTrigger = null;
                 $scope.isSave = false;
-                swal("保存失败", err, "error");
+                swal(err, "请再次保存", "error");
             })
             //保存成功后 也要clearTimeout
         }, 1000);

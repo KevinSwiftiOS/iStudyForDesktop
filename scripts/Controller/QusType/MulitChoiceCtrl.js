@@ -10,12 +10,14 @@ MainModel.controller("MulitChoiceCtrl", function ($scope, $stateParams, httpServ
     var saveTrigger = null;
     //监听值改变
     $scope.answer = function ($index) {
-        save();
+
         $scope.options[$index].isSel = !$scope.options[$index].isSel;
+        save();
     }
     $scope.changed = function ($index) {
-        save();
+
         $scope.options[$index].isSel = !$scope.options[$index].isSel;
+        save();
     }
 //初始化界面
     initView();
@@ -108,7 +110,7 @@ MainModel.controller("MulitChoiceCtrl", function ($scope, $stateParams, httpServ
                     saveTrigger = null;
                 }, function (err) {
                     $scope.isSave = false;
-                    swal("保存失败", err, "error");
+                    swal(err, "请再次保存", "error");
                     clearTimeout(saveTrigger);
                     saveTrigger = null;
                 })

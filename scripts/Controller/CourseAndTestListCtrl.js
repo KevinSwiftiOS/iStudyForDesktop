@@ -1,13 +1,13 @@
 /**
  * Created by hcnucai on 2016/12/20.
  */
-var CourseAndTestListModel = angular.module("CourseAndTestListModel", ['angular-loading-bar', 'ngAnimate', 'ngSanitize']);
+var CourseAndTestListModel = angular.module("CourseAndTestListModel", ['ngAnimate', 'ngSanitize']);
 CourseAndTestListModel.constant("hostip", "http://dodo.hznu.edu.cn/");
-CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfpLoadingBar, httpService, subDate, $interval) {
+CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, httpService, subDate, $interval) {
     var ls = window.localStorage;
     //总共的监控
     var totalStartInterval;
-    cfpLoadingBar.start();
+
     var authtoken = ls.getItem("authtoken");
     var userInfo = angular.fromJson(ls.getItem("userInfo"));
     $scope.name = userInfo.name;
@@ -17,7 +17,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
     //先请求考试的数据 后请求练习的数据
     var testPromise = httpService.post("api/testquery", param);
     testPromise.then(function (data) {
-        cfpLoadingBar.complete();
+
         var tests = [];
         tests = data;
         //进行遍历 随后和当前时间进行比较看是否已经过期
@@ -36,47 +36,57 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
             tests[i].startH = dicStart.hour;
             tests[i].startMin = dicStart.min;
             tests[i].startValue = startDate.valueOf();
+
             //是否需要倒计时的功能
             var now = new Date();
+               if(now.valueOf() > endDate.valueOf()) {
+                   tests[i].isEnd = true;
+               }else{
+                   tests[i].isEnd = false;
+               }
+
             //看考试是否已经开始
             if (now.valueOf() > startDate.valueOf()) {
                 tests[i].isStart = true;
             } else {
                 tests[i].isStart = false;
             }
-            if (tests[i].isEnd == true) {
-                //本次还未截止
-                //看本次时间
-                //剩余时间还有多少
-                var timeSlides = angular.fromJson(ls.getItem("timeSlides"));
-                if (timeSlides == null) {
-                    //根据服务器返回的剩余时间和总共时间的多少进行判断
-                    if ($scope.tests[i].timelimit * 60 - $scope.tests[i].timeslided > 100)
-                        tests[i].isEnd = false;
-                } else {
-                    //看看截止时间
-                    var timeSlide = null;
-                    for (var i = 0; i < timeSlides.length; i++) {
-                        if (timeSlides[i].key == userInfo.username + "timeSlide" + tests[i].id) {
-                            timeSlide = timeSlides[i].value;
-                            break;
-                        }
-                    }
-                    //判断
-                    if (timeSlide == null) {
-                        //根据服务器返回的剩余时间和总共时间的多少进行判断
-                        if ($scope.tests[i].timelimit * 60 - $scope.tests[i].timeslided > 100)
-                            tests[i].isEnd = false;
-                    } else {
-                        if (timeSlide > 100)
-                            tests[i].isEnd = false;
-                    }
-                }
-            }
+
+            // if (tests[i].isEnd == true) {
+            //     //本次还未截止
+            //     //看本次时间
+            //     //剩余时间还有多少
+            //     var timeSlides = angular.fromJson(ls.getItem("timeSlides"));
+            //     if (timeSlides == null) {
+            //         //根据服务器返回的剩余时间和总共时间的多少进行判断
+            //         if ($scope.tests[i].timelimit * 60 - $scope.tests[i].timeslided > 100)
+            //             tests[i].isEnd = false;
+            //     } else {
+            //         //看看截止时间
+            //         var timeSlide = null;
+            //         for (var i = 0; i < timeSlides.length; i++) {
+            //             if (timeSlides[i].key == userInfo.username + "timeSlide" + tests[i].id) {
+            //                 timeSlide = timeSlides[i].value;
+            //                 break;
+            //             }
+            //         }
+            //         //判断
+            //         if (timeSlide == null) {
+            //             //根据服务器返回的剩余时间和总共时间的多少进行判断
+            //             if ($scope.tests[i].timelimit * 60 - $scope.tests[i].timeslided > 100)
+            //                 tests[i].isEnd = false;
+            //         } else {
+            //             if (timeSlide > 100)
+            //                 tests[i].isEnd = false;
+            //         }
+            //     }
+            // }
 
         }
         //监视时间的变化
         $scope.tests = tests;
+
+
         //监控时间
         totalStartInterval = $interval(function () {
             showCoutDown();
@@ -85,7 +95,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
     }, function (err) {
         var tests = [];
         swal("请求失败", err, "error");
-        cfpLoadingBar.complete();
+
         $scope.tests = tests;
     })
 
@@ -107,12 +117,13 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
                     $scope.courses = [];
                     break;
                 }
-            }
-            if (tests[i].startH - currentHour == 1 && 60 - currentMin <= 5) {
-                $interval.cancel(totalStartInterval);
-                $scope.courses = [];
-                swal("提醒", tests[i].title + "快开始了", "warning");
-                break;
+
+                if (tests[i].startH - currentHour == 1 && 60 - currentMin <= 5) {
+                    $interval.cancel(totalStartInterval);
+                    $scope.courses = [];
+                    swal("提醒", tests[i].title + "快开始了", "warning");
+                    break;
+                }
             }
         }
         //倒计时
@@ -158,7 +169,8 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
     //随后再请求课程的数据
     var cousrePromise = httpService.post("api/coursequery", param);
     cousrePromise.then(function (data) {
-        cfpLoadingBar.complete();
+
+
         var courses = data;
         for (var i = 0; i < courses.length; i++) {
             var rgb = courses[i].picbg;
@@ -174,7 +186,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, cfp
     }, function (err) {
         var courses = [];
         swal("请求失败", err, "error");
-        cfpLoadingBar.complete();
+
         $scope.courses = courses;
     })
 

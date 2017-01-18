@@ -109,7 +109,7 @@ MainModel.controller("ProgramDesCtrl", function ($scope, QusService, httpService
                 saveTrigger = null;
             }, function (err) {
                 $scope.isSave = false;
-                swal("保存失败", err, "error");
+                swal(err, "请再次保存", "error");
                 clearTimeout(saveTrigger);
                 saveTrigger = null;
             })

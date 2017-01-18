@@ -1,4 +1,4 @@
-HomeWorkListModel.controller("ExperimentCtrl", function (hostip, $scope, httpService, subDate, $state, cfpLoadingBar) {
+HomeWorkListModel.controller("ExperimentCtrl", function (hostip, $scope, httpService, subDate, $state) {
     var ls = window.localStorage;
     var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
@@ -6,10 +6,10 @@ HomeWorkListModel.controller("ExperimentCtrl", function (hostip, $scope, httpSer
         courseid: courseInfo.courseid
     }
     var items = [];
-    cfpLoadingBar.start();
+
     var promise = httpService.post("api/exprementquery", param);
     promise.then(function (data) {
-        cfpLoadingBar.complete();
+
         //分割日期并进行查看
         items = data;
         for (var i = 0; i < items.length; i++) {
@@ -31,7 +31,7 @@ HomeWorkListModel.controller("ExperimentCtrl", function (hostip, $scope, httpSer
         }
         $scope.items = items;
     }, function (err) {
-        cfpLoadingBar.complete();
+
         swal("请求失败", err, "error");
         $scope.items = items;
     })

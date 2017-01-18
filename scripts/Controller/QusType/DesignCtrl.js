@@ -61,7 +61,7 @@ $scope.startAnswer = function () {
             initView();
         },function (err) {
             $scope.isSave = false;
-            swal("保存失败",err,"error");
+            swal(err,"请再次保存","error");
         })
     }
     var data = {

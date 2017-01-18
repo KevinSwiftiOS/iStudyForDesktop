@@ -45,7 +45,7 @@ MainModel.controller("SingleChoiceCtrl", function ($scope, $stateParams, QusServ
             initView();
         }, function (err) {
             $scope.isSave = false;
-            swal("保存失败", err, "error");
+            swal(err, "请再次保存", "error");
         })
     }
     function initView() {

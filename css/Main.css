@@ -62,22 +62,27 @@ img{
 }
 .tabBtns{
     border-bottom-style: solid;
-    border-bottom-width: 1px
+    border-bottom-width: thin;
+    margin-right: -15px;
+    padding-left: 10px;
+    border-bottom-color: lightgray;
 }
 .scoreStyle{
     border-style: solid;
     border-width: 1px;
-    min-width: 80px;
+    width: 80px;
     float: right;
-    padding: 5px;
-    margin-right: 50px;
+    height: 30px;
+    margin-right: 15px;
+    line-height: 30px;
+    text-align: center;
+    float: right
 
 }
-.infoStyle{
+.rightDiv{
     text-align: center;
     background-color: #e6e6e6;
     margin-top: -10px;
-
     width: 195px;
     float: right;
     margin-right: -15px
@@ -98,18 +103,20 @@ img{
 }
 .middleDiv{
     background-color: white;
-    padding-left: 20px;
+
     float: left;
+
 }
 .leftDiv{
-    padding: 10px;
     overflow-y:auto;
     height: 100%;
     width: 180px;
     float: left;
 }
 .mainDiv{
+    margin-right: -15px;
     margin-top: 10px;
     overflow: auto;
-    height: 150%;
+    height: 100%;
+    padding-left: 10px;
 }

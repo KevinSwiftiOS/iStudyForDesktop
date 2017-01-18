@@ -65,6 +65,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
         $scope.hasQus = true;
         qusIndex = 0;
         itemsIndex = 0;
+        if(data.length > 0)
         data[0].itemIndex = 0;
         for (var i = 1; i < data.length; i++) {
             data[i].icon = "fa fa-chevron-circle-right";
