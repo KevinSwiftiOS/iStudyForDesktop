@@ -165,26 +165,32 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
             function (isConfirm) {
                 if (isConfirm) {
                     //进行缓存的清理和跳转
-                    var data = {
-                        testid: testid,
-                        questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
-                        answer: "",
-                        answerfile: "",
-                    }
-                    var param = {
-                        authtoken: ls.getItem("authtoken"),
-                        data: base64.encode(angular.toJson(data)),
-                    }
-                    var promise = httpService.post("api/submitquestion", param);
-                    promise.then(function (res) {
-                        var reset = IsReset.reset;
-                        reset.isReset = !reset.isReset;
-                        QusService.qusItems[itemsIndex].questions[qusIndex].answer = "";
+                    //设计题的重置有不一样的重置方法 需调用jsapi
+                    var type = QusService.qusItems[itemsIndex].type;
+                    if(type == "OPENEXAM_OFC" || type == "OPENEXAM_INT" || type == "OPENEXAM_WIN")
+                        alert("调用jsapi");
+                    else {
+                        var data = {
+                            testid: testid,
+                            questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
+                            answer: "",
+                            answerfile: "",
+                        }
+                        var param = {
+                            authtoken: ls.getItem("authtoken"),
+                            data: base64.encode(angular.toJson(data)),
+                        }
+                        var promise = httpService.post("api/submitquestion", param);
+                        promise.then(function (res) {
+                            var reset = IsReset.reset;
+                            reset.isReset = !reset.isReset;
+                            QusService.qusItems[itemsIndex].questions[qusIndex].answer = "";
 
-                        QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle-thin";
-                    }, function (err) {
-                        swal("重置失败", err, "error");
-                    })
+                            QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle-thin";
+                        }, function (err) {
+                            swal("重置失败", err, "error");
+                        })
+                    }
                 }
             });
     }
