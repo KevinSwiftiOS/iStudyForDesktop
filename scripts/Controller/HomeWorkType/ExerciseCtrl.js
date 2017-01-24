@@ -50,6 +50,7 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
             drawsetting: ""
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
+        jsapi.goTestOne(angular.toJson($scope.items[$index]));
         window.location.href = "Main.html";
 
     }
@@ -64,6 +65,7 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
             drawsetting: ""
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
+        jsapi.goTestOne(angular.toJson($scope.items[$index]));
         window.location.href = "Main.html";
 
     }
@@ -77,6 +79,7 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
             redraw: true
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
+        jsapi.goTestOne(angular.toJson($scope.items[$index]));
         myModal.activate();
     }
 })

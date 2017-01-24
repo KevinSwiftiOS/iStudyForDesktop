@@ -24,8 +24,11 @@ MainModel.controller("DesignCtrl",function ($scope,$stateParams,httpService,QusS
     //开始答题 调用jsapi
 $scope.startAnswer = function () {
      //第几题
-    console.log(QusService.qusItems[itemsIndex]);
-    console.log(QusService.qusItems[itemsIndex].questions[qusIndex]);
+    //console.log(QusService.qusItems[itemsIndex]);
+    //console.log(QusService.qusItems[itemsIndex].questions[qusIndex]);
+	jsapi.questionWork(angular.toJson(QusService.qusItems[itemsIndex]),angular.toJson(QusService.qusItems[itemsIndex].questions[qusIndex]));
+   //答题完成后 调用将按钮变绿
+    jsapi.setEvent_OnQuestionWorked(afterSave());
 }
     var ls = window.localStorage;
     var authtoken = ls.getItem("authtoken");
@@ -48,17 +51,7 @@ $scope.startAnswer = function () {
         }
         var promise = httpService.post("api/submitquestion",param);
         promise.then(function (res) {
-            $scope.saveDes = {
-                icon:"fa  fa-check",
-                des:"保存成功"
-            }
-            $timeout(function () {
-                $scope.isSave = false;
-            }, 1000);
 
-            QusService.qusItems[itemsIndex].questions[qusIndex].answer = AnsCopy.ansCopy;
-            QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle";
-            initView();
         },function (err) {
             $scope.isSave = false;
             swal(err,"请再次保存","error");
@@ -69,7 +62,23 @@ $scope.startAnswer = function () {
         "questionid": QusService.qusItems[itemsIndex].questions[qusIndex].id
     }
 
-
+function afterSave() {
+    $scope.isSave = true;
+    $scope.saveDes = {
+        icon: "fa fa-spinner fa-spin",
+        des: "正在保存答案"
+    }
+    $scope.saveDes = {
+        icon:"fa  fa-check",
+        des:"保存成功"
+    }
+    $timeout(function () {
+        $scope.isSave = false;
+    }, 1000);
+    QusService.qusItems[itemsIndex].questions[qusIndex].answer = "FILE";
+    QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle";
+    initView();
+}
 
 
 

@@ -1,7 +1,7 @@
 /**
  * Created by hcnucai on 2016/12/21.
  */
-MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, Timer, $interval) {
+MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, $interval) {
     //获取参数
     //请求数据
 
@@ -164,12 +164,18 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
             },
             function (isConfirm) {
                 if (isConfirm) {
-                    //进行缓存的清理和跳转
                     //设计题的重置有不一样的重置方法 需调用jsapi
                     var type = QusService.qusItems[itemsIndex].type;
-                    if(type == "OPENEXAM_OFC" || type == "OPENEXAM_INT" || type == "OPENEXAM_WIN")
-                        alert("调用jsapi");
+                    if(type == "OPENEXAM_OFC" || type == "OPENEXAM_INT" || type == "OPENEXAM_WIN") {
+                        jsapi.resetQuestion(QusService.qusItems[itemsIndex].questions[qusIndex].id);
+                        var reset = IsReset.reset;
+                        reset.isReset = !reset.isReset;
+                        QusService.qusItems[itemsIndex].questions[qusIndex].answer = "";
+                        QusService.qusItems[itemsIndex].questions[qusIndex].answerfiles = "";
+                        QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle-thin";
+                    }
                     else {
+                        //进行缓存的清理和跳转
                         var data = {
                             testid: testid,
                             questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
@@ -191,7 +197,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                             swal("重置失败", err, "error");
                         })
                     }
-                }
+                    }
             });
     }
 
@@ -237,8 +243,6 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                 $state.go("MULIT_CHIOCE", {itemsIndex: itemsIndex, qusIndex: qusIndex, testid: testid});
                 break;
             case "FILL_BLANK":
-                $state.go("FILL_BLANK", {itemsIndex: itemsIndex, qusIndex: qusIndex, testid: testid});
-                break;
             case "PROGRAM_FILL_BLANK":
                 $state.go("FILL_BLANK", {itemsIndex: itemsIndex, qusIndex: qusIndex, testid: testid});
                 break;
@@ -246,8 +250,6 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                 $state.go("COMPLEX", {itemsIndex: itemsIndex, qusIndex: qusIndex, testid: testid});
                 break;
             case "PROGRAM_DESIGN":
-                $state.go("PROGRAM_DESIGN", {itemsIndex: itemsIndex, qusIndex: qusIndex, testid: testid});
-                break;
             case "PROGRAM_CORRECT":
             case "OPENEXAM_INPUT":
                 $state.go("PROGRAM_DESIGN", {itemsIndex: itemsIndex, qusIndex: qusIndex, testid: testid});
@@ -274,6 +276,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                 if (isConfirm) {
                     //进行缓存的清理和跳转
                     submitHomeWork();
+					
                 }
             });
 
@@ -301,6 +304,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                     ls.setItem("timeSlides", angular.toJson(timeSlides));
                     $interval.cancel(slideInterval);
                 }
+				jsapi.endTest();
                 window.location.href = "CourseAndTest.html";
                 return true;
             } else {
@@ -387,7 +391,16 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                     }
                 }
             }
-            $scope.slideTimes = slideH + ":" + slideM + ":" + slideS;
+            var realH = slideH;
+            var realM = slideM;
+            var realS = slideS;
+            if(slideH < 10)
+                realH = "0" + slideH;
+            if(slideM < 10)
+                realM = "0" + slideM;
+            if(slideS < 10)
+                realS = "0" + slideS;
+            $scope.slideTimes = realH + ":" + realM + ":" + realS;
             //进行更新值
             for (var i = 0; i < timeSlides.length; i++) {
                 if (timeSlides[i].key == userInfo.username + "timeSlide" + testid) {

@@ -2,7 +2,7 @@
  * Created by hcnucai on 2016/12/21.
  */
 var MainModel = angular.module('MainModel', ['ui.router', 'ngAnimate', 'ngSanitize', 'ab-base64', 'btford.modal']);
-MainModel.constant("hostip", "http://dodo.hznu.edu.cn/");
+MainModel.constant("hostip",  jsapi.getDomain());
 MainModel.config(function ($stateProvider, $urlRouterProvider) {
     //这里指定路由
     $stateProvider

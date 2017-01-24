@@ -2,7 +2,7 @@
  * Created by hcnucai on 2016/12/26.
  */
 var HomeWorkListModel = angular.module('HomeWorkListModel', ['ui.router', 'ngAnimate', 'ngSanitize','btford.modal']);
-HomeWorkListModel.constant("hostip", "http://dodo.hznu.edu.cn/");
+HomeWorkListModel.constant("hostip", jsapi.getDomain());
 HomeWorkListModel.config(function ($stateProvider, $urlRouterProvider) {
     //这里指定路由
     $stateProvider

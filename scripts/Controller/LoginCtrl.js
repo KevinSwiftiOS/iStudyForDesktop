@@ -3,7 +3,7 @@
  */
 var loginModel = angular.module("LoginModel", ['ngAnimate']);
 //设置成全局变量 用jsapi来提供域名服务
-loginModel.constant("hostip", "http://dodo.hznu.edu.cn/");
+loginModel.constant("hostip",  jsapi.getDomain());
 loginModel.controller("LoginCtrl", function ($scope, httpService, hostip) {
     $scope.user = {};
     //进行登录服务
@@ -31,15 +31,16 @@ loginModel.controller("LoginCtrl", function ($scope, httpService, hostip) {
             info.username = user.username;
             ls.setItem("userInfo", angular.toJson(info));
             //页面跳转
-            window.location.href = "CourseAndTest.html";
+            jsapi.loginSuccessful(data.authtoken,angular.toJson(info))
         }, function (err) {
             swal("请求失败", err, "error");
         })
     }
-    $scope.openSetting = function () {
-        alert("setting");
+   $scope.openSetting = function () {
+        jsapi.openSetting();
+       loginModel.constant("hostip", jsapi.getDomain());
     }
     $scope.openCai = function () {
-        alert("cai");
+        jsapi.openWindowsDefaultBrowser("http://cai.hznu.edu.cn");
     }
 })

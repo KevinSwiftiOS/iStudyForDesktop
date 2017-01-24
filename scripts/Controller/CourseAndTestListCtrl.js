@@ -2,7 +2,7 @@
  * Created by hcnucai on 2016/12/20.
  */
 var CourseAndTestListModel = angular.module("CourseAndTestListModel", ['ngAnimate', 'ngSanitize']);
-CourseAndTestListModel.constant("hostip", "http://dodo.hznu.edu.cn/");
+CourseAndTestListModel.constant("hostip",  jsapi.getDomain());
 CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, httpService, subDate, $interval) {
     var ls = window.localStorage;
     //总共的监控
@@ -147,8 +147,14 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
                         updateTest();
                     }
                 }
-                $scope.remainM = remainM;
-                $scope.remainS = remainS;
+                var realM = remainM;
+                var realS = remainS;
+                if(remainM < 10)
+                    realM = "0" + remainM;
+                if(remainS < 10)
+                    realS = "0" + remainS;
+                $scope.remainM = realM;
+                $scope.remainS = realS;
             }, 1000);
         }
 
@@ -195,6 +201,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
         //赋值
         var testInfo = {
             testid: $scope.tests[$index].id,
+			
             title: $scope.tests[$index].title,
             enableClientJudge: false,
             keyVisible: false,
@@ -207,6 +214,9 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
             //是否自动交卷
             forcesubmit:$scope.tests[$index].forcesubmit
         }
+		
+		jsapi.goTestOne(angular.toJson($scope.tests[$index]));
+		
         //剩余时间的检测
         var timeSlides = angular.fromJson(ls.getItem("timeSlides"));
         var timeSlideDic = {};

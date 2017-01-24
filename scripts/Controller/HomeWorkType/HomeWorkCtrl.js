@@ -54,10 +54,11 @@ HomeWorkListModel.controller("HomeWorkCtrl", function ($scope, httpService, subD
                 drawsetting: ""
             }
             ls.setItem("testInfo", angular.toJson(testInfo));
+            jsapi.goTestOne(angular.toJson($scope.items[$index]));
             window.location.href = "Main.html";
         } else {
             //调用jsapi 打开浏览器
-            window.open(hostip + "Output/ViewOne/" + $scope.items[$index].usertestid);
+			jsapi.openWindowsDefaultBrowser(hostip + "Output/ViewOne/" + $scope.items[$index].usertestid);
         }
     }
     function getParam(paramName) {
