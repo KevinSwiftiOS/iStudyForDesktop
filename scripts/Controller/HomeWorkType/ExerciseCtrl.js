@@ -1,7 +1,7 @@
 /**
  * Created by hcnucai on 2016/12/27.
  */
-HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subDate, $state, hostip,myModal) {
+HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subDate, $state,myModal,Loading) {
     var ls = window.localStorage;
     var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
@@ -10,10 +10,10 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
     }
 
     var items = [];
-
+    Loading.activate();
     var promise = httpService.post("api/exercisequery", param);
     promise.then(function (data) {
-
+        Loading.deactivate();
         //分割日期并进行查看
         items = data;
         for (var i = 0; i < items.length; i++) {
@@ -31,10 +31,16 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
             else {
                 items[i].isEnd = true;
             }
+            //判断是否是最后一题
+            if(i != items.length - 1)
+                items[i].isLast = false;
+            else
+                items[i].isLast = true;
+
         }
         $scope.items = items;
     }, function (err) {
-
+        Loading.deactivate();
         swal("请求失败", err, "error");
         $scope.items = items;
     })

@@ -1,4 +1,4 @@
-HomeWorkListModel.controller("ExperimentCtrl", function (hostip, $scope, httpService, subDate, $state) {
+HomeWorkListModel.controller("ExperimentCtrl", function ( $scope, httpService, subDate, $state,Loading) {
     var ls = window.localStorage;
     var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
@@ -6,10 +6,10 @@ HomeWorkListModel.controller("ExperimentCtrl", function (hostip, $scope, httpSer
         courseid: courseInfo.courseid
     }
     var items = [];
-
+    Loading.activate();
     var promise = httpService.post("api/exprementquery", param);
     promise.then(function (data) {
-
+        Loading.deactivate();
         //分割日期并进行查看
         items = data;
         for (var i = 0; i < items.length; i++) {
@@ -28,10 +28,14 @@ HomeWorkListModel.controller("ExperimentCtrl", function (hostip, $scope, httpSer
                 items[i].isEnd = true;
                 items[i].btnTitle = "查看";
             }
+            if(i != items.length - 1)
+                items[i].isLast = false;
+            else
+                items[i].isLast = true;
         }
         $scope.items = items;
     }, function (err) {
-
+        Loading.deactivate();
         swal("请求失败", err, "error");
         $scope.items = items;
     })
@@ -53,7 +57,7 @@ HomeWorkListModel.controller("ExperimentCtrl", function (hostip, $scope, httpSer
             window.location.href = "Main.html";
         } else {
             //调用jsapi 打开浏览器
-			jsapi.openWindowsDefaultBrowser(hostip + "Output/ViewOne/" + $scope.items[$index].usertestid);
+			jsapi.openWindowsDefaultBrowser(jsapi.getDomain() + "Output/ViewOne/" + $scope.items[$index].usertestid);
         }
     }
 

@@ -1,13 +1,14 @@
 /**
  * Created by hcnucai on 2016/12/20.
  */
-var CourseAndTestListModel = angular.module("CourseAndTestListModel", ['ngAnimate', 'ngSanitize']);
-CourseAndTestListModel.constant("hostip",  jsapi.getDomain());
-CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, httpService, subDate, $interval) {
+var CourseAndTestListModel = angular.module("CourseAndTestListModel", ['ngAnimate', 'ngSanitize', 'btford.modal']);
+
+CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, httpService, subDate, $interval, Loading) {
     var ls = window.localStorage;
     //总共的监控
     var totalStartInterval;
-
+    //开始加载
+    Loading.activate();
     var authtoken = ls.getItem("authtoken");
     var userInfo = angular.fromJson(ls.getItem("userInfo"));
     $scope.name = userInfo.name;
@@ -17,11 +18,15 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
     //先请求考试的数据 后请求练习的数据
     var testPromise = httpService.post("api/testquery", param);
     testPromise.then(function (data) {
-
+        courseP();
         var tests = [];
         tests = data;
         //进行遍历 随后和当前时间进行比较看是否已经过期
         for (var i = 0; i < tests.length; i++) {
+            if (i == tests.length - 1)
+                tests[i].isLast = true;
+            else
+                tests[i].isLast = false;
             var dicStart = subDate.divedeToDay(tests[i].datestart);
             var dicEnd = subDate.divedeToDay(tests[i].dateend);
 
@@ -39,11 +44,11 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
 
             //是否需要倒计时的功能
             var now = new Date();
-               if(now.valueOf() > endDate.valueOf()) {
-                   tests[i].isEnd = true;
-               }else{
-                   tests[i].isEnd = false;
-               }
+            if (now.valueOf() > endDate.valueOf()) {
+                tests[i].isEnd = true;
+            } else {
+                tests[i].isEnd = false;
+            }
 
             //看考试是否已经开始
             if (now.valueOf() > startDate.valueOf()) {
@@ -93,6 +98,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
         }, 1000);
 
     }, function (err) {
+        Loading.deactivate();
         var tests = [];
         swal("请求失败", err, "error");
 
@@ -149,9 +155,9 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
                 }
                 var realM = remainM;
                 var realS = remainS;
-                if(remainM < 10)
+                if (remainM < 10)
                     realM = "0" + remainM;
-                if(remainS < 10)
+                if (remainS < 10)
                     realS = "0" + remainS;
                 $scope.remainM = realM;
                 $scope.remainS = realS;
@@ -173,35 +179,41 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
     }
 
     //随后再请求课程的数据
-    var cousrePromise = httpService.post("api/coursequery", param);
-    cousrePromise.then(function (data) {
+    function courseP() {
 
-
-        var courses = data;
-        for (var i = 0; i < courses.length; i++) {
-            var rgb = courses[i].picbg;
-            if (rgb != null) {
-                courses[i].style = {
-                    "background-color": "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")",
-                    "word-wrap": "break-word"
+        var cousrePromise = httpService.post("api/coursequery", param);
+        cousrePromise.then(function (data) {
+            Loading.deactivate();
+            var courses = data;
+            for (var i = 0; i < courses.length; i++) {
+                if (i == courses.length - 1)
+                    courses[i].isLast = true;
+                else
+                    courses[i].isLast = false;
+                var rgb = courses[i].picbg;
+                if (rgb != null) {
+                    courses[i].style = {
+                        "background-color": "rgb(" + rgb[0] + "," + rgb[1] + "," + rgb[2] + ")",
+                        "word-wrap": "break-word"
+                    }
                 }
             }
-        }
-        $scope.courses = courses;
-        //和当前的时间进行比较
-    }, function (err) {
-        var courses = [];
-        swal("请求失败", err, "error");
+            $scope.courses = courses;
+            //和当前的时间进行比较
+        }, function (err) {
+            Loading.deactivate();
+            var courses = [];
+            swal("请求失败", err, "error");
 
-        $scope.courses = courses;
-    })
-
+            $scope.courses = courses;
+        })
+    }
     //开始答题
     $scope.goToTest = function ($index) {
         //赋值
         var testInfo = {
             testid: $scope.tests[$index].id,
-			
+
             title: $scope.tests[$index].title,
             enableClientJudge: false,
             keyVisible: false,
@@ -212,11 +224,9 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
             //是否是考试
             isTest: true,
             //是否自动交卷
-            forcesubmit:$scope.tests[$index].forcesubmit
+            forcesubmit: $scope.tests[$index].forcesubmit
         }
-		
-		jsapi.goTestOne(angular.toJson($scope.tests[$index]));
-		
+
         //剩余时间的检测
         var timeSlides = angular.fromJson(ls.getItem("timeSlides"));
         var timeSlideDic = {};
@@ -237,7 +247,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
                     break;
                 }
             }
-            //如果本地没有本村该次考试的剩余时间 就应该保存下来 本次时间
+            //如果本地没有本次考试的剩余时间 就应该保存下来 本次时间
             if (timeSlide == null) {
                 timeSlideDic = {
                     key: userInfo.username + "timeSlide" + $scope.tests[$index].id,
@@ -249,6 +259,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
         //页面跳转
+        jsapi.goTestOne(angular.toJson($scope.tests[$index]));
         window.location.href = "Main.html";
     }
     $scope.goToStudy = function ($index) {
@@ -275,10 +286,8 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
             },
             function (isConfirm) {
                 if (isConfirm) {
-
-
                     ls.clear();
-                    window.location.href = "Login.html";
+                    jsapi.exit();
                 }
             }
         )

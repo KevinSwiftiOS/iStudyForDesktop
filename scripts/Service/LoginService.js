@@ -3,14 +3,14 @@
  */
 //定义公有的http服务
 loginModel.factory("httpService",
-    function ($http, $q, hostip) {
+    function ($http, $q) {
         return {
             post: function (suburl, params) {
                 var defer = $q.defer();
                 $http({
                     method: 'POST',
                     params: params,
-                    url: hostip + suburl,
+                    url: jsapi.getDomain() + suburl,
                 }).success(function (data) {
                     if (data.retcode == 0) {
                         defer.resolve(data.items);
@@ -27,7 +27,7 @@ loginModel.factory("httpService",
                 $http({
                     method: 'POST',
                     params: params,
-                    url: hostip + suburl,
+                    url: jsapi.getDomain() + suburl,
                 }).success(function (data) {
                     if (data.retcode == 0) {
                         defer.resolve(data);

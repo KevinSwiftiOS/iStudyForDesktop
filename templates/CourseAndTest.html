@@ -9,7 +9,8 @@
     <link href="../libs/sweetalert/dist/sweetalert.css" rel="stylesheet">
     <link href="../css/bootstrap.min.css" rel="stylesheet"/>
     <link href="../css/font-awesome.min.css" rel="stylesheet" type="text/css">
-
+    <link href="../libs/angular-modal-service/modal.css" rel="stylesheet" type="text/css">
+    <link href="../libs/angular-modal-service/demo-modal.css" rel="stylesheet" type="text/css">
 
     <script src="../libs/js/jquery.min.js"></script>
     <!-- compiled css output -->
@@ -18,14 +19,15 @@
     <script src="../libs/angular-sanitize/angular-sanitize.js"></script>
     <script src="../libs/angular-ui-router/release/angular-ui-router.min.js"></script>
     <script src="../libs/sweetalert/dist/sweetalert.min.js"></script>
-
+    <script src="../libs/angular-modal-service/modal.js"></script>
     <script src="../libs/js/bootstrap.min.js"></script>
     <!--base64加密-->
 
     <script src="../scripts/Controller/CourseAndTestListCtrl.js"></script>
     <script src="../scripts/Service/CourseAndTestListService.js"></script>
+    <script src = "../scripts/Controller/CourseAndTestLoadingCtrl.js"></script>
 </head>
-<body ng-app="CourseAndTestListModel" ng-controller="CourseAndTestListCtrl" style="background: #e6e6e6">
+<body ng-app="CourseAndTestListModel" ng-controller="CourseAndTestListCtrl" style="background: #e6e6e6" ng-class="">
 <!--导航条-->
 <div class="head">
 
@@ -47,7 +49,7 @@
         <span ng-if="remainS > 0 || remainM > 0">离考试开始还有{{remainM}}分{{remainS}}秒</span>
     </font>
 </div>
-<div ng-repeat="test in tests" class="testItem">
+<div ng-repeat="test in tests" class="testItem" ng-class="{true: 'isLast', false: 'isnLast'}[test.isLast]">
     <div class="row">
         <div class="col-xs-12">
             <p class="testTitle">{{test.title}}</p>
@@ -80,7 +82,7 @@
 <p class="title"  ng-if='courses.length > 0 ? true:false'>我的课程</p>
 <div class="btnCenter">
 </div>
-<div class="courseItem" ng-repeat="course in courses">
+<div class="courseItem" ng-repeat="course in courses" ng-class="{true: 'isLast', false: 'isnLast'}[course.isLast]">
     <div class="row" style="padding-top: 15px;padding-bottom: 15px">
         <div class="col-xs-2 coursePicDiv">
             <img   src = "{{course.pic}}" ng-if="course.pic != ''" style="width: 100%;height: 100px">

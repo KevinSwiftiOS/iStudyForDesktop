@@ -4,14 +4,14 @@
 //头像的路径
 //时间日期的分割
 CourseAndTestListModel.factory("httpService",
-    function ($http, $q, hostip) {
+    function ($http, $q) {
         return {
             post: function (suburl, params) {
                 var defer = $q.defer();
                 $http({
                     method: 'POST',
                     params: params,
-                    url: hostip + suburl,
+                    url: jsapi.getDomain() + suburl,
                 }).success(function (data) {
                     if (data.retcode == 0) {
                         defer.resolve(data.items);
@@ -28,7 +28,7 @@ CourseAndTestListModel.factory("httpService",
                 $http({
                     method: 'POST',
                     params: params,
-                    url: hostip + suburl,
+                    url: jsapi.getDomain() + suburl,
                 }).success(function (data) {
                     if (data.retcode == 0) {
                         defer.resolve(data);
@@ -56,4 +56,11 @@ CourseAndTestListModel.factory("subDate", function () {
             return {year: year, month: month, day: day, hour: hour, min: min, second: second};
         }
     }
+});
+CourseAndTestListModel.factory('Loading', function (btfModal) {
+    return btfModal({
+        controller: 'CourseAndTestLoadingCtrl',
+
+        templateUrl: "Loading.html"
+    });
 });

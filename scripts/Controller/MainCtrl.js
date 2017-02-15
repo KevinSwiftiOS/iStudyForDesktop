@@ -1,7 +1,7 @@
 /**
  * Created by hcnucai on 2016/12/21.
  */
-MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, $interval) {
+MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, $interval) {
     //获取参数
     //请求数据
 
@@ -59,14 +59,35 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
         redraw: redraw,
         drawsetting: drawsetting
     };
-    var promise = httpService.post("api/testinfo", param);
+    Loading.activate();
+    var promise = httpService.infoPost("api/testinfo", param);
     $scope.hasQus = false;
-    promise.then(function (data) {
+    promise.then(function (res) {
+
+        //禁止右键
+        if (res.info.forbiddenMouseRightMenu) {
+            $(document).bind("contextmenu", function (e) {
+                return false;
+            });
+
+        }
+        //禁止复制
+        if (res.info.forbiddenCopy) {
+            document.body.onselectstart = document.body.ondrag = function () {
+                return false;
+            }
+            //监听ctrl c
+            $(document).keydown(function () {
+                return key(arguments[0]);
+            })
+
+        }
         $scope.hasQus = true;
         qusIndex = 0;
         itemsIndex = 0;
-        if(data.length > 0)
-        data[0].itemIndex = 0;
+        var data = res.items;
+        if (data.length > 0)
+            data[0].itemIndex = 0;
         for (var i = 1; i < data.length; i++) {
             data[i].icon = "fa fa-chevron-circle-right";
             data[i].isShow = false;
@@ -75,19 +96,36 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
         QusService.qusItems = data;
         initIcon(itemsIndex, qusIndex);
         $scope.items = QusService.qusItems;
+        var info = res.info;
         goToDiffState();
 
     }, function (err) {
+        Loading.deactivate();
         $scope.hasQus = true;
         $scope.items = [];
         QusService.qusItems = [];
 
         swal("请求失败", err, "error");
     })
+    //keyDown事件
+    function key(e) {
+        var keynum = (e.keyCode) ||(e.which) || (e.charCode);
+        var d = e.srcElement || e.target;
+
+        //有疑问 文本框中的内容不可复制?
+        if(d.tagName.toUpperCase() != 'INPUT' && d.tagName.toUpperCase() != 'TEXTAREA'){
+            if(e.ctrlKey && keynum == 67){
+              swal("提醒","禁止复制内容","warning");
+            return false;
+            }
+        }
+
+    }
     //监听值得变化
     $scope.$watch('items', function (newV, oldV) {
         if (newV != oldV) {
             $scope.items = newV;
+            Loading.deactivate();
 
         }
     }, true);
@@ -153,7 +191,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
     $scope.reset = function () {
         swal({
                 title: "提醒",
-                text: "您确认重置该题吗?",
+                text: "重置后题目将回到初始状态，确定重置吗？",
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
@@ -166,16 +204,11 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                 if (isConfirm) {
                     //设计题的重置有不一样的重置方法 需调用jsapi
                     var type = QusService.qusItems[itemsIndex].type;
-                    if(type == "OPENEXAM_OFC" || type == "OPENEXAM_INT" || type == "OPENEXAM_WIN") {
-                        jsapi.resetQuestion(QusService.qusItems[itemsIndex].questions[qusIndex].id);
-                        var reset = IsReset.reset;
-                        reset.isReset = !reset.isReset;
-                        QusService.qusItems[itemsIndex].questions[qusIndex].answer = "";
-                        QusService.qusItems[itemsIndex].questions[qusIndex].answerfiles = "";
-                        QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle-thin";
+                    if (type == "OPENEXAM_OFC" || type == "OPENEXAM_INT" || type == "OPENEXAM_WIN") {
+                        Loading.activate();
+                        jsapi.resetQuestion(QusService.qusItems[itemsIndex].questions[qusIndex].id, 'resetOfficeQus');
                     }
                     else {
-                        //进行缓存的清理和跳转
                         var data = {
                             testid: testid,
                             questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
@@ -197,10 +230,37 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                             swal("重置失败", err, "error");
                         })
                     }
-                    }
+                }
             });
     }
+    //重置office题目后的动作
+    window.resetOfficeQus = function (result) {
+        if (result.success) {
+            //调用接口进行重置
+            var data = {
+                testid: testid,
+                questionid: QusService.qusItems[itemsIndex].questions[qusIndex].id,
+                answer: "",
+                answerfile: "",
+            }
+            var param = {
+                authtoken: ls.getItem("authtoken"),
+                data: base64.encode(angular.toJson(data)),
+            }
+            var promise = httpService.post("api/submitquestion", param);
+            promise.then(function (res) {
 
+                var reset = IsReset.reset;
+                reset.isReset = !reset.isReset;
+                QusService.qusItems[itemsIndex].questions[qusIndex].answer = "";
+                QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle-thin";
+            }, function (err) {
+                swal("重置失败", err, "error");
+            })
+        } else {
+            swal("重置失败", result.message, "error");
+        }
+    }
 
     //阅卷
     $scope.goOver = function () {
@@ -217,7 +277,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
             myModal.activate();
         }
     }
-    var timePromise;
+
     function goToDiffState() {
         //定时器的测试
         //分数变换掉
@@ -259,6 +319,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                 break;
         }
     }
+
     //提交作业
     $scope.submitHomeWork = function () {
         swal({
@@ -276,7 +337,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                 if (isConfirm) {
                     //进行缓存的清理和跳转
                     submitHomeWork();
-					
+
                 }
             });
 
@@ -304,7 +365,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                     ls.setItem("timeSlides", angular.toJson(timeSlides));
                     $interval.cancel(slideInterval);
                 }
-				jsapi.endTest();
+                jsapi.endTest();
                 window.location.href = "CourseAndTest.html";
                 return true;
             } else {
@@ -314,6 +375,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
             swal("提交失败", err, "error");
         })
     }
+
 
     //初始化icon 当第几个进来 随后第几个icon变颜色
     function initIcon(itemIndex, qusIndex) {
@@ -345,6 +407,7 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
         }
         QusService.qusItems = items;
     }
+
     //进行总时间的计算
     function calTimeSlided() {
         var slideH = parseInt(timeSlide / 3600);
@@ -385,8 +448,8 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
                             },
                             function () {
                                 //根据api来确定是否要交卷
-                                 if(testInfo.forcesubmit)
-                                submitHomeWork();
+                                if (testInfo.forcesubmit)
+                                    submitHomeWork();
                             });
                     }
                 }
@@ -394,11 +457,11 @@ MainModel.controller("MainCtrl", function ($window, $scope, $state, httpService,
             var realH = slideH;
             var realM = slideM;
             var realS = slideS;
-            if(slideH < 10)
+            if (slideH < 10)
                 realH = "0" + slideH;
-            if(slideM < 10)
+            if (slideM < 10)
                 realM = "0" + slideM;
-            if(slideS < 10)
+            if (slideS < 10)
                 realS = "0" + slideS;
             $scope.slideTimes = realH + ":" + realM + ":" + realS;
             //进行更新值

@@ -132,7 +132,9 @@ MainModel.controller("ProgramDesCtrl", function ($scope, QusService, httpService
     //定时器还有些问题
     // var updateClock = null;
     // angular.element(document).ready(function () {
-    //   console.log("angularReady");
+    //
+    //
+    // ("angularReady");
     //      updateClock = null;
     //     clearTimeout(updateClock);
     //     var time = Timer.times[qusIndex];

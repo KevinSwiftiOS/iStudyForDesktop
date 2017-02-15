@@ -9,21 +9,23 @@
         <p>{{isSuss}}</p>
         <table class="table table-bordered" ng-if="points.length > 0 ? true :false">
             <tr>
+                <th style="text-align: center;width: 100px">题目信息</th>
                 <th style="text-align: center;width: 100px">知识点</th>
                 <th style="text-align: center;width: 100px">结果</th>
                 <th style="text-align: center;width: 100px">得分</th>
                 <th style="text-align: center;width: 100px">参考答案</th>
-                <th style="text-align: center;width: 100px">信息</th>
-            </tr>
-            <td style="text-align: center" rowspan="{{points.length + 1}}">{{knowledge}}</td>
-            <tr ng-repeat="point in points">
 
+            </tr>
+
+            <tr ng-repeat="point in points">
+                <td style="text-align: left">{{point.message}}</td>
+                <td style="text-align: center" rowspan="{{points.length + 1}}" ng-if = "point.isFirst">{{knowledge}}</td>
                 <td style="text-align: center;width: auto"><font color="{{point.color}}">{{point.comment}}</font></td>
                 <td style="text-align: center">{{point.gotscore}} / {{point.fullscore}}</td>
                 <td style="text-align: center">
                     <div ng-bind-html="point.key"></div>
                 </td>
-                <td style="text-align: center">{{point.message}}</td>
+
             </tr>
 
         </table>

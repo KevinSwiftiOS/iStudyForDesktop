@@ -31,13 +31,14 @@
     <script src="../scripts/Controller/HomeWorkType/HomeWorkCtrl.js"></script>
     <script src="../scripts/Controller/HomeWorkType/ExerciseCtrl.js"></script>
     <script src="../scripts/Controller/HomeWorkType/ExperimentCtrl.js"></script>
+    <script src = "../scripts/Controller/HomeWorkType/HomeWorkLoadingCtrl.js"></script>
 
 </head>
-<body ng-app="HomeWorkListModel" ng-controller="HomeWorkListCtrl" style="background: #e6e6e6;overflow-y: ">
+<body ng-app="HomeWorkListModel" ng-controller="HomeWorkListCtrl" style="background: #e6e6e6;" ng-class="{true: 'total', false: ''}[isLoading]">
 <div class="head">
 
     <div class="logo">
-        <font size="5px"><i class="fa fa-arrow-left backStyle" ng-click="back()"></i></font>
+        <font size="5px"><i class="fa fa-arrow-left backStyle " ng-click="back()"></i></font>
     </div>
     <div class="courseName">
         {{coursename}}

@@ -4,14 +4,14 @@
 //头像的路径
 //时间日期的分割
 HomeWorkListModel.factory("httpService",
-    function ($http, $q, hostip) {
+    function ($http, $q) {
         return {
             post: function (suburl, params) {
                 var defer = $q.defer();
                 $http({
                     method: 'POST',
                     params: params,
-                    url: hostip + suburl,
+                    url: jsapi.getDomain() + suburl,
                 }).success(function (data) {
                     if (data.retcode == 0) {
                         defer.resolve(data.items);
@@ -28,7 +28,7 @@ HomeWorkListModel.factory("httpService",
                 $http({
                     method: 'POST',
                     params: params,
-                    url: hostip + suburl,
+                    url: jsapi.getDomain() + suburl,
                 }).success(function (data) {
                     if (data.retcode == 0) {
                         defer.resolve(data);
@@ -66,6 +66,14 @@ HomeWorkListModel.factory("subDate", function () {
             templateUrl: "HomeWorkType/SelfSelQus.html"
         });
     });
+HomeWorkListModel.factory('Loading', function (btfModal) {
+    return btfModal({
+        controller: 'HomeWorkLoadingCtrl',
+
+        templateUrl: "Loading.html"
+    });
+});
+
 HomeWorkListModel.directive('resizediv', function ($window) {
     return function (scope, element, attr) {
 

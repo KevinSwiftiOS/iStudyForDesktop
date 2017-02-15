@@ -50,7 +50,8 @@ body {
 }
 .backStyle{
     margin-left: 20%;
-    margin-top: 10px
+    margin-top: 10px;
+    cursor: pointer;
 }
 .tabCommon{
     width: 33.3%;
@@ -70,12 +71,20 @@ body {
     margin-left: 5%;
     margin-right: 5%;
 
-    border-bottom: 1px dashed #E7E4E4;
+}
+.isnLast{
+    border-bottom: 1px solid darkgray;
+
+}
+.isLast{
+
 }
 .homeworkMarginLeft{
     margin-left: 5px;
     color: darkgray;
-
+}
+.dateTime{
+    font-size: 12px;
 }
 .homeworkMarginTop{
     margin-top: 30px;
@@ -106,5 +115,5 @@ body {
     background: white;
 }
 .tabStyle{
-    margin: 20px 50px;
+    margin: 30px 50px;
 }

@@ -3,14 +3,14 @@
  */
 //定义公有的http服务
 MainModel.factory("httpService",
-    function ($http, $q, hostip) {
+    function ($http, $q) {
         return {
             post: function (suburl, params) {
                 var defer = $q.defer();
                 $http({
                     method: 'POST',
                     params: params,
-                    url: hostip + suburl,
+                    url: jsapi.getDomain() + suburl,
                 }).success(function (data) {
                     if (data.retcode == 0) {
                         defer.resolve(data.items);
@@ -27,7 +27,7 @@ MainModel.factory("httpService",
                 $http({
                     method: 'POST',
                     params: params,
-                    url: hostip + suburl,
+                    url: jsapi.getDomain() + suburl,
                 }).success(function (data) {
                     if (data.retcode == 0) {
                         defer.resolve(data);
@@ -59,6 +59,14 @@ MainModel.factory('myModal', function (btfModal) {
         templateUrl: "QusType/Modal.html"
     });
 });
+MainModel.factory('Loading', function (btfModal) {
+    return btfModal({
+        controller: 'LoadingCtrl',
+
+        templateUrl: "Loading.html"
+    });
+});
+
 //答案的副本 在重置的时候有用
 MainModel.factory("AnsCopy", function () {
     return {

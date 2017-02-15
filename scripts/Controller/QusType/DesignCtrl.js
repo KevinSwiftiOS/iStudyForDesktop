@@ -28,7 +28,7 @@ $scope.startAnswer = function () {
     //console.log(QusService.qusItems[itemsIndex].questions[qusIndex]);
 	jsapi.questionWork(angular.toJson(QusService.qusItems[itemsIndex]),angular.toJson(QusService.qusItems[itemsIndex].questions[qusIndex]));
    //答题完成后 调用将按钮变绿
-    jsapi.setEvent_OnQuestionWorked(afterSave());
+    jsapi.setEvent_OnQuestionWorked('afterSave');
 }
     var ls = window.localStorage;
     var authtoken = ls.getItem("authtoken");
@@ -62,7 +62,8 @@ $scope.startAnswer = function () {
         "questionid": QusService.qusItems[itemsIndex].questions[qusIndex].id
     }
 
-function afterSave() {
+window.afterSave = function (result) {
+  if(result.success) {
     $scope.isSave = true;
     $scope.saveDes = {
         icon: "fa fa-spinner fa-spin",
@@ -78,6 +79,9 @@ function afterSave() {
     QusService.qusItems[itemsIndex].questions[qusIndex].answer = "FILE";
     QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle";
     initView();
+  }else{
+      swal("保存失败",result.message,"error");
+  }
 }
 
 

@@ -64,10 +64,8 @@ HomeWorkListModel.controller("HomeWorkListCtrl", function ($scope, $state) {
             },
             function (isConfirm) {
                 if (isConfirm) {
-
-
                     ls.clear();
-                    window.location.href = "Login.html";
+                    jsapi.exit();
                 }
             }
         )
