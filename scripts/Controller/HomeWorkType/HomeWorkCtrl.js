@@ -1,4 +1,4 @@
-HomeWorkListModel.controller("HomeWorkCtrl", function ($scope, httpService, subDate, $state,Loading) {
+HomeWorkListModel.controller("HomeWorkCtrl", function ($interval, $timeout,$scope, httpService, subDate, $state,Loading) {
     var ls = window.localStorage;
     var courserInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
@@ -6,10 +6,23 @@ HomeWorkListModel.controller("HomeWorkCtrl", function ($scope, httpService, subD
         courseid: courserInfo.courseid
     }
     var items = [];
-    Loading.activate();
+    //是否需要loading
+    var needLoading = true;
+    var loadingTimeOut = $timeout(function () {
+        if(needLoading) {
+            Loading.activate();
+            //Loading至少显示1.5秒
+            var showLoading = $interval(function () {
+                if(!needLoading) {
+                    Loading.deactivate();
+                    $interval.cancel(showLoading);
+                }
+            },1500);
+        }
+    },1000);
     var promise = httpService.post("api/homeworkquery", param);
     promise.then(function (data) {
-        Loading.deactivate();
+        needLoading = false;
         //分割日期并进行查看
         items = data;
         for (var i = 0; i < items.length; i++) {
@@ -36,8 +49,8 @@ HomeWorkListModel.controller("HomeWorkCtrl", function ($scope, httpService, subD
         }
         $scope.items = items;
     }, function (err) {
-        Loading.deactivate();
-        $scope.isLoading = false;
+       needLoading = false;
+
         swal("请求失败", err, "error");
         $scope.items = items;
     })
@@ -61,7 +74,7 @@ HomeWorkListModel.controller("HomeWorkCtrl", function ($scope, httpService, subD
             }
             ls.setItem("testInfo", angular.toJson(testInfo));
             jsapi.goTestOne(angular.toJson($scope.items[$index]));
-            window.location.href = "Main.html";
+	
         } else {
             //调用jsapi 打开浏览器
 			jsapi.openWindowsDefaultBrowser(jsapi.getDomain() + "Output/ViewOne/" + $scope.items[$index].usertestid);

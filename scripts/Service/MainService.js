@@ -66,6 +66,13 @@ MainModel.factory('Loading', function (btfModal) {
         templateUrl: "Loading.html"
     });
 });
+MainModel.factory('ResetLoading', function (btfModal) {
+    return btfModal({
+        controller: 'ResetLoadingCtrl',
+
+        templateUrl: "Loading.html"
+    });
+});
 
 //答案的副本 在重置的时候有用
 MainModel.factory("AnsCopy", function () {

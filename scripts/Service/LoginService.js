@@ -2,7 +2,7 @@
  * Created by hcnucai on 2016/12/20.
  */
 //定义公有的http服务
-loginModel.factory("httpService",
+LoginModel.factory("httpService",
     function ($http, $q) {
         return {
             post: function (suburl, params) {
@@ -43,3 +43,10 @@ loginModel.factory("httpService",
         };
 
     });
+LoginModel.factory('loginLoading', function (btfModal) {
+    return btfModal({
+        controller: 'LoginLoadingCtrl',
+
+        templateUrl: "Loading.html"
+    });
+});

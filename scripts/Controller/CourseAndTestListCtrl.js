@@ -3,18 +3,32 @@
  */
 var CourseAndTestListModel = angular.module("CourseAndTestListModel", ['ngAnimate', 'ngSanitize', 'btford.modal']);
 
-CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, httpService, subDate, $interval, Loading) {
+CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, httpService, subDate, $interval, Loading,$timeout) {
     var ls = window.localStorage;
     //总共的监控
     var totalStartInterval;
     //开始加载
-    Loading.activate();
+    var courses = [];
+    var needLoading = true;
+
+
+            Loading.activate();
+            //Loading显示1.5秒
+            var showLoading = $interval(function () {
+                if(!needLoading) {
+                    Loading.deactivate();
+                    $interval.cancel(showLoading);
+                }
+            },1500);
     var authtoken = ls.getItem("authtoken");
     var userInfo = angular.fromJson(ls.getItem("userInfo"));
     $scope.name = userInfo.name;
     var param = {
         authtoken: authtoken
     }
+    //定义课程 模态框的出现有用
+
+
     //先请求考试的数据 后请求练习的数据
     var testPromise = httpService.post("api/testquery", param);
     testPromise.then(function (data) {
@@ -98,7 +112,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
         }, 1000);
 
     }, function (err) {
-        Loading.deactivate();
+        needLoading = false;
         var tests = [];
         swal("请求失败", err, "error");
 
@@ -183,8 +197,8 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
 
         var cousrePromise = httpService.post("api/coursequery", param);
         cousrePromise.then(function (data) {
-            Loading.deactivate();
-            var courses = data;
+            needLoading = false;
+             courses = data;
             for (var i = 0; i < courses.length; i++) {
                 if (i == courses.length - 1)
                     courses[i].isLast = true;
@@ -201,7 +215,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
             $scope.courses = courses;
             //和当前的时间进行比较
         }, function (err) {
-            Loading.deactivate();
+            needLoading = false;
             var courses = [];
             swal("请求失败", err, "error");
 
@@ -260,7 +274,6 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
         ls.setItem("testInfo", angular.toJson(testInfo));
         //页面跳转
         jsapi.goTestOne(angular.toJson($scope.tests[$index]));
-        window.location.href = "Main.html";
     }
     $scope.goToStudy = function ($index) {
         var courseInfo = {

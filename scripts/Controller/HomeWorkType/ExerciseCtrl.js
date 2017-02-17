@@ -1,19 +1,31 @@
 /**
  * Created by hcnucai on 2016/12/27.
  */
-HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subDate, $state,myModal,Loading) {
+HomeWorkListModel.controller("ExerciseCtrl", function ($interval, $timeout,$scope, httpService, subDate, $state,myModal,Loading) {
     var ls = window.localStorage;
     var courseInfo = angular.fromJson(ls.getItem("courseInfo"));
     var param = {
         authtoken: ls.getItem("authtoken"),
         courseid: courseInfo.courseid
     }
-
+    //是否需要loading
+    var needLoading = true;
+    var loadingTimeOut = $timeout(function () {
+        if(needLoading) {
+            Loading.activate();
+            //Loading至少显示1.5秒
+            var showLoading = $interval(function () {
+                if(!needLoading) {
+                    Loading.deactivate();
+                    $interval.cancel(showLoading);
+                }
+            },1500);
+        }
+    },1000);
     var items = [];
-    Loading.activate();
     var promise = httpService.post("api/exercisequery", param);
     promise.then(function (data) {
-        Loading.deactivate();
+        needLoading = false;
         //分割日期并进行查看
         items = data;
         for (var i = 0; i < items.length; i++) {
@@ -40,7 +52,7 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
         }
         $scope.items = items;
     }, function (err) {
-        Loading.deactivate();
+        needLoading = false;
         swal("请求失败", err, "error");
         $scope.items = items;
     })
@@ -57,7 +69,7 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
         jsapi.goTestOne(angular.toJson($scope.items[$index]));
-        window.location.href = "Main.html";
+
 
     }
     $scope.randomSel = function ($index) {
@@ -72,7 +84,7 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
         jsapi.goTestOne(angular.toJson($scope.items[$index]));
-        window.location.href = "Main.html";
+
 
     }
     $scope.selfSel = function ($index) {
@@ -85,7 +97,8 @@ HomeWorkListModel.controller("ExerciseCtrl", function ($scope, httpService, subD
             redraw: true
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
-        jsapi.goTestOne(angular.toJson($scope.items[$index]));
+        //在自主选题中有用
+        ls.setItem("exerciseItem",angular.toJson($scope.items[$index]));
         myModal.activate();
     }
 })

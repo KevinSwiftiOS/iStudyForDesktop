@@ -1,7 +1,7 @@
 /**
  * Created by hcnucai on 2016/12/21.
  */
-MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, $interval) {
+MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $window, $scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, $interval) {
     //获取参数
     //请求数据
 
@@ -18,11 +18,23 @@ MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, htt
     var drawsetting = "";
     drawsetting = testInfo.drawsetting;
     //倒计时的时间
-
     var slideInterval = null;
     var timeSlide = null;
     //从本地提取timeSlide
     var timeSlides = [];
+    //是否需要loading
+    var needLoading = true;
+    Loading.activate();
+
+
+            //Loading显示1.5秒
+            var showLoading = $interval(function () {
+
+                if(!needLoading) {
+                    Loading.deactivate();
+                    $interval.cancel(showLoading);
+                }
+            },1500);
     //是否可以阅卷的按钮隐藏
     $scope.enableClientJudge = testInfo.enableClientJudge;
     timeSlides = angular.fromJson(ls.getItem("timeSlides"));
@@ -59,11 +71,10 @@ MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, htt
         redraw: redraw,
         drawsetting: drawsetting
     };
-    Loading.activate();
     var promise = httpService.infoPost("api/testinfo", param);
-    $scope.hasQus = false;
-    promise.then(function (res) {
 
+    promise.then(function (res) {
+         needLoading = false;
         //禁止右键
         if (res.info.forbiddenMouseRightMenu) {
             $(document).bind("contextmenu", function (e) {
@@ -82,7 +93,7 @@ MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, htt
             })
 
         }
-        $scope.hasQus = true;
+
         qusIndex = 0;
         itemsIndex = 0;
         var data = res.items;
@@ -100,8 +111,8 @@ MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, htt
         goToDiffState();
 
     }, function (err) {
-        Loading.deactivate();
-        $scope.hasQus = true;
+        needLoading = false;
+
         $scope.items = [];
         QusService.qusItems = [];
 
@@ -125,7 +136,6 @@ MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, htt
     $scope.$watch('items', function (newV, oldV) {
         if (newV != oldV) {
             $scope.items = newV;
-            Loading.deactivate();
 
         }
     }, true);
@@ -205,7 +215,10 @@ MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, htt
                     //设计题的重置有不一样的重置方法 需调用jsapi
                     var type = QusService.qusItems[itemsIndex].type;
                     if (type == "OPENEXAM_OFC" || type == "OPENEXAM_INT" || type == "OPENEXAM_WIN") {
-                        Loading.activate();
+                        var reset = IsReset.reset;
+                        reset.isReset = !reset.isReset;
+                        ResetLoading.activate();
+
                         jsapi.resetQuestion(QusService.qusItems[itemsIndex].questions[qusIndex].id, 'resetOfficeQus');
                     }
                     else {
@@ -249,15 +262,15 @@ MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, htt
             }
             var promise = httpService.post("api/submitquestion", param);
             promise.then(function (res) {
-
-                var reset = IsReset.reset;
-                reset.isReset = !reset.isReset;
+                ResetLoading.deactivate();
                 QusService.qusItems[itemsIndex].questions[qusIndex].answer = "";
                 QusService.qusItems[itemsIndex].questions[qusIndex].icon = "fa fa-circle-thin";
             }, function (err) {
+                ResetLoading.deactivate();
                 swal("重置失败", err, "error");
             })
         } else {
+            ResetLoading.deactivate();
             swal("重置失败", result.message, "error");
         }
     }
@@ -353,8 +366,9 @@ MainModel.controller("MainCtrl", function (Loading, $window, $scope, $state, htt
             if (info.succ == true) {
                 //进行清空 跳转
                 ls.removeItem("testInfo");
-                ls.removeItem("courseInfo");
+           //     ls.removeItem("courseInfo");
                 ls.removeItem("qusLocation");
+                ls.removeItem("exerciseItem");
                 if (timeSlides != null) {
                     for (var i = 0; i < timeSlides.length; i++) {
                         if (timeSlides[i].key == userInfo.username + "timeSlide" + testid) {

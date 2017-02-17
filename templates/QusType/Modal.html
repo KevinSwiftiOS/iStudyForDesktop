@@ -19,10 +19,10 @@
 
             <tr ng-repeat="point in points">
                 <td style="text-align: left">{{point.message}}</td>
-                <td style="text-align: center" rowspan="{{points.length + 1}}" ng-if = "point.isFirst">{{knowledge}}</td>
-                <td style="text-align: center;width: auto"><font color="{{point.color}}">{{point.comment}}</font></td>
-                <td style="text-align: center">{{point.gotscore}} / {{point.fullscore}}</td>
-                <td style="text-align: center">
+                <td style="text-align: center;vertical-align: middle" rowspan="{{points.length + 1}}" ng-if = "point.isFirst">{{knowledge}}</td>
+                <td style="text-align: center;width: auto;vertical-align: middle"><font color="{{point.color}}">{{point.comment}}</font></td>
+                <td style="text-align: center;vertical-align: middle">{{point.gotscore}} / {{point.fullscore}}</td>
+                <td style="text-align: center;vertical-align: middle">
                     <div ng-bind-html="point.key"></div>
                 </td>
 

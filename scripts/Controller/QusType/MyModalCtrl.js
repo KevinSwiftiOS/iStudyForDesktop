@@ -34,7 +34,7 @@ MainModel.controller('MyModalCtrl', function ($scope, $timeout, myModal, base64,
                  points[i].isFirst = true;
             else
                 points[i].isFirst = false;
-            if (points[i].comment === "正确")
+            if (points[i].right)
                 points[i].color = "green";
             else
                 points[i].color = "red";

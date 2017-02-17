@@ -16,8 +16,10 @@ HomeWorkListModel.controller('SelfSelQusCtrl', function ($scope, $timeout, myMod
     testid: testInfo.testid,
     authtoken: ls.getItem("authtoken")
   }
+  $scope.isOver = false;
   var promise = httpService.post("api/exerciseDrowRange", param);
   promise.then(function (data) {
+    $scope.isOver = true;
     for (var i = 0; i < data.length; i++) {
       var range = data[i].range;
       data[i].selBundle = "第" + range[0] + "套";
@@ -25,6 +27,8 @@ HomeWorkListModel.controller('SelfSelQusCtrl', function ($scope, $timeout, myMod
     }
     $scope.items = data;
   }, function (err) {
+    $scope.isOver = false;
+    myModal.deactivate();
     swal("请求失败", err, "error");
   })
   //进行练习
@@ -47,7 +51,7 @@ HomeWorkListModel.controller('SelfSelQusCtrl', function ($scope, $timeout, myMod
     testInfo.drawsetting = angular.toJson(drawsetting);
     ls.setItem("testInfo", angular.toJson((testInfo)));
     myModal.deactivate();
-    window.location.href = "Main.html";
+    jsapi.goTestOne(ls.getItem("exerciseItem"));
 
   }
 })

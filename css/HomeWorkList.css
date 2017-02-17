@@ -68,12 +68,12 @@ body {
 }
 .workItem{
 
-    margin-left: 5%;
-    margin-right: 5%;
+    padding:5px 5%;
+    margin: 0 -15px;
 
 }
 .isnLast{
-    border-bottom: 1px solid darkgray;
+    border-bottom: 1px solid #ccc;
 
 }
 .isLast{
