@@ -2,12 +2,11 @@
  * Created by hcnucai on 2016/12/19.
  */
 var LoginModel = angular.module("LoginModel", ['ngAnimate','btford.modal']);
-LoginModel.controller("LoginCtrl", function ($scope, httpService,loginLoading) {
+LoginModel.controller("LoginCtrl", function ($scope, httpService) {
     $scope.user = {};
     //进行登录服务
 
     $scope.submit = function () {
-        loginLoading.activate();
         var user = $scope.user;
         //进行登录
         var param = {
@@ -20,7 +19,6 @@ LoginModel.controller("LoginCtrl", function ($scope, httpService,loginLoading) {
         };
         var promise = httpService.infoPost("api/login", param);
         promise.then(function (data) {
-            loginLoading.deactivate();
             var ls = window.localStorage;
             ls.setItem("authtoken", data.authtoken);
             var info = data["info"];
@@ -34,7 +32,6 @@ LoginModel.controller("LoginCtrl", function ($scope, httpService,loginLoading) {
             //页面跳转
             jsapi.loginSuccessful(data.authtoken,angular.toJson(info));
         }, function (err) {
-            loginLoading.deactivate();
             swal("请求失败", err, "error");
         })
     }

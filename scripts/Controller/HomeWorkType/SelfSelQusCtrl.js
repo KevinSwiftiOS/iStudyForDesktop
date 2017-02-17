@@ -50,7 +50,6 @@ HomeWorkListModel.controller('SelfSelQusCtrl', function ($scope, $timeout, myMod
     testInfo.redraw = true;
     testInfo.drawsetting = angular.toJson(drawsetting);
     ls.setItem("testInfo", angular.toJson((testInfo)));
-    myModal.deactivate();
     jsapi.goTestOne(ls.getItem("exerciseItem"));
 
   }

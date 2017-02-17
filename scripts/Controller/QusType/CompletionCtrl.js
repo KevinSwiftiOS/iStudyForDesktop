@@ -138,9 +138,4 @@ MainModel.controller("CompletionCtrl", function ($scope, $stateParams, QusServic
         }, 1000);
     }
 
-
-    $scope.$on("$viewContentLoaded", function () {
-
-    })
-
 })

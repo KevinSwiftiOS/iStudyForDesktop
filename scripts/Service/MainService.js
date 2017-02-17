@@ -54,9 +54,9 @@ MainModel.factory("QusService", function () {
 
 MainModel.factory('myModal', function (btfModal) {
     return btfModal({
-        controller: 'MyModalCtrl',
+        controller: 'GoOverCtrl',
 
-        templateUrl: "QusType/Modal.html"
+        templateUrl: "QusType/GoOver.html"
     });
 });
 MainModel.factory('Loading', function (btfModal) {
@@ -86,12 +86,6 @@ MainModel.factory("IsReset", function () {
         reset: {isReset: 0},
     }
 });
-//定时器的设置
-MainModel.factory("Timer", function () {
-    return {
-        times: null
-    }
-})
 
 MainModel.directive('resize', function ($window) {
     return function (scope, element, attr) {
@@ -154,19 +148,3 @@ MainModel.directive('widthresize', function ($window) {
     }
 });
 
-
-
-// MainModel.directive('fileModel', ['$parse', function ($parse) {
-//     return {
-//         restrict: 'A',
-//         link: function (scope, element, attrs) {
-//             element.bind('change', function () {
-//                 $parse(attrs.fileModel).assign(scope, element[0].files)
-//                 scope.$MainModelly();
-//             });
-//         }
-//     }
-// }]);
-
-
-//定义保存的服务

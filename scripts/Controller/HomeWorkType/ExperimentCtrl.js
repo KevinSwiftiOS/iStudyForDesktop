@@ -5,6 +5,8 @@ HomeWorkListModel.controller("ExperimentCtrl", function ($interval,$timeout, $sc
         authtoken: ls.getItem("authtoken"),
         courseid: courseInfo.courseid
     }
+    //选中了第几个
+    var index = 0;
     var items = [];
     //是否需要loading
     var needLoading = true;
@@ -29,7 +31,7 @@ HomeWorkListModel.controller("ExperimentCtrl", function ($interval,$timeout, $sc
             var dicStart = subDate.divedeToDay(items[i].datestart);
             var dicEnd = subDate.divedeToDay(items[i].dateend);
             items[i].datestart = dicStart.year + "-" + dicStart.month + "-" + dicStart.day + " " + dicStart.hour + ":" + dicStart.min;
-            items[i].dateend = dicEnd.year + "-" + dicEnd.month + "-" + dicEnd.day + " " + dicStart.hour + ":" + dicStart.min;
+            items[i].dateend = dicEnd.year + "-" + dicEnd.month + "-" + dicEnd.day + " " + dicEnd.hour + ":" + dicEnd.min;
             var endDate = new Date(dicEnd.year, dicEnd.month - 1, dicEnd.day, dicEnd.hour, dicEnd.min, dicEnd.second);
             var now = new Date();
             //还要看是否已经交卷
@@ -66,13 +68,49 @@ HomeWorkListModel.controller("ExperimentCtrl", function ($interval,$timeout, $sc
                 drawsetting: ""
             }
             ls.setItem("testInfo", angular.toJson(testInfo));
+            index = $index;
             jsapi.goTestOne(angular.toJson($scope.items[$index]));
-
+            jsapi.setEvent_OnTestClosed("updateTestInfo");
         } else {
             //调用jsapi 打开浏览器
 			jsapi.openWindowsDefaultBrowser(jsapi.getDomain() + "Output/ViewOne/" + $scope.items[$index].usertestid);
         }
     }
-
+    window.updateTestInfo = function () {
+        var param = {
+            authtoken:ls.getItem("authtoken"),
+            testid: $scope.items[index].id
+        }
+        var promise = httpService.infoPost("api/usertestinfo", param);
+        promise.then(function (data) {
+            var info = data.info;
+            //进行同步 是否可以阅卷 阅卷后答案是否可见 开始截止时间更新
+            $scope.items[index].enableClientJudge = info.enableClientJudge;
+            $scope.items[index].keyVisible = info.keyVisible;
+            $scope.items[index].forbiddenMouseRightMenu = info.forbiddenMouseRightMenu;
+            $scope.items[index].forbiddenCopy = info.forbiddenCopy;
+            $scope.items[index].firstTimeDo = info.firstTimeDo;
+            $scope.items[index].datestart = info.datestart;
+            $scope.items[index].dateend = info.dateend;
+            $scope.items[index].myscore = info.myscore;
+            var dicStart = subDate.divedeToDay($scope.items[index].datestart);
+            var dicEnd = subDate.divedeToDay(  $scope.items[index].dateend);
+            $scope.items[index].datestart = dicStart.year + "-" + dicStart.month + "-" + dicStart.day + " " + dicStart.hour + ":" + dicStart.min;
+            $scope.items[index].dateend = dicEnd.year + "-" + dicEnd.month + "-" + dicEnd.day + " " + dicEnd.hour + ":" + dicEnd.min;
+            var endDate = new Date(dicEnd.year, dicEnd.month - 1, dicEnd.day, dicEnd.hour, dicEnd.min, dicEnd.second);
+            var now = new Date();
+            //还要看是否已经交卷
+            if (endDate.valueOf() > now.valueOf()) {
+                $scope.items[index].isEnd = false;
+                $scope.items[index].btnTitle = "答题";
+            }
+            else {
+                $scope.items[index].isEnd = true;
+                $scope.items[index].btnTitle = "查看";
+            }
+        }, function (err) {
+            swal("请求失败",err,"error");
+        })
+    }
 
 })

@@ -1,20 +1,16 @@
 /**
  * Created by hcnucai on 2016/12/26.
  */
-
+HomeWorkListModel.controller("HomeWorkLoadingCtrl",function ($scope) {
+    $scope.des = "加载";
+})
 HomeWorkListModel.controller("HomeWorkListCtrl", function ($scope, $state) {
     $state.go("HomeWork");
    $scope.isHomeWork = true;
     $scope.isExperiment = false;
     $scope.isExercice = false;
-    // $scope.homeWorkStyle = selStyle;
-    // $scope.experimentStyle = unSelStyle;
-    // $scope.exerciseStyle = unSelStyle;
     $scope.goToHomeWork = function () {
         $state.go("HomeWork");
-        // $scope.homeWorkStyle = selStyle;
-        // $scope.experimentStyle = unSelStyle;
-        // $scope.exerciseStyle = unSelStyle;
         $scope.isHomeWork = true;
         $scope.isExperiment = false;
         $scope.isExercice = false;
@@ -22,18 +18,12 @@ HomeWorkListModel.controller("HomeWorkListCtrl", function ($scope, $state) {
     }
     $scope.goToExerceise = function () {
         $state.go("Exercise");
-        // $scope.homeWorkStyle = unSelStyle;
-        // $scope.experimentStyle = unSelStyle;
-        // $scope.exerciseStyle = selStyle;
         $scope.isHomeWork = false;
         $scope.isExperiment = false;
         $scope.isExercice = true;
     }
     $scope.goToExperiment = function () {
         $state.go("Experiment");
-        // $scope.homeWorkStyle = unSelStyle;
-        // $scope.experimentStyle = selStyle;
-        // $scope.exerciseStyle = unSelStyle;
         $scope.isHomeWork = false;
         $scope.isExperiment = true;
         $scope.isExercice = false;

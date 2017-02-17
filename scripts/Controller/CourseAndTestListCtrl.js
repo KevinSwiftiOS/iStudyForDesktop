@@ -2,24 +2,26 @@
  * Created by hcnucai on 2016/12/20.
  */
 var CourseAndTestListModel = angular.module("CourseAndTestListModel", ['ngAnimate', 'ngSanitize', 'btford.modal']);
-
+CourseAndTestListModel.controller("CourseAndTestLoadingCtrl",function ($scope) {
+    $scope.des = "加载";
+})
 CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, httpService, subDate, $interval, Loading,$timeout) {
     var ls = window.localStorage;
     //总共的监控
     var totalStartInterval;
     //开始加载
     var courses = [];
+    //选择了第几个考试
+    var testIndex;
     var needLoading = true;
-
-
-            Loading.activate();
-            //Loading显示1.5秒
+             Loading.activate();
+            //Loading显示1秒
             var showLoading = $interval(function () {
                 if(!needLoading) {
                     Loading.deactivate();
                     $interval.cancel(showLoading);
                 }
-            },1500);
+            },1000);
     var authtoken = ls.getItem("authtoken");
     var userInfo = angular.fromJson(ls.getItem("userInfo"));
     $scope.name = userInfo.name;
@@ -55,7 +57,7 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
             tests[i].startH = dicStart.hour;
             tests[i].startMin = dicStart.min;
             tests[i].startValue = startDate.valueOf();
-
+            tests[i].endValue = endDate.valueOf();
             //是否需要倒计时的功能
             var now = new Date();
             if (now.valueOf() > endDate.valueOf()) {
@@ -70,37 +72,6 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
             } else {
                 tests[i].isStart = false;
             }
-
-            // if (tests[i].isEnd == true) {
-            //     //本次还未截止
-            //     //看本次时间
-            //     //剩余时间还有多少
-            //     var timeSlides = angular.fromJson(ls.getItem("timeSlides"));
-            //     if (timeSlides == null) {
-            //         //根据服务器返回的剩余时间和总共时间的多少进行判断
-            //         if ($scope.tests[i].timelimit * 60 - $scope.tests[i].timeslided > 100)
-            //             tests[i].isEnd = false;
-            //     } else {
-            //         //看看截止时间
-            //         var timeSlide = null;
-            //         for (var i = 0; i < timeSlides.length; i++) {
-            //             if (timeSlides[i].key == userInfo.username + "timeSlide" + tests[i].id) {
-            //                 timeSlide = timeSlides[i].value;
-            //                 break;
-            //             }
-            //         }
-            //         //判断
-            //         if (timeSlide == null) {
-            //             //根据服务器返回的剩余时间和总共时间的多少进行判断
-            //             if ($scope.tests[i].timelimit * 60 - $scope.tests[i].timeslided > 100)
-            //                 tests[i].isEnd = false;
-            //         } else {
-            //             if (timeSlide > 100)
-            //                 tests[i].isEnd = false;
-            //         }
-            //     }
-            // }
-
         }
         //监视时间的变化
         $scope.tests = tests;
@@ -194,7 +165,6 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
 
     //随后再请求课程的数据
     function courseP() {
-
         var cousrePromise = httpService.post("api/coursequery", param);
         cousrePromise.then(function (data) {
             needLoading = false;
@@ -227,7 +197,6 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
         //赋值
         var testInfo = {
             testid: $scope.tests[$index].id,
-
             title: $scope.tests[$index].title,
             enableClientJudge: false,
             keyVisible: false,
@@ -273,8 +242,58 @@ CourseAndTestListModel.controller("CourseAndTestListCtrl", function ($scope, htt
         }
         ls.setItem("testInfo", angular.toJson(testInfo));
         //页面跳转
+        testIndex = $index;
         jsapi.goTestOne(angular.toJson($scope.tests[$index]));
+        jsapi.setEvent_OnTestClosed("updateTestInfo");
     }
+    window.updateTestInfo = function () {
+        var param = {
+            authtoken:ls.getItem("authtoken"),
+            testid: $scope.tests[testIndex].id
+        }
+        var promise = httpService.infoPost("api/usertestinfo", param);
+        promise.then(function (data) {
+            //进行同步 不能进行整个的复制 只需覆盖状态 开始截止时间 和是否已经交卷 分数
+            var info = data.info;
+            $scope.tests[testIndex].status = info.status;
+            $scope.tests[testIndex].issubmited = info.issubmited;
+            $scope.tests[testIndex].myscore = info.myscore;
+            $scope.tests[testIndex].datestart = info.datestart;
+            $scope.tests[testIndex].dateend = info.dateend;
+            var dicStart = subDate.divedeToDay($scope.tests[testIndex].datestart);
+            var dicEnd = subDate.divedeToDay( $scope.tests[testIndex].dateend);
+
+            $scope.tests[testIndex].datestart = dicStart.year + "-" + dicStart.month + "-" + dicStart.day + " " + dicStart.hour + ":" + dicStart.min;
+            $scope.tests[testIndex].dateend = dicEnd.year + "-" + dicEnd.month + "-" + dicEnd.day + " " + dicEnd.hour + ":" + dicEnd.min;
+            var endDate = new Date(dicEnd.year, dicEnd.month - 1, dicEnd.day, dicEnd.hour, dicEnd.min, dicEnd.second);
+            //开始的时间和现在比较
+            var startDate = new Date(dicStart.year, dicStart.month - 1, dicStart.day, dicStart.hour, dicStart.min, dicStart.second);
+            $scope.tests[testIndex].startY = dicStart.year;
+            $scope.tests[testIndex].startM = dicStart.month;
+            $scope.tests[testIndex].startD = dicStart.day;
+            $scope.tests[testIndex].startH = dicStart.hour;
+            $scope.tests[testIndex].startMin = dicStart.min;
+            $scope.tests[testIndex].startValue = startDate.valueOf();
+            $scope.tests[testIndex].endValue = endDate.valueOf();
+            //是否需要倒计时的功能
+            var now = new Date();
+            if (now.valueOf() > endDate.valueOf()) {
+                $scope.tests[testIndex].isEnd = true;
+            } else {
+                $scope.tests[testIndex].isEnd = false;
+            }
+            //看考试是否已经开始
+            if (now.valueOf() > startDate.valueOf()) {
+                $scope.tests[testIndex].isStart = true;
+            } else {
+                $scope.tests[testIndex].isStart = false;
+            }
+        }, function (err) {
+           swal("请求失败",err,"error");
+        })
+
+    }
+
     $scope.goToStudy = function ($index) {
         var courseInfo = {
             courseid: $scope.courses[$index].id,

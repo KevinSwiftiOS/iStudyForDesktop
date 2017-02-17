@@ -118,6 +118,5 @@ MainModel.controller("MulitChoiceCtrl", function ($scope, $stateParams, httpServ
 
 
         }
-    //保存
 
 })

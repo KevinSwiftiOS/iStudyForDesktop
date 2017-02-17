@@ -1,0 +1,33 @@
+<a class="demo-modal-close" href ng-click="closeMe()">
+    <font size="5px"><i class="fa fa-close" aria-hidden="true"></i></font>
+</a>
+<div class="total">
+
+    <div class="btf-modal demo-modal">
+        当前题目{{currentQus}}
+        <div ng-if="isGoOver"style="text-align: center;margin-top: 10%"><font size="5px"><i class="fa fa-spinner fa-spin"></i> 正在阅卷中</font> </div>
+        <p>{{isSuss}}<span ng-if = "success">满分为{{fullscore}}分,得分为{{gotscore}}分 </span>  </p>
+        <table class="table table-bordered" ng-if="points.length > 0 ? true :false">
+            <tr>
+                <th style="text-align: center;width: 100px">题目信息</th>
+                <th style="text-align: center;width: 100px">知识点</th>
+                <th style="text-align: center;width: 100px">结果</th>
+                <th style="text-align: center;width: 100px">得分</th>
+                <th style="text-align: center;width: 100px">参考答案</th>
+
+            </tr>
+
+            <tr ng-repeat="point in points">
+                <td style="text-align: left">{{point.message}}</td>
+                <td style="text-align: center;vertical-align: middle" rowspan="{{points.length + 1}}" ng-if = "point.isFirst">{{knowledge}}</td>
+                <td style="text-align: center;width: auto;vertical-align: middle"><font color="{{point.color}}">{{point.comment}}</font></td>
+                <td style="text-align: center;vertical-align: middle">{{point.gotscore}} / {{point.fullscore}}</td>
+                <td style="text-align: center;vertical-align: middle">
+                    <div ng-bind-html="point.key"></div>
+                </td>
+
+            </tr>
+
+        </table>
+    </div>
+</div>

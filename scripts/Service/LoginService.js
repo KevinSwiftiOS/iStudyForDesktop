@@ -43,10 +43,3 @@ LoginModel.factory("httpService",
         };
 
     });
-LoginModel.factory('loginLoading', function (btfModal) {
-    return btfModal({
-        controller: 'LoginLoadingCtrl',
-
-        templateUrl: "Loading.html"
-    });
-});

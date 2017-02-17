@@ -1,10 +1,24 @@
 /**
  * Created by hcnucai on 2016/12/21.
  */
+MainModel.controller("LoadingCtrl",function ($scope,Loading,IsReset) {
+
+    //首次加载题目
+    $scope.des = "加载";
+
+});
+MainModel.controller("ResetLoadingCtrl",function ($scope,Loading,IsReset) {
+
+    //重置office题目
+    $scope.des = "重置";
+
+});
+
 MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $window, $scope, $state, httpService, QusService, base64, myModal, IsReset, AnsCopy, $interval) {
     //获取参数
     //请求数据
-
+    //已经选中的题型
+    var itemsIndex = 0, qusIndex = 0;
     var ls = window.localStorage;
     //初始化
     var userInfo = angular.fromJson(ls.getItem("userInfo"));
@@ -26,15 +40,14 @@ MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $wind
     var needLoading = true;
     Loading.activate();
 
-
-            //Loading显示1.5秒
+            //Loading显示1秒
             var showLoading = $interval(function () {
 
                 if(!needLoading) {
                     Loading.deactivate();
                     $interval.cancel(showLoading);
                 }
-            },1500);
+            },1000);
     //是否可以阅卷的按钮隐藏
     $scope.enableClientJudge = testInfo.enableClientJudge;
     timeSlides = angular.fromJson(ls.getItem("timeSlides"));
@@ -63,8 +76,6 @@ MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $wind
     var selStyle = {
         "background-color": "#C5DBFD",
     }
-    //已经选中的题型
-    var itemsIndex = 0, qusIndex = 0;
     var param = {
         authtoken: ls.getItem("authtoken"),
         testid: testid,
@@ -106,9 +117,12 @@ MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $wind
         }
         QusService.qusItems = data;
         initIcon(itemsIndex, qusIndex);
+
         $scope.items = QusService.qusItems;
-        var info = res.info;
+        if(QusService.qusItems.length > 0)
         goToDiffState();
+        else
+            swal("无题目信息","请退出再次尝试进入本次做题","warning");
 
     }, function (err) {
         needLoading = false;
@@ -365,10 +379,9 @@ MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $wind
             var info = data.info;
             if (info.succ == true) {
                 //进行清空 跳转
-                ls.removeItem("testInfo");
+
            //     ls.removeItem("courseInfo");
-                ls.removeItem("qusLocation");
-                ls.removeItem("exerciseItem");
+
                 if (timeSlides != null) {
                     for (var i = 0; i < timeSlides.length; i++) {
                         if (timeSlides[i].key == userInfo.username + "timeSlide" + testid) {
@@ -380,7 +393,9 @@ MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $wind
                     $interval.cancel(slideInterval);
                 }
                 jsapi.endTest();
-                window.location.href = "CourseAndTest.html";
+                ls.removeItem("qusLocation");
+                ls.removeItem("exerciseItem");
+                ls.removeItem("testInfo");
                 return true;
             } else {
                 swal("提交失败", "", "error");
@@ -430,7 +445,7 @@ MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $wind
         var slideS = timeSlide - slideH * 3600 - slideM * 60;
         //随后进行倒计时
         slideInterval = $interval(function () {
-            if (slideM <= 5) {
+            if (slideM <= 5 && slideH == 0) {
                 $scope.remainLess = true;
             }
             //如果还有秒数的话
@@ -505,7 +520,7 @@ MainModel.controller("MainCtrl", function (ResetLoading, $timeout,Loading, $wind
             var promise = httpService.infoPost("api/signslidetime", param);
             promise.then(function (data) {
             }, function (err) {
-                console.log("提交时间失败", err, "error");
+                swal("与服务器同步时间失败", err, "error");
             });
         }, 180000);
     }

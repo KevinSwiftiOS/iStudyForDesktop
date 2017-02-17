@@ -1,7 +1,7 @@
 /**
  * Created by hcnucai on 2016/12/23.
  */
-MainModel.controller("ProgramDesCtrl", function ($scope, QusService, httpService, $stateParams, IsReset, AnsCopy, myModal, base64, $timeout, Timer, $interval) {
+MainModel.controller("ProgramDesCtrl", function ($scope, QusService, httpService, $stateParams, IsReset, AnsCopy, myModal, base64, $timeout, $interval) {
     var itemsIndex = $stateParams.itemsIndex;
     var qusIndex = $stateParams.qusIndex;
     //传过来的值还有testId
@@ -128,44 +128,6 @@ MainModel.controller("ProgramDesCtrl", function ($scope, QusService, httpService
             AnsCopy.ansCopy = newV;
         }
     })
-    //保存的按钮 在这里要进行阅卷
-    //定时器还有些问题
-    // var updateClock = null;
-    // angular.element(document).ready(function () {
-    //
-    //
-    // ("angularReady");
-    //      updateClock = null;
-    //     clearTimeout(updateClock);
-    //     var time = Timer.times[qusIndex];
-    //     console.log(time);
-    //      updateClock = function () {
-    //
-    //          $scope.time = time--;
-    //        Timer.times[qusIndex] = time;
-    //            setTimeout(function () {
-    //                 updateClock();
-    //             }, 1000);
-    //         }
-    //      updateClock();
-    // });
-    //
-    //
-    // window.onbeforeunload = function() {
-    //     console.log("beforeLoaded");
-    // }
-    // $scope.$on("$viewContentLoaded",function () {
-    //      time = Timer.time;
-    //
-    //    updateClock();
-    // })
-    // $scope.$on("$viewContentLeaved",function () {
-    //      console.log("leaves");
-    // })
 
-    angular.element(document).ready(function () {
-
-
-    });
 
 })
